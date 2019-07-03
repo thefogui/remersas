@@ -5,7 +5,7 @@
  * @package 
  * @see     
  */
-class DaoClient {
+class DaoFactura {
 
     private $con;
 
@@ -28,5 +28,4 @@ class DaoClient {
     private function closeConnection() {
         mysqli_close($this->con);
     }
-
 }
