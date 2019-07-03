@@ -21,7 +21,7 @@ class DaoClient {
      * This function returns all the clients that has the state : 
      * 'solicitar datos pago'
      */
-    private function getClientVip($conn) {
+    public function getClientVip($conn) {
         $state = 'solicitar datos pago';
         $clients = array();
     

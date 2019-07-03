@@ -12,7 +12,7 @@ class AppConfig {
         {
             if($_SERVER['SERVER_NAME'] != 'localhost')
             {
-            if( isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] == "dev-form.populetic.com" )
+            if( isset($_SERVER['HTTP_HOST']) && $_cleSERVER['HTTP_HOST'] == "dev-form.populetic.com" )
             {
                 /* DEVELOPMENT SERVER */
                 $servername = "127.0.0.1"; 

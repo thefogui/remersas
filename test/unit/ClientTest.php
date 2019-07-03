@@ -1,7 +1,8 @@
 <?php
 
-include_once '../../lib/model/DaoClient.php';
-include_once '../../lib/model/Client.php';
+require_once "../../config/config.php";
+include_once '../../lib/model/dao/DaoClient.php';
+include_once '../../lib/model/entity/Client.php';
 
 class ClientTest {
     
@@ -39,6 +40,6 @@ class ClientTest {
 }
 }
 
-$connect = new ConnectTest();
-$connect->testCase();
+$connect = new ClientTest();
+$connect->testGetClientVip();
 

@@ -1,5 +1,7 @@
 <?php 
 
+require_once "Person.php";
+
 /**
  * Class that are associated with the client information
  * @package 
