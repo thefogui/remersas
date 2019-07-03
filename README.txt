@@ -11,5 +11,5 @@ Folder structure base don symfony structure:
     lib/ Dedicated to foreign classes or libraries. Here, you can add the code that needs to be shared among your applications. The model/ subdirectory stores the object model of the project (described in Chapter 8).
     log/ Stores the applicable log files generated directly by symfony. It can also contain web server log files, database log files, or log files from any part of the project. Symfony creates one log file per application and per environment (log files are discussed in Chapter 16).
     plugins/ Stores the plug-ins installed in the application (plug-ins are discussed in Chapter 17).
-    test/ Contains unit and functional tests written in PHP and compatible with the symfony testing framework (discussed in Chapter 15). During the project setup, symfony automatically adds some stubs with a few basic tests.
+    test/ Contains unit and functional tests written in PHP and compatible with testing frameworks
     web/ The root for the web server. The only files accessible from the Internet are the ones located in this directory.
