@@ -23,6 +23,7 @@ class DaoClient {
      */
     private function getClientVip($conn) {
         $state = 'solicitar datos pago';
+        $clients = array();
     
         if($conn) {
             $query = "SELECT pfv.'Id_Cliente', c.'Email' 
@@ -30,6 +31,18 @@ class DaoClient {
                       LEFT JOIN clientes c 
                       ON c.'ID' = pfv.'Id_Cliente'
                       WHERE pfv.'Id_Estado' = 36";
+
+            $result = mysqli_query($conn, $query);
+
+            if (mysqli_errno($conn)) {
+                throw new Exception('Error getting users: ' . mysqli_error($conn));
+            } else {
+                while ($client = mysqli_fetch_object($result, 'Client')) {
+                    $clients[] = $client;
+                }
+            }
         }
+        return  $clients;
+
     }
 }
