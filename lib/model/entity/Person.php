@@ -21,4 +21,8 @@ class Person {
         $this->nif = $nif;
         $this->name = $name;
     }
+
+    public function __toString() {
+        
+    }
 }

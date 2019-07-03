@@ -2,8 +2,12 @@
 ?>
 <!DOCTYPE html>
 <html>
-<body>
-
-hello
-</body>
+    <head>
+    </head>
+    <body>
+        <form method="" action="">
+            <input type="text" required>
+            <input type="submit" value="Send">
+        </form>
+    </body>
 </html>

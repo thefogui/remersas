@@ -29,4 +29,22 @@ class DaoClient {
         mysqli_close($this->con);
     }
 
+    /**
+     * This function returns all the clients that has the state : 
+     * 'solicitar datos pago'
+     */
+    private function getClientVip() {
+        $state = 'solicitar datos pago';
+
+        $response = $this->conectar();
+
+        if($this->con) {
+            $query = "SELECT " .
+                     "FROM " .
+                     "ON" .
+                     "WHERE";
+        }
+    }
+
+    
 }
