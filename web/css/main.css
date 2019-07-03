@@ -1,0 +1,15 @@
+.form_button {
+    background: #f26822;
+    color: white;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    border: none;
+    padding: 10px 15px;
+    margin-top: 20px;
+    font-size: 18px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -khtml-border-radius: 3px;
+    border-radius: 3px;
+}

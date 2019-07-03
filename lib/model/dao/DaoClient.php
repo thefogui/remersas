@@ -17,7 +17,7 @@ class DaoClient {
     private function connect() {
         if(!$this->con = mysqli_connect($this->cfg->DBSERVER, $this->cfg->DBUSER, $this->cfg->PWD, $this->cfg->BD)) {
             return $this->response(true, "Error connecting to the database: " . mysqli_connect_error());
-        } else{
+        } else {
             mysqli_set_charset($this->con, "utf8");
         }
     }
