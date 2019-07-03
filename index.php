@@ -19,18 +19,32 @@
             <div class="row">
                 <div class="col-12 align-self-center logo">
                     <img class="align-self-center" src="web/images/logo.png" alt="logo">
-                </div>
+                </div><!-- closing div col-12 align-self-center logo -->
             </div> <!-- closing div row -->
 
             <div class="row">
                 <div class="col-12 form_div">
+
+                    <h1 class="h3 mb-3 font-weight-normal">Insert the amount of money</h1>
+
                     <form class="align-self-center" method="" action="">
-                        <input type="text" class="form-control" required>
-                        <input class="form-control" type="submit" value="Send">
+                        <input type="text" id="amount" name="amount" class="form-control " value="" 
+                            placeholder="Amount " autofocus="" required="" autocomplete="off">
+
+                            <div class="mt-4">
+                                <input class="btn btn-lg btn-outline-info btn-block" type="submit" value="Send">
+                            </div><!-- closing div mt-4 -->
                     </form>
-                </div>
+                </div><!-- closing div col-12 form_div -->
             </div> <!-- closing div row -->
+
+            <div class="mt-3 mb-3">
+                <p class="text-muted">Populetic © 2019</p>
+            </div><!-- closing div mt-3 mb-3 -->
+
         </div> <!-- closing div container -->
+
+
 
         <!-- Booststrap and jQuery JS -->
         <script  type="text/javascript" src="web/js/jquery-3.4.1.min.js"></script>
