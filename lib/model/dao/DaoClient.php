@@ -25,10 +25,11 @@ class DaoClient {
         $state = 'solicitar datos pago';
     
         if($conn) {
-            $query = "SELECT " .
-                     "FROM " .
-                     "ON" .
-                     "WHERE";
+            $query = "SELECT pfv.'Id_Cliente', c.'Email' 
+                      FROM populetic_form_vuelos pfv
+                      LEFT JOIN clientes c 
+                      ON c.'ID' = pfv.'Id_Cliente'
+                      WHERE pfv.'Id_Estado' = 36";
         }
     }
 }
