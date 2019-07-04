@@ -12,7 +12,6 @@ $conn;
 
 //functions
 
-
 /**
  * This function reads the databse and get the clients with vip status
  * 

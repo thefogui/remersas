@@ -25,8 +25,3 @@ class Controller {
         fclose($fp);
     }
 }
-
-/*Controller::getInstance()->arrayToJson("test", array(
-    "foo" => "bar",
-    "bar" => "foo",
-));*/

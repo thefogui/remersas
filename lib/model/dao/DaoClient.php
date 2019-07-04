@@ -39,7 +39,7 @@ class DaoClient {
             } else {
                 while ($row = mysqli_fetch_assoc($result)) {
                     $client = new Client($row["nif"], $row["name"], $row["id"], $row["email"]);
-                    $dateClient = array('id' => client->getId(), 'nif' => client->getNif(), 'name' => client->getName(), 'email' => client->getEmail());
+                    $dateClient = array('id' => $client->getId(), 'nif' => $client->getNif(), 'name' => $client->getName(), 'email' => $client->getEmail());
                     $clients[] = $dateClient;
                 }
             }
