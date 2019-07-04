@@ -16,6 +16,10 @@ class ClientBankAccount extends Person {
         $this->billingAddress = $billingAddress;
     }
 
+    public function getIBAN() {
+        return $this->IBAN;
+    }
+
     public function __toString() {
         return "";
     }

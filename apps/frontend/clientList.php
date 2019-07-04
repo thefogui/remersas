@@ -4,7 +4,7 @@ session_start();
 
 function generateTable($idName = '') {
     $content = "";
-    $content .= '<table' . ($idName ? ' id="' . $idName . '"' : '') . ' class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">';
+    $content .= '<table' . ($idName ? ' id="' . $idName . '"' : '') . ' class="table table-striped table-bordered" cellspacing="0" width="100%">';
     $content .= '<thead><tr><th>NIF</th><th>Nombre</th><th>ID</th><th>Email</th></tr>';
     $content .= '</thead>';
 
@@ -69,14 +69,8 @@ function generateTable($idName = '') {
                 </div>
             </div>
         </div>
-
-        <!-- Booststrap and jQuery JS -->
-        <script  type="text/javascript" src="../../web/js/jquery-3.4.1.min.js"></script>
-        <script  type="text/javascript" src="../../web/js/bootstrap.min.js"></script>
-        <script  type="text/javascript" src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-        <script type="text/javascript">
-            
-        </script>
+        
+        <?php include("templates/scripts.php") ?>
         <!-- Main JS -->
         <script  type="text/javascript" src="../../web/js/main.js"></script>
     </body>

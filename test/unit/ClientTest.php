@@ -43,7 +43,10 @@ class ClientTest {
 
         $appConfig->closeConnection($conn);
     }
-    
+
+    function testAmountToPay() {
+        
+    }
 }
 
 $clientTest = new ClientTest();
