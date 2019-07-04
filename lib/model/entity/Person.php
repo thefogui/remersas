@@ -8,21 +8,17 @@
 class Person {
     protected $nif;
     protected $name;
+    private $id;
 
-    public function __construct() {
-        $args = func_get_args();
-
-        if (count(args) > 0) {
-            $this->Person(args[0], args[1]);
-        }
-    }
-
-    public function Person($nif, $name) {
+    public function __construct($nif, $name, $id) {
         $this->nif = $nif;
         $this->name = $name;
+        $this->id = $id;
     }
 
     public function __toString() {
-        
+        return "<br>----------------------------------------------------------------"
+                . "<br>NIF: $this->nif"
+                . "<br>Nombre: $this->name";
     }
 }

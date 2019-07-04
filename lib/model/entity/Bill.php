@@ -8,15 +8,15 @@
 class Bill {
     private $value;
 
-    public function __construct() {
-        $args = func_get_args();
-
-        if (count(args) > 0) {
-            $this->Bill(args[0]);
-        }
+    public function __construct($value) {
+        $this->value = value;
     }
 
     public function Bill($value) {
         $this->value = $value;
+    }
+
+    public function __toString() {
+        return "";
     }
 }

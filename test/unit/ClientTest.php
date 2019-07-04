@@ -6,6 +6,11 @@ include_once '../../lib/model/entity/Client.php';
 
 class ClientTest {
     
+    function testCreateClient() {
+        $client = new Client("YXXXXXXY", "John Deo", 1, "john@email.com");
+        echo $client;
+    }
+
     /**
      * Test get all clients with vip state 
      * @see DaoClient.php
@@ -21,7 +26,6 @@ class ClientTest {
         } 
         echo "Connected successfully";
 
-        
         $clients = $daoClient->getClientVip($conn);
 
         printAll($clients);
@@ -36,10 +40,11 @@ class ClientTest {
     function printAll($array) {
         foreach ($array as $element) {
             echo $element;
+        }
     }
 }
-}
 
-$connect = new ClientTest();
-$connect->testGetClientVip();
+$clientTest = new ClientTest();
+$clientTest->testCreateClient();
+//$clientTest->testGetClientVip();
 

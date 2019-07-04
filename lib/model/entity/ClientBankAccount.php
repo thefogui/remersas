@@ -10,19 +10,13 @@ class ClientBankAccount extends Person {
     private $titular;
     private $billingAddress;
 
-    public function __construct() {
-        $args = func_get_args();
-
-        if (count(args) > 0) {
-            $this->ClientBankAccount(args[0], args[1], args[2]);
-        }
-    }
-
-    public function ClientBankAccount($nif, $name, $IBAN, $titular, $billingAddress) {
-        parent::__construct($nif, $name);
-
+    public function __construct($IBAN, $titular, $billingAddress) {
         $this->IBAN = $IBAN;
         $this->titular = $titular;
         $this->billingAddress = $billingAddress;
+    }
+
+    public function __toString() {
+        return "";
     }
 }
