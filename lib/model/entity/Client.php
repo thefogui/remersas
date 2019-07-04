@@ -11,8 +11,8 @@ class Client extends Person {
     private $email;
 
     public function __construct($nif, $name, $id, $email) {
-       parent::__construct($nif, $name, $id);
-        $this->email = email;
+        parent::__construct($nif, $name, $id);
+        $this->email = $email;
     }
 
     public function __toString() {

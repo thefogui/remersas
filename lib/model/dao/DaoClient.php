@@ -26,13 +26,17 @@ class DaoClient {
         $clients = array();
     
         if($conn) {
-            $query = "SELECT pfv.'Id_Cliente', c.'Email' 
-                      FROM populetic_form_vuelos pfv
-                      LEFT JOIN clientes c 
-                      ON c.'ID' = pfv.'Id_Cliente'
-                      WHERE pfv.'Id_Estado' = 36";
+            $query =    "SELECT pfv.Id_Cliente, c.DocIdentidad, c.Nombre,c.Email
+                        FROM populetic_form_vuelos pfv
+                        LEFT JOIN clientes c 
+                        ON c.ID = pfv.Id_Cliente
+                        WHERE pfv.Id_Estado = 36;";
 
             $result = mysqli_query($conn, $query);
+
+            while ($row = $result->fetch_assoc()) {
+                echo $row['classtype']."<br>";
+            }
 
             if (mysqli_errno($conn)) {
                 throw new Exception('Error getting users: ' . mysqli_error($conn));
