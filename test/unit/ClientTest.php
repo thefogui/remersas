@@ -28,8 +28,8 @@ class ClientTest {
     function testGetClientVip() {
         $appConfig = new AppConfig();
         $daoClient = new DaoClient();
-        $client = new Client();
-        $conn = $appConfig->connect( "populetic_form", "replica" );
+        
+        $conn = $appConfig->connect( "populetic_form", "localhost" );
 
         // Check connection
         if ($conn->connect_error) {
@@ -47,6 +47,5 @@ class ClientTest {
 }
 
 $clientTest = new ClientTest();
-$clientTest->testCreateClient();
 $clientTest->testGetClientVip();
-
+$clientTest->testCreateClient();

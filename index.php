@@ -1,4 +1,18 @@
 <?php
+
+require_once "config/router.php";
+
+$router = new Router();
+ 
+/* Add a Homepage route as a closure 
+$router->add_route('/', function(){
+    
+});
+
+$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+$router->execute($path);
+*/
 ?>
 <!DOCTYPE html>
     <head>

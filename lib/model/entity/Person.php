@@ -16,9 +16,21 @@ class Person {
         $this->id = $id;
     }
 
+    public function getNif() {
+        return $this->nif;
+    }
+
+    public function getId() {
+        return $this->id;
+    }
+
+    public function getName() {
+        return $this->name;
+    }
+
     public function __toString() {
-        return "<br>----------------------------------------------------------------"
-                . "<br>NIF: $this->nif"
-                . "<br>Nombre: $this->name";
+        return "<tr><td>$this->id</td>"
+                . "<td>$this->nif</td>"
+                . "<td>$this->name</td>";
     }
 }

@@ -10,6 +10,10 @@ require_once "Person.php";
 class Client extends Person {
     private $email;
 
+	public function getEmail() {
+        return $this->email;
+    }
+
     public function __construct($nif, $name, $id, $email) {
         parent::__construct($nif, $name, $id);
         $this->email = $email;
@@ -17,6 +21,6 @@ class Client extends Person {
 
     public function __toString() {
         return parent::__toString()
-                . "<br>Email: $this->email<br>";
+                . "<td>$this->email</td></tr>";
     }
 }

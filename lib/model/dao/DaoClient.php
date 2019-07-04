@@ -24,29 +24,26 @@ class DaoClient {
     public function getClientVip($conn) {
         $state = 'solicitar datos pago';
         $clients = array();
-    
+
         if($conn) {
-            $query =    "SELECT pfv.Id_Cliente, c.DocIdentidad, c.Nombre,c.Email
+            $query =   "SELECT c.DocIdentidad AS nif, c.Nombre AS name, pfv.Id_Cliente AS id, c.Email AS email
                         FROM populetic_form_vuelos pfv
                         LEFT JOIN clientes c 
                         ON c.ID = pfv.Id_Cliente
-                        WHERE pfv.Id_Estado = 36;";
+                        WHERE pfv.Id_Estado = 36";
 
-            $result = mysqli_query($conn, $query);
-
-            while ($row = $result->fetch_assoc()) {
-                echo $row['classtype']."<br>";
-            }
+            $result = mysqli_query($conn, $query) or die('Invalid query: ' . mysqli_error());
 
             if (mysqli_errno($conn)) {
                 throw new Exception('Error getting users: ' . mysqli_error($conn));
             } else {
-                while ($client = mysqli_fetch_object($result, 'Client')) {
-                    $clients[] = $client;
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $client = new Client($row["nif"], $row["name"], $row["id"], $row["email"]);
+                    $dateClient = array('id' => client->getId(), 'nif' => client->getNif(), 'name' => client->getName(), 'email' => client->getEmail());
+                    $clients[] = $dateClient;
                 }
             }
         }
-        return  $clients;
-
+        return $clients;
     }
 }
