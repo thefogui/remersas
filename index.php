@@ -15,18 +15,7 @@ $router->execute($path);
 */
 ?>
 <!DOCTYPE html>
-    <head>
-        <title>Remersas - Populetic</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-        <meta charset="utf-8">
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-
-        <!-- Main CSS -->
-        <link rel="stylesheet" href="web/css/main.css">
-
-        <!-- Booststrap CSS -->
-        <link rel="stylesheet" href="web/css/bootstrap.min.css">
-    </head>
+    <?php include("apps/views/layouts/header.php") ?>
     
     <body>
         <div class="box-login d-flex justify-content-center">
@@ -46,7 +35,6 @@ $router->execute($path);
             </form>
         </div> <!-- closing div container -->
 
-        <!-- Booststrap and jQuery JS -->
-        <script  type="text/javascript" src="web/js/jquery-3.4.1.min.js"></script>
+        <?php include("apps/views/layouts/scripts.php") ?>
     </body>
 </html>

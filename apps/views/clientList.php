@@ -1,7 +1,5 @@
 <?php
 
-session_start();
-
 /**
  * This function generates a bootstrap table
  * @param $idName html id of the table
@@ -13,20 +11,27 @@ function generateTable($idName = '', $thead = '', $data) {
     $content .= '<table' . ($idName ? ' id="' . $idName . '"' : '') . ' class="table table-striped table-bordered" cellspacing="0" width="100%">';
 
     $content .= '<thead>';
+    $content .= '<tr>';
     foreach ($thead as $cow) {
-        $content .= '<tr>';
+        $content .= '<th>';
         $content .= $cow;
-        $content .= '</tr>';
+        $content .= '</th>';
     }
+    $content .= '</tr>';
     $content .= '</thead>';
 
     $content .= '<tbody>';
-
-    foreach ($_SESSION['clientsVips'] as $key => $value) {
-        $content .= $value;
+    foreach ($data as $row) {
+        $content .= '<tr>';
+        foreach($row as $cow) {
+            $content .= '<td>';
+            $content .= $cow;
+            $content .= '</td>';
+        }
+        $content .= '</tr>';
     }
-
     $content .= '</tbody>';
+
     $content .= '</table>';
 
     return $content;
@@ -35,19 +40,7 @@ function generateTable($idName = '', $thead = '', $data) {
 ?>
 
 <!DOCTYPE html>
-    <head>
-        <title>Remersas - Populetic</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-        <meta charset="utf-8">
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-
-        <!-- Booststrap CSS -->
-        <link rel="stylesheet" href="../../web/css/bootstrap.min.css">
-        <link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
-
-        <!-- Main CSS -->
-        <link rel="stylesheet" href="../../web/css/main.css">
-    </head>
+    <?php include("apps/views/layouts/header.php") ?>
     
     <body>
         <div class="d-flex justify-content-center" style="margim-top:3em!important;">
