@@ -43,6 +43,5 @@ class DaoClient {
             }
         }
         return  $clients;
-
     }
 }

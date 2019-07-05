@@ -21,7 +21,7 @@ function getVipClients($amount) {
     $daoClient = new DaoClient();
     $appConfig = new AppConfig();
     
-    $conn = $appConfig->connect( "populetic_form", "localhost" ); //conenct to the sql databse
+    $conn = $appConfig->connect( "populetic_form", "localhost" ); //connect to the sql databse
     // Check connection
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
@@ -29,7 +29,7 @@ function getVipClients($amount) {
 
     $clients = $daoClient->getClientVip($conn);
 
-    $appConfig->closeConnection($conn); //close the conection
+    $appConfig->closeConnection($conn); //close the connection
 
     return $clients;
 }
@@ -37,8 +37,8 @@ function getVipClients($amount) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $amount = $_POST["amount"];
     
-    $clientsVips = getVipClients($amount);
+    //$clientsVips = getVipClients($amount);
     Controller::getInstance()->arrayToJson("clientsvip", $clientsVips);
 }
 
-header("Location: ../apps/frontend/clientList.php?amount=" . $amount);
+header("Location: ../apps/views/clientList.php?amount=" . $amount);

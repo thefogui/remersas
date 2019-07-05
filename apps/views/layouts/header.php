@@ -5,8 +5,8 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
     <!-- Main CSS -->
-    <link rel="stylesheet" href="web/css/main.css">
+    <link rel="stylesheet" href="../../web/css/main.css">
 
     <!-- Booststrap CSS -->
-    <link rel="stylesheet" href="web/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../web/css/bootstrap.min.css">
 </head>

@@ -24,4 +24,21 @@ class Controller {
         fwrite($fp, json_encode($array));
         fclose($fp);
     }
+
+    /**
+     * Function to delete a json file
+     * be carefull using it 
+     * 
+     * @param $name file name
+     * @param $source file source folder
+     * @exception throws an exception if the file does not exist
+     */
+    function deleteJson($name, $source = "../cache/") {
+        $fileRouter = $source . $name . '.json';
+        if (file_exists($fileRouter)) {
+            unlink($fileRouter);
+        } else {
+            throw new Exception('Error deleting file: ' . $fileRouter .' does not exist!');
+        }
+    }
 }
