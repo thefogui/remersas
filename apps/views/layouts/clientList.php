@@ -2,10 +2,22 @@
 
 session_start();
 
-function generateTable($idName = '') {
+/**
+ * This function generates a bootstrap table
+ * @param $idName html id of the table
+ * @param $thead an array that contains the data tu put in the head of the table
+ * @param $data actual array that contains the data we want to put in the table
+ */
+function generateTable($idName = '', $thead = '', $data) {
     $content = "";
     $content .= '<table' . ($idName ? ' id="' . $idName . '"' : '') . ' class="table table-striped table-bordered" cellspacing="0" width="100%">';
-    $content .= '<thead><tr><th>NIF</th><th>Nombre</th><th>ID</th><th>Email</th></tr>';
+
+    $content .= '<thead>';
+    foreach ($thead as $cow) {
+        $content .= '<tr>';
+        $content .= $cow;
+        $content .= '</tr>';
+    }
     $content .= '</thead>';
 
     $content .= '<tbody>';
