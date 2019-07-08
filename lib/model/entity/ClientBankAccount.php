@@ -6,11 +6,13 @@
  * @see Client.php
  */
 class ClientBankAccount extends Person {
+    private $id;
     private $IBAN;
     private $titular;
     private $billingAddress;
 
-    public function __construct($IBAN, $titular, $billingAddress) {
+    public function __construct($id, $IBAN, $titular, $billingAddress) {
+        $this->id = $id;
         $this->IBAN = $IBAN;
         $this->titular = $titular;
         $this->billingAddress = $billingAddress;

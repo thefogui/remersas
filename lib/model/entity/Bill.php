@@ -6,10 +6,13 @@
  * @see Client.php
  */
 class Bill {
+    private $id;
     private $value;
+    private $date;
+    private $code;
 
     public function __construct($value) {
-        $this->value = value;
+        $this->value = $value;
     }
 
     public function Bill($value) {

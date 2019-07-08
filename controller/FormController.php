@@ -34,10 +34,11 @@ function getVipClients($amount) {
     return $clients;
 }
 
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $amount = $_POST["amount"];
     
-    //$clientsVips = getVipClients($amount);
+    $clientsVips = getVipClients($amount);
     Controller::getInstance()->arrayToJson("clientsvip", $clientsVips);
 }
 

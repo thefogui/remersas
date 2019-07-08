@@ -6,13 +6,17 @@ function getTable($idName, $destination, $thead = '') {
     $string = file_get_contents($destination . $file . ".json", 'r');
 
     $data = json_decode($string, true);
-   
-    try {
-        Controller::getInstance()->deleteJson($file, "../../cache/");
-    } catch (Exception $e) {
-        echo 'Caught exception: ',  $e->getMessage(), "\n";
-    }    
-    return generateTable($idName, $thead, $data);
+
+    if ($data) {
+        try {
+            #Controller::getInstance()->deleteJson($file, "../../cache/");
+        } catch (Exception $e) {
+            throw $e;
+        }
+        return generateTable($idName, $thead, $data);
+    }
+
+    return "There is no data to be showed";
 }
 
 /**
@@ -21,7 +25,7 @@ function getTable($idName, $destination, $thead = '') {
  * @param $thead an array that contains the data to put in the head of the table
  * @param $data actual array that contains the data we want to put in the table
  */
-function generateTable($idName = '', $thead = '', $data) {
+function generateTable($idName = '', $thead = '', $data = array()) {
     $content = "";
     $content .= '<table' . ($idName ? ' id="' . $idName . '"' : '') . ' class="table table-striped table-bordered" cellspacing="0" width="100%">';
 
@@ -53,6 +57,14 @@ function generateTable($idName = '', $thead = '', $data) {
     return $content;
 }
 
+function sendEmails() {
+    echo "Need to be implemented";
+}
+
+if(array_key_exists('email-send', $_POST)) {
+    sendEmails();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -60,7 +72,6 @@ function generateTable($idName = '', $thead = '', $data) {
     
     <body>
         <div class="d-flex justify-content-center" style="margim-top:3em!important;">
-            
             <div class="container" style="margin-top: 2em;">
                 <div class="row">
                     <img class="align-self-center" src="../../web/images/logo.png" alt="logo">
@@ -88,11 +99,18 @@ function generateTable($idName = '', $thead = '', $data) {
                         </div>
                     </div>
                 </div>
+
+                <div class="send-email-div">
+                <form method="post">
+                    <input type="submit" name="email-send" id="email-send-button" value="Send Email to clients" />
+                </form>
+                </div><!-- Closing div send-email-div -->
             </div>
         </div>
         
         <?php include("layouts/scripts.php") ?>
         <!-- Main JS -->
+
         <script  type="text/javascript" src="../../web/js/main.js"></script>
     </body>
 </html>

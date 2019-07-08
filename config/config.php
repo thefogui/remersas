@@ -54,10 +54,10 @@ class AppConfig {
             } 
             else 
             {
-            /* LOCALHOST*/
-            $servername = "127.0.0.1";
-            $username   = "root";
-            $password   = "";
+                /* LOCALHOST*/
+                $servername = "127.0.0.1";
+                $username   = "root";
+                $password   = "";
             }
         } 
         else 
