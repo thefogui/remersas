@@ -2,24 +2,36 @@
 
 /**
  * This function verifies if the url that the used to get here is valid or not
+ * @throws Exception if the email ins't a valid format
  */
-
 function checkUrl() {
     if (isset($_GET['email'])) {
-        echo $_GET['email'];
+
+        $email = $_GET['email']; //chekcs if the email insert in the url is a valid format
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new Exception("The email inserted isn't a valid format.");
+        }
 
         if (isset($_GET['hash'])) {
-            echo $_GET['hash'];
+            //TODO: call the query with these parameters and redirect to the bank account form
         } else {
             // Fallback behaviour goes here
+            //TODO: redirect or show error template 
         }
     } else {
         // Fallback behaviour goes here
+         //TODO: redirect or show error template
     }
 }
 
-checkUrl()
+try {
+    checkUrl();
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
 
+
+//TODO: Put load gif while this page is processed 
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +39,7 @@ checkUrl()
 
     <body>
         <section>
-
+            
         </section>
 
         <?php include("layouts/scripts.php") ?>

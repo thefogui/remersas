@@ -27,7 +27,12 @@ function getVipClients($amount) {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    $clients = $daoClient->getClientVip($conn);
+    $resultQuery = $daoClient->getClientVip($conn, $amount); //clients, ammountLeft, amountToPay
+
+    $clients = $resultQuery[0];
+
+    $_POST["amountLeft"] = $resultQuery[1];
+    $_POST["amountToPay"] = $resultQuery[2];
 
     $appConfig->closeConnection($conn); //close the connection
 

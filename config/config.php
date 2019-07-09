@@ -89,7 +89,7 @@ class AppConfig {
                 $servername = "127.0.0.1"; 
                 $username = "root";
                 $password = "p0pprdfr0nt";
-                }
+                }   
                 else 
                 {
                 /* SERVER */

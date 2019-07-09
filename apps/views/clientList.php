@@ -5,7 +5,10 @@ function getTable($idName, $destination, $thead = '') {
     $file = 'clientsvip';
     $string = file_get_contents($destination . $file . ".json", 'r');
 
-    $data = json_decode($string, true);
+    $data = json_decode($string, true); 
+    
+    session_start();
+    $_SESSION['json_data_vclients'] = $data; //save the json data in the session so we can use it later to send emails
 
     if ($data) {
         try {
@@ -58,7 +61,10 @@ function generateTable($idName = '', $thead = '', $data = array()) {
 }
 
 function sendEmails() {
-    echo "Need to be implemented";
+    //TODO:: need to read the json and send email
+
+    $_SESSION['json_data_vclients'];
+    Controller::getInstance()->sendEmails();
 }
 
 if(array_key_exists('email-send', $_POST)) {
@@ -85,10 +91,20 @@ if(array_key_exists('email-send', $_POST)) {
                 </div>
 
                 <div class="row">
-                    <h1 class="h3 mb-3 font-weight-normal">
-                        Amount of money left after pay vips: 
-                        XXX€
-                    </h1>
+                    <?php
+                        //Checks if the information is set in the session
+                        if (isset($_POST["amountLeft"])) {
+                            echo "<h1 class='h3 mb-3 font-weight-normal'>";
+                            echo   "Amount of money left after pay vips:";
+                            echo    $_POST["amountLeft"];
+                            echo    "</h1>";
+                        } else if ($_POST["amountToPaY"]) {
+                            echo "<h1 class='h3 mb-3 font-weight-normal'>";
+                            echo   "Amount of money to pay to clients vips:";
+                            echo    $_POST["amountToPaY"];
+                            echo    "</h1>";
+                        }
+                    ?>
                 </div>
 
                 <div class="row">

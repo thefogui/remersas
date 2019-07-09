@@ -9,13 +9,15 @@ class ClientBankAccount extends Person {
     private $id;
     private $IBAN;
     private $titular;
+    private $swift;
     private $billingAddress;
 
-    public function __construct($id, $IBAN, $titular, $billingAddress) {
+    public function __construct($id, $IBAN, $titular, $billingAddress, $swift) {
         $this->id = $id;
         $this->IBAN = $IBAN;
         $this->titular = $titular;
         $this->billingAddress = $billingAddress;
+        $this->swift = $swift;
     }
 
     public function getIBAN() {
