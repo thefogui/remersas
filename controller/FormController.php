@@ -31,8 +31,9 @@ function getVipClients($amount) {
 
     $clients = $resultQuery[0];
 
-    $_POST["amountLeft"] = $resultQuery[1];
-    $_POST["amountToPay"] = $resultQuery[2];
+    session_start();
+    $_SESSION["amountLeft"] = $resultQuery[1];
+    $_SESSION["amountToPay"] = $resultQuery[2];
 
     $appConfig->closeConnection($conn); //close the connection
 

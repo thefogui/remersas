@@ -5,9 +5,8 @@ function getTable($idName, $destination, $thead = '') {
     $file = 'clientsvip';
     $string = file_get_contents($destination . $file . ".json", 'r');
 
-    $data = json_decode($string, true); 
+    $data = json_decode($string, true);
     
-    session_start();
     $_SESSION['json_data_vclients'] = $data; //save the json data in the session so we can use it later to send emails
 
     if ($data) {
@@ -46,10 +45,13 @@ function generateTable($idName = '', $thead = '', $data = array()) {
 
     foreach ($data as $row) {
         $content .= '<tr>';
-        foreach ($row as $cow) {
-            $content .= '<td>';
-            $content .= $cow;
-            $content .= '</td>';
+
+        if (is_array($row) || is_object($row)) {
+            foreach ($row as $cow) {
+                $content .= '<td>';
+                $content .= $cow;
+                $content .= '</td>';
+            }
         }
         $content .= '</tr>';
     }
@@ -93,15 +95,23 @@ if(array_key_exists('email-send', $_POST)) {
                 <div class="row">
                     <?php
                         //Checks if the information is set in the session
-                        if (isset($_POST["amountLeft"])) {
+                        session_start();
+                        if (isset($_SESSION["amountLeft"])) {
                             echo "<h1 class='h3 mb-3 font-weight-normal'>";
-                            echo   "Amount of money left after pay vips:";
-                            echo    $_POST["amountLeft"];
+                            echo   "Amount of money left after pay vips: ";
+                            echo    $_SESSION["amountLeft"];
                             echo    "</h1>";
-                        } else if (isset($_POST["amountToPay"])) {
+                        }
+                    ?>
+                </div>
+
+                <div class="row">
+                    <?php
+                        //Checks if the information is set in the session
+                        if (isset($_SESSION["amountToPay"])) {
                             echo "<h1 class='h3 mb-3 font-weight-normal'>";
-                            echo   "Amount of money to pay to clients vips:";
-                            echo    $_POST["amountToPay"];
+                            echo   "Amount of money to pay to clients vips: ";
+                            echo   $_SESSION["amountToPay"];
                             echo    "</h1>";
                         }
                     ?>
@@ -111,14 +121,16 @@ if(array_key_exists('email-send', $_POST)) {
                     <div class="card justify-content-center shadow p-3 mb-5 bg-white rounded" style="width: 80vw;">
                         <div class="card-body">
                             <h1>Clients Vips</h1>    
-                            <?php echo getTable("clientsVipsTable", "../../cache/", array("ID", "Nif", "Name", "Email")) ?>
+                            <?php echo getTable("tabel", "../../cache/", array("Nif", "Name", "Id", "Email", "Compensation (€)")) ?>
                         </div>
                     </div>
                 </div>
 
                 <div class="send-email-div">
                 <form method="post">
-                    <input type="submit" name="email-send" id="email-send-button" value="Send Email to clients" />
+                    <div class="w-25 p-3 center-block">
+                        <input class="btn btn-lg btn-outline-info btn-block" name="email-send" id="email-send-button" value="Send Email to clients">
+                    </div><!-- closing div mt-4 -->
                 </form>
                 </div><!-- Closing div send-email-div -->
             </div>
@@ -127,6 +139,6 @@ if(array_key_exists('email-send', $_POST)) {
         <?php include("layouts/scripts.php") ?>
         <!-- Main JS -->
 
-        <script  type="text/javascript" src="../../web/js/main.js"></script>
+        <script type="text/javascript" src="../../web/js/main.js"></script>
     </body>
 </html>

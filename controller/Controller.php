@@ -1,7 +1,5 @@
 <?php
 
-require_once "../lib/model/dao/DaoUrlClient.php";
-
 class Controller {
     private static $instance;
     

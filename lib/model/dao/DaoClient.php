@@ -26,6 +26,14 @@ class DaoClient {
         //TODO: query to get the amount reviewed
         return $amountReviewed;
     }
+
+    /**
+     * Function to get the clients with the status 
+     * 
+     */
+    public function getClients($conn, $ammount) {
+
+    }
     
     /**
      * This function returns all the clients that has the state : 
@@ -35,18 +43,29 @@ class DaoClient {
      * @param conn the connection with the sql
      * @return array that contains the clients array the amount to pay to the vips clients and the amount left after pay clients.
      */
-    public function getClientVip($conn, $ammount) {
+    public function getClientVip($conn, $amount) {
         $state = 'solicitar datos pago';
         $clients = array();
         $amountToPay = 0;
+        $clientsVip = 0;
+        $amountLeft = $amount;
     
         if($conn) {
             //TODO: orderby the amount of money the client gonna receive
-            $query = "SELECT c.DocIdentidad AS nif, c.Nombre AS name, pfv.Id_Cliente AS id, c.Email AS email
-                            FROM populetic_form_vuelos pfv
-                            INNER JOIN clientes c 
-                            ON c.ID = pfv.Id_Cliente
-                            WHERE pfv.Id_Estado = 36";
+            $query = "SELECT 
+                         c.DocIdentidad AS nif
+                        ,c.Nombre AS name
+                        ,pfv.Id_Cliente AS id
+                        ,c.Email AS email 
+                        ,pfv.Cuantia_pasajero AS amountReviewed
+                    FROM 
+                        populetic_form_vuelos pfv
+                    INNER JOIN 
+                        clientes c ON c.ID = pfv.Id_Cliente
+                    WHERE 
+                        pfv.Id_Estado = 36 
+                    ORDER BY 
+                        amountReviewed";
 
             $result = mysqli_query($conn, $query);
 
@@ -54,18 +73,23 @@ class DaoClient {
                 throw new Exception('Error getting users: ' . mysqli_error($conn));
             } else {
                 while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-                    echo $row;
-                    $clients[] = new Client($row['nif'], $row['name'], $row['id'], $row['email']);
-
+                    
+                    $client = new Client($row['nif'], $row['name'], $row['id'], $row['email']);
+                    
                     //logical behind the amount
+                    $clientAmount = $client->amountToPay($row['amountReviewed']);
+                    
+                    $amountToPay = $amountToPay + $clientAmount;
 
-                    //TODO: get the amount of money the client got
-                   /*$clientAmount = $client->amountToPay();
-                    $amount = $amount - $clientAmount;
-                    $amountToPay =  $amountToPay + $clientAmount;*/
+                    if ($amountToPay <= $amount) {
+                        $amountLeft = $amountLeft - $clientAmount;
+                        $clientValue = array($row['nif'], $row['name'], $row['id'], $row['email'], $clientAmount);
+                        $clients[] = $clientValue;
+                    }
                 }
             }
+            $clientsVip = count($clients);
         }
-        return  array($clients, $amount, $amountToPay);
+        return  array($clients, $amountLeft, $amountToPay, $clientsVip);
     }
 }

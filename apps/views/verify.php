@@ -1,6 +1,6 @@
 <?php
 
-require_once "../../controller/Controller.php";
+require_once "../../controller/VerifyController.php";
 
 /**
  * This function verifies if the url that the used to get here is valid or not
@@ -17,7 +17,7 @@ function checkUrl() {
         if (isset($_GET['hash'])) {
             //TODO: call the query with these parameters and redirect to the bank account form
         
-            if (Controller::getInstance()->checkUrl($_GET['email'], $_GET['hash'])) {
+            if (Controller::getInstance()->checkClientUrl($_GET['email'], $_GET['hash'])) {
                 //TODO: redirect to form
             } else {
                 //TODO: say it isnst a vlaid url

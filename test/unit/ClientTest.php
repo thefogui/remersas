@@ -37,7 +37,7 @@ class ClientTest {
         } 
         echo "Connected successfully";
 
-        $clients = $daoClient->getClientVip($conn);
+        $clients = $daoClient->getClientVip($conn, 500);
 
         $this->printAll($clients);
 
