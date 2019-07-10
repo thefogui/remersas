@@ -98,10 +98,10 @@ if(array_key_exists('email-send', $_POST)) {
                             echo   "Amount of money left after pay vips:";
                             echo    $_POST["amountLeft"];
                             echo    "</h1>";
-                        } else if ($_POST["amountToPaY"]) {
+                        } else if (isset($_POST["amountToPay"])) {
                             echo "<h1 class='h3 mb-3 font-weight-normal'>";
                             echo   "Amount of money to pay to clients vips:";
-                            echo    $_POST["amountToPaY"];
+                            echo    $_POST["amountToPay"];
                             echo    "</h1>";
                         }
                     ?>

@@ -119,4 +119,6 @@ class Controller {
 
         return openssl_decrypt(base64_decode($encryptedText), $encrypt_method, $key, 0, $iv);
     }
+
+    
 }

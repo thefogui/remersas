@@ -42,26 +42,27 @@ class DaoClient {
     
         if($conn) {
             //TODO: orderby the amount of money the client gonna receive
-            $query = "SELECT pfv.'Id_Cliente', c.'Email' 
-                      FROM populetic_form_vuelos pfv 
-                      LEFT JOIN clientes c 
-                      ON c.'ID' = pfv.'Id_Cliente' 
-                      WHERE pfv.'Id_Estado' = 36";
+            echo $query = "SELECT c.DocIdentidad AS nif, c.Nombre AS name, pfv.Id_Cliente AS id, c.Email AS email
+                            FROM populetic_form_vuelos pfv
+                            INNER JOIN clientes c 
+                            ON c.ID = pfv.Id_Cliente
+                            WHERE pfv.Id_Estado = 36";
 
             $result = mysqli_query($conn, $query);
 
             if (mysqli_errno($conn)) {
                 throw new Exception('Error getting users: ' . mysqli_error($conn));
             } else {
-                while ($client = mysqli_fetch_object($result, 'Client')) {
-                    $clients[] = $client;
+                while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+                    echo $row;
+                    $clients[] = new Client($row['nif'], $row['name'], $row['id'], $row['email'],);
 
                     //logical behind the amount
 
                     //TODO: get the amount of money the client got
-                    $clientAmount = $client->amountToPay();
+                   /*$clientAmount = $client->amountToPay();
                     $amount = $amount - $clientAmount;
-                    $amountToPay =  $amountToPay + $clientAmount;
+                    $amountToPay =  $amountToPay + $clientAmount;*/
                 }
             }
         }
