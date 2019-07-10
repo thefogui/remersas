@@ -42,6 +42,13 @@ class UrlClient {
     }
 
     /**
+     * return true if the hash is similar a hash passed by parameter false otherwise
+     */
+    private function checkHash($hash) {
+        return $this->hash == $hash;
+    }
+
+    /**
      * Function to check the expire date of the actual url
      * 
      * @return true if the url still valid and false otherwise

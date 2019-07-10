@@ -42,7 +42,7 @@ class DaoClient {
     
         if($conn) {
             //TODO: orderby the amount of money the client gonna receive
-            echo $query = "SELECT c.DocIdentidad AS nif, c.Nombre AS name, pfv.Id_Cliente AS id, c.Email AS email
+            $query = "SELECT c.DocIdentidad AS nif, c.Nombre AS name, pfv.Id_Cliente AS id, c.Email AS email
                             FROM populetic_form_vuelos pfv
                             INNER JOIN clientes c 
                             ON c.ID = pfv.Id_Cliente
@@ -55,7 +55,7 @@ class DaoClient {
             } else {
                 while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
                     echo $row;
-                    $clients[] = new Client($row['nif'], $row['name'], $row['id'], $row['email'],);
+                    $clients[] = new Client($row['nif'], $row['name'], $row['id'], $row['email']);
 
                     //logical behind the amount
 

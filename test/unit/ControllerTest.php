@@ -34,6 +34,35 @@ class ControllerTest {
         echo "-------------------------------";
         echo "\n";
     }
+
+    function testcheckUrl()
+    {
+        echo "-------------------------------";
+        echo "\n";
+        echo "****Testing eheckurl ****";
+        echo "\n";
+        echo Controller::getInstance()->checkurl("", "");
+        echo "\n";
+
+        echo "testing a valid entry --->";
+        echo Controller::getInstance()->checkurl("", "");
+        echo "\n";
+
+        echo "testing a invalid entry --->";
+        echo Controller::getInstance()->checkurl("", "");
+        echo "\n";
+
+        echo "testing a existent query --->";
+        echo Controller::getInstance()->checkurl("", "");
+        echo "\n";
+
+        echo "testing a inexistent query --->";
+        echo Controller::getInstance()->checkurl("", "");
+        echo "\n";
+
+        echo "-------------------------------";
+        echo "\n";
+    }
 }
 
 $controllerTest = new ControllerTest();

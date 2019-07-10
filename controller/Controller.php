@@ -1,5 +1,7 @@
 <?php
 
+require_once "../lib/model/dao/DaoUrlClient.php";
+
 class Controller {
     private static $instance;
     
@@ -120,5 +122,17 @@ class Controller {
         return openssl_decrypt(base64_decode($encryptedText), $encrypt_method, $key, 0, $iv);
     }
 
-    
+    /**
+     * Function to check the url that was sent to user email
+     * @return true if the url is valid false otherwise
+     */
+    function checkClientUrl($email, $hash) {
+        $daoUrlClient = new DaoUrlClient();
+        $conn = $appConfig->connect("populetic_form", "localhost");
+
+        $urlCheckResult = $daoUrlClient->checkClientUrl($email, $hash);
+
+        $appConfig->closeConnection($conn);
+        return $urlCheckResult;
+    }
 }

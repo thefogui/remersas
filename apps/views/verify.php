@@ -1,5 +1,7 @@
 <?php
 
+require_once "../../controller/Controller.php";
+
 /**
  * This function verifies if the url that the used to get here is valid or not
  * @throws Exception if the email ins't a valid format
@@ -14,6 +16,12 @@ function checkUrl() {
 
         if (isset($_GET['hash'])) {
             //TODO: call the query with these parameters and redirect to the bank account form
+        
+            if (Controller::getInstance()->checkUrl($_GET['email'], $_GET['hash'])) {
+                //TODO: redirect to form
+            } else {
+                //TODO: say it isnst a vlaid url
+            }
         } else {
             // Fallback behaviour goes here
             //TODO: redirect or show error template 
