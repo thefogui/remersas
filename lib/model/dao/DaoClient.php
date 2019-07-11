@@ -27,13 +27,6 @@ class DaoClient {
         return $amountReviewed;
     }
 
-    /**
-     * Function to get the clients with the status 
-     * 
-     */
-    public function getClients($conn, $ammount) {
-
-    }
     
     /**
      * This function returns all the clients that has the state : 
@@ -73,6 +66,7 @@ class DaoClient {
                 throw new Exception('Error getting users: ' . mysqli_error($conn));
             } else {
                 while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+                    echo "<br>".date("d-m-Y H:i:s");
                     
                     $client = new Client($row['nif'], $row['name'], $row['id'], $row['email']);
                     
@@ -88,8 +82,149 @@ class DaoClient {
                     }
                 }
             }
-            $clientsVip = count($clients);
+            $clientsSize = count($clients);
         }
-        return  array($clients, $amountLeft, $amountToPay, $clientsVip);
+        return array("clients"=>$clients,"amountLeft"=> $amountLeft, "amountToPay"=>$amountToPay, "totalClients"=>$clientsSize);
+    }
+
+     /**
+     * Function to get the oldest month that contains a possible bill
+     * @param conn
+     * @return month
+     * @throws exception error connecting to the sql database
+     */
+    public function getTheOldestMonth($conn) {
+        $monthYear = array();
+        if ($conn) {
+            echo "<br>".date("d-m-Y H:i:s");
+            $query = "SELECT 
+                        MONTH(FROM_UNIXTIME(lg.data)) AS m,
+                        YEAR(FROM_UNIXTIME(lg.data)) AS y
+                    FROM 
+                        populetic_form.populetic_form_vuelos pfv
+                    INNER JOIN 
+                        halbrand.logs_estados lg ON pfv.ID = lg.Id_reclamacion
+                    WHERE 
+                        pfv.Id_Estado = 18 AND 
+                        lg.Estado = 18
+                    ORDER BY
+                        m
+                    LIMIT 1"; 
+
+            $result = mysqli_query($conn, $query);
+
+            if (mysqli_errno($conn)) {
+                throw new Exception('Error getting users: ' . mysqli_error($conn));
+            } else {
+                $d = mysqli_fetch_assoc($result);
+                
+                $monthYear["month"] = $d["m"];
+                $monthYear["year"] = $d["y"];
+            }
+        }
+        return $monthYear;
+    }
+
+    /**
+     * Function to get the bills order by the month inserted
+     * @param $conn
+     * @param $month
+     * @return 
+     * @throws 
+     */
+    public function getClientsByMonth($conn, $month, $amount) {
+        $clients = array();
+        $amountToPay = 0;
+        $clientsVip = 0;
+        $amountLeft = $amount;
+
+        if ($conn) {
+            echo "<br>".date("d-m-Y H:i:s");
+            $query = "SELECT 
+                            c.DocIdentidad AS nif
+                            ,c.Nombre AS name
+                            ,pfv.Id_Cliente AS id
+                            ,c.Email AS email 
+                            ,pfv.Cantidadcompensacion AS amountReviewed
+                            ,pfv.Cuantia_pasajero
+                        FROM 
+                            populetic_form.populetic_form_vuelos pfv
+                        INNER JOIN 
+                            populetic_form.clientes c ON c.ID = pfv.Id_Cliente
+                        INNER JOIN 
+                            halbrand.logs_estados lg ON pfv.ID = lg.Id_reclamacion
+                        WHERE 
+                            pfv.Id_Estado = 18 
+                            AND 
+                            MONTH(FROM_UNIXTIME(lg.data)) =" . $month .
+                        " ORDER BY 
+                            amountReviewed";
+
+            $result = mysqli_query($conn, $query);
+
+            if (mysqli_errno($conn)) {
+                throw new Exception('Error getting users: ' . mysqli_error($conn));
+            } else {
+                while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+                    echo "<br>".date("d-m-Y H:i:s");
+                    
+                    $client = new Client($row['nif'], $row['name'], $row['id'], $row['email']);
+                    
+                    //logical behind the amount
+                    $clientAmount = $client->amountToPay($row['amountReviewed']);
+                    
+                    $amountToPay = $amountToPay + $clientAmount;
+
+                    if ($amountToPay <= $amount) {
+                        $amountLeft = $amountLeft - $clientAmount;
+                        $clientValue = array($row['nif'], $row['name'], $row['id'], $row['email'], $clientAmount);
+                        $clients[] = $clientValue;
+                    }
+                }
+            }
+            $clientsSize = count($clients);
+        }
+        return array("clients"=>$clients,"amountLeft"=> $amountLeft, "amountToPay"=>$amountToPay, "totalClients"=>$clientsSize);
+    }
+
+    /**
+     * 
+     */
+    public function getClients($conn, $amount) {
+        $result = $this->getClientVip($conn, $amount);
+
+        $amountLeft = $result["amountLeft"];
+
+        $date = $this->getTheOldestMonth($conn);
+
+        $month = $date["month"];
+        $year = $date["year"];
+
+        $m = date("M Y", strtotime($month . "-" . $year));
+
+        $actual_date = date('M Y');
+
+        $amountToPay = $result["amountToPay"];
+
+        while (($amountLeft > 0)  && ($actual_date > $m)) {
+            $resultsClientsMonth = $this->getClientsByMonth($conn, $month, $amountLeft);
+
+            echo "<br>".date("d-m-Y H:i:s");
+
+            $amountLeft = $amountLeft - $resultsClientsMonth["amountLeft"];
+
+            echo "<br><hr>";
+            var_dump($result);
+            echo "<br><hr>";
+            var_dump($resultsClientsMonth);
+            echo "<br><hr>";
+
+            $result = array_merge($result, $resultsClientsMonth);
+
+            $month = $month + 1;
+            if ($month == 13)
+                $month = 1;
+        }
+        return $result;
     }
 }

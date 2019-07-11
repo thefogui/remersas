@@ -17,7 +17,7 @@ $conn;
  * 
  * @param $amount amount of money the user speciefied in the form
  */
-function getVipClients($amount) {
+function getClients($amount) {
     $daoClient = new DaoClient();
     $appConfig = new AppConfig();
     
@@ -27,13 +27,15 @@ function getVipClients($amount) {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    $resultQuery = $daoClient->getClientVip($conn, $amount); //clients, ammountLeft, amountToPay
+    $resultQuery = $daoClient->getClients($conn, $amount); //clients, ammountLeft, amountToPay
 
-    $clients = $resultQuery[0];
+
+    $clients = $resultQuery['clients'];
 
     session_start();
-    $_SESSION["amountLeft"] = $resultQuery[1];
-    $_SESSION["amountToPay"] = $resultQuery[2];
+    $_SESSION["amountLeft"] = $resultQuery["amountLeft"];
+    $_SESSION["amountToPay"] = $resultQuery["amountToPay"];
+    $_SESSION["amountToPay"] = $resultQuery["amountToPay"];
 
     $appConfig->closeConnection($conn); //close the connection
 
@@ -44,8 +46,9 @@ function getVipClients($amount) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $amount = $_POST["amount"];
     
-    $clientsVips = getVipClients($amount);
-    Controller::getInstance()->arrayToJson("clientsvip", $clientsVips);
+    $clients = getClients($amount);
+
+    Controller::getInstance()->arrayToJson("clients", $clients);
 }
 
 header("Location: ../apps/views/clientList.php?amount=" . $amount);

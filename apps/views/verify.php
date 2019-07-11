@@ -1,12 +1,16 @@
 <?php
 
 require_once "../../controller/VerifyController.php";
+require_once "../../lib/model/dao/DaoUrlClient.php";
 
 /**
  * This function verifies if the url that the used to get here is valid or not
  * @throws Exception if the email ins't a valid format
  */
 function checkUrl() {
+
+    $verifyController = new VerifyController();
+    
     if (isset($_GET['email'])) {
 
         $email = $_GET['email']; //chekcs if the email insert in the url is a valid format
@@ -16,15 +20,22 @@ function checkUrl() {
 
         if (isset($_GET['hash'])) {
             //TODO: call the query with these parameters and redirect to the bank account form
-        
-            if (Controller::getInstance()->checkClientUrl($_GET['email'], $_GET['hash'])) {
-                //TODO: redirect to form
-            } else {
-                //TODO: say it isnst a vlaid url
+            
+            try {
+                if ($verifyController->checkClientUrl($_GET['email'], $_GET['hash'])) {
+                    //TODO: redirect to form
+                    echo "here";
+                    header("Location: bankAccountForm.php?email=" . $_GET['email'] . '&' . $_GET['hash']);
+                } else {
+                    //TODO: say it isn't a valid url
+                    echo "Url inserted not valid!";
+                }
+            } catch (Exception $e) {
+                echo 'Caught exception: ',  $e->getMessage(), "\n";
             }
         } else {
             // Fallback behaviour goes here
-            //TODO: redirect or show error template 
+            //TODO: redirect or show error template
         }
     } else {
         // Fallback behaviour goes here

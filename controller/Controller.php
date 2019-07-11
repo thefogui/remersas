@@ -56,7 +56,7 @@ class Controller {
         //check if the email extension is a populetic email.
         preg_match('/(\S+)(@(\S+))/', $email, $match);
         $emailExtension = $match[2];
-        echo $emailExtension;
+ 
         if ($emailExtension == "populetic") {
             
             $to      = $email; // Send email to our user
@@ -87,8 +87,8 @@ class Controller {
 
         //TODO: change the secret key
         $encrypt_method = "AES-256-CBC";
-        $secret_key = 'This is my secret key';
-        $secret_iv = 'This is my secret iv';
+        $secret_key = 'BHEJLNWWQVQWGJSQS52D1QW32E52XWQE8';
+        $secret_iv = 'BHEJLNWWQVQWGJSQS52D1QW32E52XWQE8';
 
         $key = hash('sha256', $secret_key);
     
@@ -109,8 +109,8 @@ class Controller {
             return false;
 
         $encrypt_method = "AES-256-CBC";
-        $secret_key = 'This is my secret key';
-        $secret_iv = 'This is my secret iv';
+        $secret_key = 'BHEJLNWWQVQWGJSQS52D1QW32E52XWQE8';
+        $secret_iv = 'BHEJLNWWQVQWGJSQS52D1QW32E52XWQE8';
 
         $key = hash('sha256', $secret_key);
 
@@ -118,19 +118,5 @@ class Controller {
         $iv = substr(hash('sha256', $secret_iv), 0, 16);
 
         return openssl_decrypt(base64_decode($encryptedText), $encrypt_method, $key, 0, $iv);
-    }
-
-    /**
-     * Function to check the url that was sent to user email
-     * @return true if the url is valid false otherwise
-     */
-    function checkClientUrl($email, $hash) {
-        $daoUrlClient = new DaoUrlClient();
-        $conn = $appConfig->connect("populetic_form", "localhost");
-
-        $urlCheckResult = $daoUrlClient->checkClientUrl($email, $hash);
-
-        $appConfig->closeConnection($conn);
-        return $urlCheckResult;
-    }
+    }   
 }

@@ -14,14 +14,14 @@ class DaoUrlClient {
         return $this->conn;
     }
 
-    public function checkUrl($conn, $email, $hash) {
-        $query = "SELECT * FROM emails WHERE email='" . $email . "'";
+    public function checkClientUrl($conn, $email, $hash) {
+        /*$query = "SELECT * FROM emails WHERE email='" . $email . "'";
 
         $result = mysqli_query($conn, $query);
 
-        if (!$query) {
-            return false;
-        }
+        if (mysqli_errno($conn)) {
+            throw new Exception('Error getting the url: ' . mysqli_error($conn));
+        }*/
 
         
         //TODO: check the data of the url inserted if is not valid return false

@@ -2,7 +2,7 @@
 include("../../controller/Controller.php");
 
 function getTable($idName, $destination, $thead = '') {
-    $file = 'clientsvip';
+    $file = 'clients';
     $string = file_get_contents($destination . $file . ".json", 'r');
 
     $data = json_decode($string, true);
@@ -120,8 +120,11 @@ if(array_key_exists('email-send', $_POST)) {
                 <div class="row">
                     <div class="card justify-content-center shadow p-3 mb-5 bg-white rounded" style="width: 80vw;">
                         <div class="card-body">
-                            <h1>Clients Vips</h1>    
-                            <?php echo getTable("tabel", "../../cache/", array("Nif", "Name", "Id", "Email", "Compensation (€)")) ?>
+                            <h1>Clients Vips</h1>
+                            <div class="table-responsive">
+                                <?php echo getTable("table", "../../cache/", array("Nif", "Name", "Id", "Email", "Compensation (€)")) ?>
+                        
+                            </div><!-- closing div table-responsive -->
                         </div>
                     </div>
                 </div>
