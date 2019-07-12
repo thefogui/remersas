@@ -47,7 +47,7 @@ class DaoClientTest {
         $conn = $appConfig->connect( "populetic_form", "replica" );
         $daoUrl = new DaoClient();
 
-        var_dump($daoUrl->getClients($conn, 2626.786));
+        var_dump($daoUrl->getClients($conn, 50000.786));
         echo "<br>";
         echo "-------------------------------";
         echo "<br>";

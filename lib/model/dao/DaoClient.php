@@ -125,7 +125,7 @@ class DaoClient {
      * @return 
      * @throws 
      */
-    public function getClientsByMonth($conn, $month, $year,$amount) {
+    public function getClientsByMonth($conn, $month, $year, $amount) {
         $clients = array();
         $amountToPay = 0.0;
         $clientsVip = 0.0;
@@ -150,7 +150,7 @@ class DaoClient {
                             AND 
                             MONTH(FROM_UNIXTIME(lg.data)) =" . $month .
                             " AND
-                            YEAR(FROM_UNIXTIME(lg.data)) =" . $year .
+                            YEAR(FROM_UNIXTIME(lg.data)) =20" . $year .
                         " ORDER BY 
                             amountReviewed";
 
@@ -185,6 +185,10 @@ class DaoClient {
      */
     public function getClients($conn, $amount) {
         $result = $this->getClientVip($conn, $amount);
+
+        ini_set('max_execution_time', 300);
+        set_time_limit(300);
+
         $amountLeft = $result["amountLeft"];
         $d = $this->getTheOldestDate($conn);
 
@@ -196,20 +200,21 @@ class DaoClient {
 
         $month = intval(date("m", $d));
         $year = intval(date("y", $d));
-
-        $result["numVips"] = $result["totalClients"];
+        
+        $result["numVips"] = intval($result["totalClients"]);
 
         while (($start < $end) && ($amountToPay <= $amount)) {
             $resultsClientsMonth = $this->getClientsByMonth($conn, $month, $year, $amountLeft);
             $amountToPay = $amountToPay + $resultsClientsMonth["amountToPay"];
             $amountLeft = $amount - $amountToPay;
-            
-            echo "<br><hr>" . $month . " d ". $d . " Start ". $start . " TimeStamp ". $ts_start;
 
             $result["clients"] = $this->mergeData($result["clients"], $resultsClientsMonth["clients"]);
             $result["totalClients"] = $result["totalClients"] + $resultsClientsMonth["totalClients"];
             $result["amountLeft"] = $amountLeft;
             $result["amountToPay"] = $amountToPay;
+
+            //var_dump($resultsClientsMonth);
+            //echo "<br><hr>" . $month . " d ". $d . " Start ". $start . " TimeStamp ". $ts_start;
 
             $month = $month + 1;
             if ($month == 13) {

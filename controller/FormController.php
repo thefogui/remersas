@@ -5,6 +5,7 @@ include_once '../lib/model/dao/DaoClient.php';
 include_once '../lib/model/entity/Client.php';
 include("Controller.php");
 
+session_start();
 //atributtes form
 $amount = "";
 $conn;
@@ -29,13 +30,12 @@ function getClients($amount) {
 
     $resultQuery = $daoClient->getClients($conn, $amount); //clients, ammountLeft, amountToPay
 
-
     $clients = $resultQuery['clients'];
 
-    session_start();
+    
     $_SESSION["amountLeft"] = $resultQuery["amountLeft"];
     $_SESSION["amountToPay"] = $resultQuery["amountToPay"];
-    $_SESSION["numClients"] = $resultQuery["numClients"];
+    $_SESSION["numClients"] = $resultQuery["totalClients"];
     $_SESSION["numVips"] = $resultQuery["numVips"];
 
     $appConfig->closeConnection($conn); //close the connection
