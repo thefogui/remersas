@@ -35,7 +35,8 @@ function getClients($amount) {
     session_start();
     $_SESSION["amountLeft"] = $resultQuery["amountLeft"];
     $_SESSION["amountToPay"] = $resultQuery["amountToPay"];
-    $_SESSION["amountToPay"] = $resultQuery["amountToPay"];
+    $_SESSION["numClients"] = $resultQuery["numClients"];
+    $_SESSION["numVips"] = $resultQuery["numVips"];
 
     $appConfig->closeConnection($conn); //close the connection
 

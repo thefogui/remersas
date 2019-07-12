@@ -190,12 +190,14 @@ class DaoClient {
 
         $start = date("Y-m-d H:i:s", $d);
         $ts_start = $d;
-        $end = date("Y-m-d H:i:s");
+        $end = date("Y-m-d H:i:s", strtotime('first day of +1 month'));
 
         $amountToPay = $result["amountToPay"];
 
         $month = intval(date("m", $d));
         $year = intval(date("y", $d));
+
+        $result["numVips"] = $result["totalClients"];
 
         while (($start < $end) && ($amountToPay <= $amount)) {
             $resultsClientsMonth = $this->getClientsByMonth($conn, $month, $year, $amountLeft);

@@ -15,7 +15,8 @@ function getTable($idName, $destination, $thead = '') {
         } catch (Exception $e) {
             throw $e;
         }
-        return generateTable($idName, $thead, $data);
+
+        return generateTable($idName, $thead, $data, $_SESSION["numVips"]);
     }
 
     return "There is no data to be showed";
@@ -27,11 +28,13 @@ function getTable($idName, $destination, $thead = '') {
  * @param $thead an array that contains the data to put in the head of the table
  * @param $data actual array that contains the data we want to put in the table
  */
-function generateTable($idName = '', $thead = '', $data = array()) {
+function generateTable($idName = '', $thead = '', $data = array(), $numVips = 0) {
     $content = "";
+    $index = 0;
+
     $content .= '<table' . ($idName ? ' id="' . $idName . '"' : '') . ' class="table table-striped table-bordered" cellspacing="0" width="100%">';
 
-    $content .= '<thead>';
+    $content .= '<thead class="thead-dark">';
     $content .= '<tr>';
     foreach ($thead as $cow) {
         $content .= '<th>';
@@ -48,12 +51,20 @@ function generateTable($idName = '', $thead = '', $data = array()) {
 
         if (is_array($row) || is_object($row)) {
             foreach ($row as $cow) {
-                $content .= '<td>';
-                $content .= $cow;
-                $content .= '</td>';
+                if ($index < $numVips) {
+                    $content .= '<td class="table-light">';
+                    $content .= $cow;
+                    $content .= '</td>';
+                } else {
+                    $content .= '<td class="table-secondary">';
+                    $content .= $cow;
+                    $content .= '</td>';
+                }
             }
         }
         $content .= '</tr>';
+
+        $index = $index + 1;
     }
     $content .= '</tbody>';
 
@@ -98,9 +109,9 @@ if(array_key_exists('email-send', $_POST)) {
                         session_start();
                         if (isset($_SESSION["amountLeft"])) {
                             echo "<h1 class='h3 mb-3 font-weight-normal'>";
-                            echo   "Amount of money left after pay vips: ";
-                            echo    $_SESSION["amountLeft"];
-                            echo    "</h1>";
+                            echo "Amount of money left after pay vips: ";
+                            echo $_SESSION["amountLeft"];
+                            echo "</h1>";
                         }
                     ?>
                 </div>
@@ -110,9 +121,9 @@ if(array_key_exists('email-send', $_POST)) {
                         //Checks if the information is set in the session
                         if (isset($_SESSION["amountToPay"])) {
                             echo "<h1 class='h3 mb-3 font-weight-normal'>";
-                            echo   "Amount of money to pay to clients vips: ";
-                            echo   $_SESSION["amountToPay"];
-                            echo    "</h1>";
+                            echo "Amount of money to pay to clients vips: ";
+                            echo $_SESSION["amountToPay"];
+                            echo "</h1>";
                         }
                     ?>
                 </div>
@@ -132,7 +143,7 @@ if(array_key_exists('email-send', $_POST)) {
                 <div class="send-email-div">
                 <form method="post">
                     <div class="w-25 p-3 center-block">
-                        <input class="btn btn-lg btn-outline-info btn-block" name="email-send" id="email-send-button" value="Send Email to clients">
+                        <input class="btn btn-lg btn-outline-info btn-block custom" name="email-send" id="email-send-button" value="Send Email to clients">
                     </div><!-- closing div mt-4 -->
                 </form>
                 </div><!-- Closing div send-email-div -->

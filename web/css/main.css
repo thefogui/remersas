@@ -29,3 +29,7 @@ body {
 .card {
     margin-top: 2em!important;
 }
+
+.custom {
+    width: 300px!important;
+}
