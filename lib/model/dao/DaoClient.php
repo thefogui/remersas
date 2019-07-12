@@ -39,8 +39,8 @@ class DaoClient {
     public function getClientVip($conn, $amount) {
         $state = 'solicitar datos pago';
         $clients = array();
-        $amountToPay = 0;
-        $clientsVip = 0;
+        $amountToPay = 0.0;
+        $clientsVip = 0.0;
         $amountLeft = $amount;
     
         if($conn) {
@@ -66,7 +66,6 @@ class DaoClient {
                 throw new Exception('Error getting users: ' . mysqli_error($conn));
             } else {
                 while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-                    echo "<br>".date("d-m-Y H:i:s");
                     
                     $client = new Client($row['nif'], $row['name'], $row['id'], $row['email']);
                     
@@ -93,13 +92,10 @@ class DaoClient {
      * @return month
      * @throws exception error connecting to the sql database
      */
-    public function getTheOldestMonth($conn) {
-        $monthYear = array();
+    public function getTheOldestDate($conn) {
         if ($conn) {
-            echo "<br>".date("d-m-Y H:i:s");
             $query = "SELECT 
-                        MONTH(FROM_UNIXTIME(lg.data)) AS m,
-                        YEAR(FROM_UNIXTIME(lg.data)) AS y
+                        lg.Data As d
                     FROM 
                         populetic_form.populetic_form_vuelos pfv
                     INNER JOIN 
@@ -108,7 +104,7 @@ class DaoClient {
                         pfv.Id_Estado = 18 AND 
                         lg.Estado = 18
                     ORDER BY
-                        m
+                        d
                     LIMIT 1"; 
 
             $result = mysqli_query($conn, $query);
@@ -116,13 +112,10 @@ class DaoClient {
             if (mysqli_errno($conn)) {
                 throw new Exception('Error getting users: ' . mysqli_error($conn));
             } else {
-                $d = mysqli_fetch_assoc($result);
-                
-                $monthYear["month"] = $d["m"];
-                $monthYear["year"] = $d["y"];
+                $d = mysqli_fetch_assoc($result)["d"];
             }
         }
-        return $monthYear;
+        return $d;
     }
 
     /**
@@ -132,14 +125,13 @@ class DaoClient {
      * @return 
      * @throws 
      */
-    public function getClientsByMonth($conn, $month, $amount) {
+    public function getClientsByMonth($conn, $month, $year,$amount) {
         $clients = array();
-        $amountToPay = 0;
-        $clientsVip = 0;
+        $amountToPay = 0.0;
+        $clientsVip = 0.0;
         $amountLeft = $amount;
 
         if ($conn) {
-            echo "<br>".date("d-m-Y H:i:s");
             $query = "SELECT 
                             c.DocIdentidad AS nif
                             ,c.Nombre AS name
@@ -157,6 +149,8 @@ class DaoClient {
                             pfv.Id_Estado = 18 
                             AND 
                             MONTH(FROM_UNIXTIME(lg.data)) =" . $month .
+                            " AND
+                            YEAR(FROM_UNIXTIME(lg.data)) =" . $year .
                         " ORDER BY 
                             amountReviewed";
 
@@ -166,7 +160,6 @@ class DaoClient {
                 throw new Exception('Error getting users: ' . mysqli_error($conn));
             } else {
                 while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-                    echo "<br>".date("d-m-Y H:i:s");
                     
                     $client = new Client($row['nif'], $row['name'], $row['id'], $row['email']);
                     
@@ -192,39 +185,55 @@ class DaoClient {
      */
     public function getClients($conn, $amount) {
         $result = $this->getClientVip($conn, $amount);
-
         $amountLeft = $result["amountLeft"];
+        $d = $this->getTheOldestDate($conn);
 
-        $date = $this->getTheOldestMonth($conn);
-
-        $month = $date["month"];
-        $year = $date["year"];
-
-        $m = date("M Y", strtotime($month . "-" . $year));
-
-        $actual_date = date('M Y');
+        $start = date("Y-m-d H:i:s", $d);
+        $ts_start = $d;
+        $end = date("Y-m-d H:i:s");
 
         $amountToPay = $result["amountToPay"];
 
-        while (($amountLeft > 0)  && ($actual_date > $m)) {
-            $resultsClientsMonth = $this->getClientsByMonth($conn, $month, $amountLeft);
+        $month = intval(date("m", $d));
+        $year = intval(date("y", $d));
 
-            echo "<br>".date("d-m-Y H:i:s");
+        while (($start < $end) && ($amountToPay <= $amount)) {
+            $resultsClientsMonth = $this->getClientsByMonth($conn, $month, $year, $amountLeft);
+            $amountToPay = $amountToPay + $resultsClientsMonth["amountToPay"];
+            $amountLeft = $amount - $amountToPay;
+            
+            echo "<br><hr>" . $month . " d ". $d . " Start ". $start . " TimeStamp ". $ts_start;
 
-            $amountLeft = $amountLeft - $resultsClientsMonth["amountLeft"];
-
-            echo "<br><hr>";
-            var_dump($result);
-            echo "<br><hr>";
-            var_dump($resultsClientsMonth);
-            echo "<br><hr>";
-
-            $result = array_merge($result, $resultsClientsMonth);
+            $result["clients"] = $this->mergeData($result["clients"], $resultsClientsMonth["clients"]);
+            $result["totalClients"] = $result["totalClients"] + $resultsClientsMonth["totalClients"];
+            $result["amountLeft"] = $amountLeft;
+            $result["amountToPay"] = $amountToPay;
 
             $month = $month + 1;
-            if ($month == 13)
+            if ($month == 13) {
                 $month = 1;
+                $year = $year + 1;
+            }
+
+            $start = date("Y-m-d H:i:s", strtotime("+1 month", $ts_start));
+            $ts_start = strtotime("+1 month", $ts_start);          
         }
         return $result;
+    }
+
+    private function mergeData($array1, $array2) {
+        $smallestArray = $array2;
+        $bigestArray = $array1;
+
+        if (count($array1) < count($array2)) {
+            $smallestArray = $array1;
+            $bigestArray = $array2;
+        }
+
+        foreach ($smallestArray as $row) {
+            $bigestArray[] = $row;
+        }
+
+        return $bigestArray;
     }
 }
