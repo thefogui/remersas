@@ -2,6 +2,7 @@
     <?php include("layouts/header.php") ?>
     
     <body>
+        <!-- TODO: loading gif -->
         <div class="box-login d-flex justify-content-center">
             <form class="align-self-center text-center form-box" method="POST" action="../../controller/FormController.php">
                 <img class="align-self-center" src="../../web/images/populetic.svg" alt="logo">

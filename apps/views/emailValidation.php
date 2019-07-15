@@ -27,9 +27,12 @@ function checkUrl() {
                     //TODO: redirect to form
                     $date = Controller::getInstance()->hashToActualData($_GET['hash']);
 
-                    if (Controller::getInstance()-> checkExpireDate($date)){
+                    if (Controller::getInstance()->checkExpireDate($date)){
                         //send code to user
-                        header("Location: BankAccountForm.php?email=" . $_GET['email'] . '&' . $_GET['hash']);
+                        //TODO: sendEmailValidation
+                        //($info, $name, $email, $hash)
+                        //Controller::getInstance()->sendEmailVerify("", "", $_GET['email'], );
+                        header("Location: emailForm.php?email=" . $_GET['email'] . '&' . $_GET['hash']);
                     } else
                         echo "Error date!";
                 } else {

@@ -74,9 +74,6 @@ function generateTable($idName = '', $thead = '', $data = array(), $numVips = 0)
 }
 
 function sendEmails() {
-    //TODO:: need to read the json and send email
-
-    $_SESSION['json_data_vclients'];
     Controller::getInstance()->sendEmails();
 }
 
@@ -141,9 +138,9 @@ if(array_key_exists('email-send', $_POST)) {
                 </div>
 
                 <div class="send-email-div">
-                <form method="post">
+                <form method="post" action="../../controller/ClientListController.php">
                     <div class="w-25 p-3 center-block">
-                        <input class="btn btn-lg btn-outline-info btn-block custom" name="email-send" id="email-send-button" value="Send Email to clients">
+                        <input class="btn btn-lg btn-outline-info btn-block custom" type="submit" name="email-send" id="email-send-button" value="Send Email to clients">
                     </div><!-- closing div mt-4 -->
                 </form>
                 </div><!-- Closing div send-email-div -->

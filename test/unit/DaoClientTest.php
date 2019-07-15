@@ -53,9 +53,62 @@ class DaoClientTest {
         echo "<br>";
         $appConfig->closeConnection($conn);
     }
+
+    function testChangeToSolicitarDatosPago() {
+        echo "<br>";
+        echo "-------------------------------";
+        echo "<br>";
+        echo "Testing changeToSolicitarDatosPago()";
+        echo "<br>";
+        $appConfig = new AppConfig();
+        $conn = $appConfig->connect( "populetic_form", "replica" );
+        $dao = new DaoClient();
+
+        var_dump($dao->changeToSolicitarDatosPago($conn, 29));
+        echo "<br>";
+        echo "-------------------------------";
+        echo "<br>";
+        $appConfig->closeConnection($conn);
+    }
+
+    function testgetIdReclamacion() {
+        echo "<br>";
+        echo "-------------------------------";
+        echo "<br>";
+        echo "Testing changeToSolicitarDatosPago()";
+        echo "<br>";
+        $appConfig = new AppConfig();
+        $conn = $appConfig->connect( "populetic_form", "replica" );
+        $dao = new DaoClient();
+
+        var_dump($dao->getIdReclamacion($conn, 29));
+        echo "<br>";
+        echo "-------------------------------";
+        echo "<br>";
+        $appConfig->closeConnection($conn);
+    }
+
+    function testInsertLogChange() {
+        echo "<br>";
+        echo "-------------------------------";
+        echo "<br>";
+        echo "Testing Insert Log Change";
+        echo "<br>";
+        $appConfig = new AppConfig();
+        $conn = $appConfig->connect( "populetic_form", "replica" );
+        $dao = new DaoClient();
+
+        var_dump($dao->insertLogChange($conn, 29, 51));
+        echo "<br>";
+        echo "-------------------------------";
+        echo "<br>";
+        $appConfig->closeConnection($conn);
+    }
 }
 
-$daoBillTest = new DaoClientTest();
-//$daoBillTest->testGetMonth();
-//$daoBillTest->testGetClientsByMonth();
-$daoBillTest->testgetClients();
+$daoClient = new DaoClientTest();
+//$daoClient->testGetMonth();
+//$daoClient->testGetClientsByMonth();
+$daoClient->testChangeToSolicitarDatosPago();
+$daoClient->testgetIdReclamacion();
+$daoClient->testInsertLogChange();

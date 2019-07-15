@@ -183,9 +183,65 @@ class DaoClient {
     /**
      * 
      */
+    public function changeToSolicitarDatosPago($conn, $id) {
+         
+        if ($conn) {
+            $query = "UPDATE populetic_form.populetic_form_vuelos pfv
+                      SET pfv.Id_Estado = 36
+                      WHERE pfv.Id_Cliente = ". $id .";";
+            $result = mysqli_query($conn, $query);
+
+            if (mysqli_errno($conn)) {
+                throw new Exception('Error getting users: ' . mysqli_error($conn));
+            }
+            
+        } else{
+            throw new Exception('Error conecting to the sql database!');
+        } 
+    }
+
+    public function getIdReclamacion($conn, $id){
+        $id;
+
+        if ($conn) {
+            $query = "SELECT  `populetic_form_vuelos`.`ID` AS id_pfv,  `Ref` AS ref
+                      FROM `populetic_form`.`populetic_form_vuelos` 
+                      WHERE `Id_Cliente` IN (". $id . ")
+                      ORDER BY id_pfv ASC
+                      LIMIT 1;";
+            $result = mysqli_query($conn, $query);
+            if (mysqli_errno($conn)) {
+                throw new Exception('Error getting users: ' . mysqli_error($conn));
+            }
+            
+            $id = mysqli_fetch_assoc($result)["id_pfv"];
+        } else{
+            throw new Exception('Error conecting to the sql database!');
+        }
+        return $id;
+    }
+
+    public function insertLogChange($conn, $clienld, $reclamacionId) {
+        //TODO: check if a row exists, otherwise insert
+        if ($conn) {
+            $query = "INSERT INTO halbrand.logs_estados (`Id_reclamacion`, `Data`, `Estado`, `Tipo`, `Id_Agente`, `Checked`) 
+                      VALUES (". $reclamacionId .", CURRENT_TIMESTAMP,'36', '19', NULL, '0');";
+            $result = mysqli_query($conn, $query);
+
+            if (mysqli_errno($conn)) {
+                throw new Exception('Error getting users: ' . mysqli_error($conn));
+            }   
+        } else{
+            throw new Exception('Error conecting to the sql database!');
+        }
+    }
+
+    /**
+     * 
+     */
     public function getClients($conn, $amount) {
         $result = $this->getClientVip($conn, $amount);
-
+        //TODO: https://jnjsite.com/php7-paralelizando-procesos-aprovechando-procesador-al-100/
         ini_set('max_execution_time', 300);
         set_time_limit(300);
 

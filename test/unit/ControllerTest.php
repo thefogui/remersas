@@ -8,7 +8,7 @@ class ControllerTest {
     function testSendEmail() {
         echo "-------------------------------";
         echo "\n";
-        Controller::getInstance()->sendEmail("", "vitor", "vitor.carvalho@populetic", "OQWHLJFAMWSBFAJBFAÑJBFÑAMBWQJRBQWJLR");
+        Controller::getInstance()->sendEmail("", "vitor", "vitor.carvalho@populetic.com", "OQWHLJFAMWSBFAJBFAÑJBFÑAMBWQJRBQWJLR");
         echo "\n";
         echo "-------------------------------";
         echo "\n";
@@ -67,5 +67,6 @@ class ControllerTest {
 }
 
 $controllerTest = new ControllerTest();
-$controllerTest->testEncryptFunction();
-$controllerTest->testDecryptText();
+//$controllerTest->testEncryptFunction();
+//$controllerTest->testDecryptText();
+$controllerTest->testSendEmail();

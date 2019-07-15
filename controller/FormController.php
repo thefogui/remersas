@@ -32,7 +32,6 @@ function getClients($amount) {
 
     $clients = $resultQuery['clients'];
 
-    
     $_SESSION["amountLeft"] = $resultQuery["amountLeft"];
     $_SESSION["amountToPay"] = $resultQuery["amountToPay"];
     $_SESSION["numClients"] = $resultQuery["totalClients"];
@@ -42,7 +41,6 @@ function getClients($amount) {
 
     return $clients;
 }
-
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $amount = $_POST["amount"];
