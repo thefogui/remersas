@@ -44,7 +44,7 @@ class DaoClient {
         $amountLeft = $amount;
     
         if($conn) {
-            //TODO: orderby the amount of money the client gonna receive
+            //TODO: get the name and cognom
             $query = "SELECT 
                          c.DocIdentidad AS nif
                         ,c.Nombre AS name
@@ -204,7 +204,7 @@ class DaoClient {
         $id;
 
         if ($conn) {
-            $query = "SELECT  `populetic_form_vuelos`.`ID` AS id_pfv,  `Ref` AS ref
+            $query = "SELECT  `populetic_form_vuelos`.`ID` AS id_pfv, `Ref` AS ref
                       FROM `populetic_form`.`populetic_form_vuelos` 
                       WHERE `Id_Cliente` IN (". $id . ")
                       ORDER BY id_pfv ASC

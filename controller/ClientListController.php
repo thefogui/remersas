@@ -47,21 +47,26 @@ function sendEmails($destination= "../cache/"){
             $date = date('Y-m-d H:i:s');
             $hash = Controller::getInstance()->generateHash($date);
 
-            echo Controller::getInstance()->sendEmail($info, $name, $email, $hash);
-            $appConfig->closeConnection($conn);
+            echo Controller::getInstance()->sendEmailValidation($info, $name, $email, $hash);
+            
         }
     } else {
         throw new Exception('Error reading emails');
     }
+    $appConfig->closeConnection($conn);
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     try {
         sendEmails();
+        
     } catch (Exception $e) {
         echo $e;
     }
 }
 
-//header("Location: ../apps/views/clientList.php?amount=" . $amount);
+//TODO: change this text
+$_SESSION['text'] = "Emails sent to the users";
+
+header("Location: ../apps/views/confirmation.php");

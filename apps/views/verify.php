@@ -9,6 +9,7 @@ require_once "../../lib/model/dao/DaoUrlClient.php";
  * @throws Exception if the email ins't a valid format
  */
 function checkUrl() {
+    session_start();
 
     $verifyController = new VerifyController();
     
@@ -23,18 +24,16 @@ function checkUrl() {
             //TODO: call the query with these parameters and redirect to the bank account form
             
             try {
-                if ($verifyController->checkClientUrl($_GET['email'], $_GET['hash'])) {
-                    //TODO: redirect to form
-                    $date = Controller::getInstance()->hashToActualData($_GET['hash']);
-
-                    if (Controller::getInstance()-> checkExpireDate($date)){
-                        //send code to user
-                        header("Location: BankAccountForm.php?email=" . $_GET['email'] . '&' . $_GET['hash']);
-                    } else
-                        echo "Error date!";
-                } else {
-                    //TODO: say it isn't a valid url
-                    echo "Url inserted not valid!";
+                $date = Controller::getInstance()->hashToActualData($_GET['hash']);
+            
+                if (!Controller::getInstance()->checkExpireDate($date)){
+                    header("Location: emailForm.php?email=" . $_GET['email'] . '&' . $_GET['hash']);
+                } else{
+                    //TODO: change date
+                    unset ($_SESSION['text']);
+                    echo "erro date";
+                    $_SESSION['text'] = "Error date!";
+                    header("Location: confirmation.php");
                 }
             } catch (Exception $e) {
                 echo 'Caught exception: ',  $e->getMessage(), "\n";

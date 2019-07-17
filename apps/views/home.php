@@ -4,7 +4,9 @@
     <body>
         <!-- TODO: loading gif -->
         <div class="box-login d-flex justify-content-center">
-            <form class="align-self-center text-center form-box" method="POST" action="../../controller/FormController.php">
+            <img class="align-self-center load" src="../../web/images/loading.gif">
+            <form class="align-self-center text-center form-box" method="POST" onsubmit="showLoading()" action="../../controller/FormController.php">
+                
                 <img class="align-self-center" src="../../web/images/populetic.svg" alt="logo">
                 <h1 class="h3 mb-3 font-weight-normal">Insert the amount of money</h1>
                 <input type="number" id="amount" name="amount" class="form-control " value="" 
@@ -21,5 +23,11 @@
         </div> <!-- closing div container -->
 
         <?php include("layouts/scripts.php") ?>
+        <script>
+            function showLoading() {
+                $('.load').css('display','block');
+                $('.form-box').css('display', 'none');
+            }
+        </script>
     </body>
 </html>

@@ -14,7 +14,7 @@ class UrlClient {
 
     public function __construct($id, $expireDate, $email) {
         $this->id = $id;
-        $this->expireDate = $expireDate;
+        $this->expireDate = date('Y-m-d H:i:s');
         $this->active = 1;
         $this->email = $email;
         $this->generateHash();

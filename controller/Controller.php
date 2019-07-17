@@ -50,13 +50,33 @@ class Controller {
      * @param $email 
      * @param $hash
      */
-    function sendEmailValidation($info, $name, $email, $hash) {
+    function sendEmailValidation($info, $name, $email, $hash, $amount=0, $ref="MARIA SU", $languageId='en') {
         $correo = $this->initPHPMailer();
+        $mandrill = $this->initMandrill();
+        $templateSubject = " [Ref:" . $ref . "]";    
+        $result = "Nothing";
+    
+        $emailInfo[] = array(
+            "email" => utf8_encode($email),
+            "name" => utf8_encode($name),
+            "amount" => utf8_encode($amount),
+            "hash" => utf8_encode($hash)
+        );
+
+        try {
+            sendMandrillBatchMail($mandrill, $ref, $email, 'correo_verificación_datos_bancarios_' . $languageId, $templateSubject, $emailInfo, 0);
+            $result = "Error no";
+        } catch(Mandrill_Error $e) {
+            echo 'A mandrill error occurred: ' . get_class($e) . ' - ' . $e->getMessage();
+            $result = "Error yes";
+            throw $e;
+        }
+        
+        //TODO: remove code below
         $result = "Nothing";
         //check if the email extension is a populetic email.
         preg_match('/(\S+)(@(\S+))/', $email, $match);
         $emailExtension = $match[2];
-
        // if ($emailExtension == "@populetic.com") {
             
             $to      = $email; // Send email to our user
@@ -67,13 +87,12 @@ class Controller {
             Zombie ipsum reversus ab viral inferno' . $name . ', nam rick grimes malum cerebro. De carne lumbering animata corpora quaeritis. Summus brains sit​​, morbo vel maleficia? De apocalypsi gorger omero undead survivor dictum mauris. Hi mindless mortuis soulless creaturas, imo evil stalking monstra adventus resi dentevil vultus comedat cerebella viventium. Qui animated corpse, cricket bat max brucks terribilem incessu zomby.
             
             Please click this link to activate your account:
-            localhost/remesas/apps/views/emailValidation.php?email=' . $email.'&hash=' . $hash . '
+            localhost/remesas/apps/views/verify.php?email=' . $email.'&hash=' . $hash . '
             
             '; // Our message above including the link
                                 
             $correo->Subject = $subject;   
             $correo->MsgHTML($body);
-
             $correo->AddAddress($to, "Populetic");
  
             if( !$correo->Send() ) {
@@ -85,8 +104,34 @@ class Controller {
         return $result;
     }
 
-    function sendEmailVerify($info, $name, $email, $hash) {
+    function sendEmailCode($info, $name, $email, $hash, $code) {
+        //TODO: edit email;
+        $correo = $this->initPHPMailer();
+
         $result = "Nothing";
+        //check if the email extension is a populetic email.
+        
+        $to      = $email; // Send email to our user
+        $subject = 'Populetic | Email Verification'; // Give the email a subject 
+        $body = '
+        
+        Hello from team Populetic, 
+        Zombie ipsum reversus ab viral inferno' . $name . ', nam rick grimes malum cerebro. De carne lumbering animata corpora quaeritis. Summus brains sit​​, morbo vel maleficia? De apocalypsi gorger omero undead survivor dictum mauris. Hi mindless mortuis soulless creaturas, imo evil stalking monstra adventus resi dentevil vultus comedat cerebella viventium. Qui animated corpse, cricket bat max brucks terribilem incessu zomby.
+        
+        YOUR CODE IS: ' .  $code . '
+        
+        '; // Our message above including the link
+                            
+        $correo->Subject = $subject;   
+        $correo->MsgHTML($body);
+        $correo->AddAddress($to, "Populetic");
+
+        if( !$correo->Send() ) {
+            $result= "Error yes";
+        } else {
+            $result= "Error no";
+        }
+ 
         return $result;
     }
 
@@ -137,6 +182,7 @@ class Controller {
     function initPHPMailer() {
         date_default_timezone_set('Etc/UTC');
 
+        //TODO: change files url
         require_once( dirname(__FILE__) . '/../plugins/phpmailer/PHPMailerAutoload.php');
         require_once( dirname(__FILE__) . '/../plugins/phpmailer/class.phpmailer.php');
         
@@ -167,6 +213,14 @@ class Controller {
         return $correo;
     }
 
+    private function initMandrill() {
+        require_once( dirname(__FILE__) . "/../plugins/mandrill/mandrill.php");
+
+        $mandrill = new Mandrill('vrjSix_nhICY9pQa2gnYtQ');
+
+        return $mandrill;
+    }
+
     public function generateHash($expireDate) {
         return base64_encode(bin2hex($expireDate));
     }
@@ -186,9 +240,69 @@ class Controller {
      * @return true if the url still valid and false otherwise
      */
     public function checkExpireDate($date) {
-        if( strtotime($date) !== FALSE && strtotime($date) < strtotime('+7 days') ) {
-            return true;
-         }
-         return false;
+        $exp_date = strtotime($date . '+7 days');        
+        $today    = date("Y-m-d H:i:s");
+        $tsToday  = strtotime($today);
+
+        return ($tsToday > $exp_date);
+    }
+
+    public function checkExpiredOneDay($date) {
+        $exp_date = strtotime($date . '+1 days');        
+        $today    = date("Y-m-d H:i:s");
+        $tsToday  = strtotime($today);
+
+        return ($tsToday > $exp_date);
+    }
+
+    public function uniqidReal($lenght = 13) {
+        // uniqid gives 13 chars, but you could adjust it to your needs.
+        if (function_exists("random_bytes")) {
+            $bytes = random_bytes(ceil($lenght / 2));
+        } elseif (function_exists("openssl_random_pseudo_bytes")) {
+            $bytes = openssl_random_pseudo_bytes(ceil($lenght / 2));
+        } else {
+            throw new Exception("no cryptographically secure random function available");
+        }
+        return strtoupper(substr(bin2hex($bytes), 0, $lenght));
+    }
+
+    public function generateUrlCodeValidation() {
+        $date = date('Y-m-d H:i:s');
+        $code = "";
+        try {
+            $code = $this->uniqidReal(6);
+        } catch (Exception $e) {
+            //TODO: redirect to error page
+        }
+        
+        $url = "date=" . $date . "code=" . $code;
+        $url = $this->encryptText($url);
+
+        return array('url' => $url, 'code' => $code);
+    }
+
+    function between($start, $end, $string) {
+        $string = ' ' . $string;
+        $ini = strpos($string, $start);
+        if ($ini == 0) return '';
+            $ini += strlen($start);
+            $len = strpos($string, $end, $ini) - $ini;
+        return substr($string, $ini, $len);
+    }
+
+    function after($start, $str) {
+        if (!is_bool(strpos($str, $start)))
+        return substr($str, strpos($str, $start)+strlen($start));
+    }
+
+    public function getDataFromUrlCode($url) {
+        $url_decoded = $this->decryptText($url);
+
+        $date = $this->between('date=', 'code=', $url_decoded);
+
+        $code = $this->after('code=', $url_decoded);
+
+        return array('date' => $date, 'code' => $code);
     }
 }

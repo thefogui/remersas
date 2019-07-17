@@ -33,3 +33,7 @@ body {
 .custom {
     width: 300px!important;
 }
+
+.load {
+    display: none;
+}
