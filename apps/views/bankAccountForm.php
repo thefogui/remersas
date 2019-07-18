@@ -1,5 +1,9 @@
 <?php
 
+//TODO: make varifications here
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -16,8 +20,16 @@
                         <h2 class="title">Insert your account information below</h2>
                         <form name="bankAccountForm" action="" method="POST" onsubmit="return validateForm()">
                             <div class="input-group">
-                                <input class="input--style-3" type="text" name="bank-account-number" id="bank-account-number" placeholder="Bank account number" size="35" required>
+                                <input class="input--style-3 iban" type="text" name="iban" id="iban" placeholder="IBAN" size="35" required>
                             </div>
+
+                            <div class="input-group">
+                                <input class="form-check-input chk-iban" type="checkbox" id="iban-checkbox">
+                                <label class="form-check-label" for="iban-checkbox">
+                                    I don't have it.
+                                </label>
+                            </div>
+
                             <div class="input-group">
                                 <input class="input--style-3" type="text" id="bank-account-titular" name="bank-account-titular" placeholder="Bank Account Titular" size="75" required>
                             </div>
@@ -43,6 +55,19 @@
         <!-- Main JS -->
         <script type="text/javascript" src="../../web/js/main.js"></script>
         <script type="text/javascript" src="../../web/js/bankAccountForm.js"></script>
-
+        <script>
+            $('.chk-iban').change(function() {
+                if(this.checked) {
+                    //Do stuff
+                    $( "#iban" ).removeClass( "iban" );
+                    $( "#iban" ).attr('placeholder','Bank account number');
+                    $( "#iban" ).attr('name','bank-account-number');
+                } else {
+                    $( "#iban" ).addClass( "iban" );
+                    $( "#iban" ).attr('placeholder','IBAN');
+                    $( "#iban" ).attr('name','iban');
+                }
+            });     
+        </script>
     </body>
 </html>

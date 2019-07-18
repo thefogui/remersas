@@ -44,7 +44,6 @@ class DaoClient {
         $amountLeft = $amount;
     
         if($conn) {
-            //TODO: get the name and cognom
             $query = "SELECT 
                          c.DocIdentidad AS nif
                         ,CONCAT(c.Nombre, ' ',c.Apellidos) AS name
@@ -76,7 +75,7 @@ class DaoClient {
 
                     if ($amountToPay <= $amount) {
                         $amountLeft = $amountLeft - $clientAmount;
-                        $clientValue = array($row['nif'], $row['name'], $row['id'], $row['email'], $clientAmount);
+                        $clientValue = array($row['nif'], utf8_encode($row['name']), $row['id'], utf8_encode($row['email']), $clientAmount);
                         $clients[] = $clientValue;
                     }
                 }
@@ -169,7 +168,7 @@ class DaoClient {
 
                     if ($amountToPay <= $amount) {
                         $amountLeft = $amountLeft - $clientAmount;
-                        $clientValue = array($row['nif'], $row['name'], $row['id'], $row['email'], $clientAmount);
+                        $clientValue = array($row['nif'], utf8_encode($row['name']), $row['id'], utf8_encode($row['email']), $clientAmount);
                         $clients[] = $clientValue;
                     }
                 }

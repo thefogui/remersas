@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $validateFormData = validateCode();
 
     if ($validateFormData) {
-        header("Location: ../apps/views/bankAccountForm.php");
+        header("Location: ../apps/views/bankAccountForm.php?hash" + $hash);
     } else {
         unset ($_SESSION['text']);
         $_SESSION['text'] = "Error validation your code!";

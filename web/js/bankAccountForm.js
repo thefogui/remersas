@@ -1,6 +1,8 @@
 
 function validateForm() {
-    var IBAN = $('#bank-account-number').val();
+
+	if (!$( "#iban" ).hasClass("iban")) return true;
+    var IBAN = $('#iban').val();
     console.log(IBAN);
 
     var iban = IBAN.replace( / /g, "" ).toUpperCase(),
