@@ -1,6 +1,6 @@
 <!DOCTYPE html>
     <head>
-        <?php include("layouts/header.php") ?>
+        <?php include(dirname(__FILE__) . "/layouts/header.php") ?>
         <link rel="stylesheet" href="../../web/css/emailvalidation.css">
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     </head>
@@ -27,6 +27,7 @@
                 <div class="mt-4">
                     <p>
                         I didn't received any code.
+                        <!--  TODO: what to do here? -->
                         <a href="#">Send it again</a>
                     </p>
                 </div><!-- closing div mt-4 -->
@@ -39,18 +40,18 @@
         
         <!-- TODO: validate the form -->
 
-        <?php include("layouts/scripts.php") ?>
+        <?php include( dirname(__FILE__) . "/layouts/scripts.php") ?>
         <!-- Main JS -->
         <script type="text/javascript" src="../../web/js/main.js"></script>
         <script type="text/javascript" src="../../web/js/emailValidation.js"></script>
         <script>
             function checkRecaptcha() {
-                //TODO: change this interaction, remove comment
-               /* var recaptcha = $("#g-recaptcha-response").val();
+                //TODO: change this interaction
+                var recaptcha = $("#g-recaptcha-response").val();
                 if (recaptcha === "") {
                     event.preventDefault();
                     alert("Please check the recaptcha");
-                }*/
+                }
             }
         </script>
     </body>

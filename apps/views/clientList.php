@@ -1,5 +1,5 @@
 <?php
-include("../../controller/Controller.php");
+include(dirname(__FILE__) . "/../../controller/Controller.php");
 
 function getTable($idName, $destination, $thead = '') {
     $file = 'clients';
@@ -84,7 +84,7 @@ if(array_key_exists('email-send', $_POST)) {
 ?>
 
 <!DOCTYPE html>
-    <?php include("layouts/header.php") ?>
+    <?php include( dirname(__FILE__) . "/layouts/header.php") ?>
     
     <body>
         <div class="d-flex justify-content-center" style="margim-top:3em!important;">
@@ -128,7 +128,8 @@ if(array_key_exists('email-send', $_POST)) {
                 <div class="row">
                     <div class="card justify-content-center shadow p-3 mb-5 bg-white rounded" style="width: 80vw;">
                         <div class="card-body">
-                            <h1>Clients Vips</h1>
+                            <h1>Clients</h1>
+                            <img class="align-self-center load" src="../../web/images/loading.gif">
                             <div class="table-responsive">
                                 <?php echo getTable("table", "../../cache/", array("Nif", "Name", "Id", "Email", "Compensation (€)")) ?>
                         
@@ -138,7 +139,7 @@ if(array_key_exists('email-send', $_POST)) {
                 </div>
 
                 <div class="send-email-div">
-                <form method="post" action="../../controller/ClientListController.php">
+                <form method="post" action="../../controller/ClientListController.php" onsubmit="showLoading()">
                     <div class="w-25 p-3 center-block">
                         <input class="btn btn-lg btn-outline-info btn-block custom" type="submit" name="email-send" id="email-send-button" value="Send Email to clients">
                     </div><!-- closing div mt-4 -->
@@ -151,5 +152,11 @@ if(array_key_exists('email-send', $_POST)) {
         <!-- Main JS -->
 
         <script type="text/javascript" src="../../web/js/main.js"></script>
+        <script>
+            function showLoading() {
+                $('.load').css('display','block');
+                $('.table-responsive').css('display', 'none');
+            }
+        </script>
     </body>
 </html>

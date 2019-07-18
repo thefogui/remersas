@@ -1,8 +1,8 @@
 <?php
 
-require_once "../config/config.php";
+require_once dirname(__FILE__) . "/../config/config.php";
 
-include("Controller.php");
+include(dirname(__FILE__) . "/Controller.php");
 
 session_start();
 //atributtes form

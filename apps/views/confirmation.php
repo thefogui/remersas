@@ -7,7 +7,7 @@ $text = $_SESSION['text'];
 ?>
 
 <!DOCTYPE html>
-    <?php include("layouts/header.php") ?>
+    <?php include(dirname(__FILE__) . "/layouts/header.php") ?>
     
     <body>
         <div class="box-login d-flex justify-content-center">  
@@ -27,7 +27,7 @@ $text = $_SESSION['text'];
             </div><!-- closing div container card -->
         </div> <!-- closing div justify-content-center -->
 
-        <?php include("layouts/scripts.php") ?>
+        <?php include(dirname(__FILE__) . "/layouts/scripts.php") ?>
         <script>
             function showLoading() {
                 $('.load').css('display','block');

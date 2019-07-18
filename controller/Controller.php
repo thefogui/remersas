@@ -182,7 +182,6 @@ class Controller {
     function initPHPMailer() {
         date_default_timezone_set('Etc/UTC');
 
-        //TODO: change files url
         require_once( dirname(__FILE__) . '/../plugins/phpmailer/PHPMailerAutoload.php');
         require_once( dirname(__FILE__) . '/../plugins/phpmailer/class.phpmailer.php');
         

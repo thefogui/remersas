@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-    <?php include("layouts/header.php") ?>
+    <?php include(dirname(__FILE__) . "/layouts/header.php") ?>
     
     <body>
         <!-- TODO: loading gif -->

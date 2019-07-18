@@ -1,6 +1,6 @@
 <?php
 
-include("Controller.php");
+include(dirname(__FILE__) . "/Controller.php");
 
 function validateCode() {
     $hash = $_POST['hash'];
@@ -21,7 +21,6 @@ function validateCode() {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-
     $validateFormData = validateCode();
 
     if ($validateFormData) {
@@ -31,6 +30,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['text'] = "Error validation your code!";
         header("Location: ../apps/views/confirmation.php");
     }
-
-    
 }

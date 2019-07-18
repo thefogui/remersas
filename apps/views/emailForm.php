@@ -2,7 +2,7 @@
 
 <!DOCTYPE html>
     <head>
-        <?php include("layouts/header.php") ?>
+        <?php include( dirname(__FILE__) . "/layouts/header.php") ?>
         <link rel="stylesheet" href="../../web/css/emailvalidation.css">
     </head>
 
@@ -26,7 +26,7 @@
         
         <!-- TODO: validate the form -->
 
-        <?php include("layouts/scripts.php") ?>
+        <?php include(dirname(__FILE__) . "/layouts/scripts.php") ?>
         <!-- Main JS -->
         <script type="text/javascript" src="../../web/js/main.js"></script>
         <script type="text/javascript" src="../../web/js/emailValidation.js"></script>

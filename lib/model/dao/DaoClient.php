@@ -47,7 +47,7 @@ class DaoClient {
             //TODO: get the name and cognom
             $query = "SELECT 
                          c.DocIdentidad AS nif
-                        ,c.Nombre AS name
+                        ,CONCAT(c.Nombre, ' ',c.Apellidos) AS name
                         ,pfv.Id_Cliente AS id
                         ,c.Email AS email 
                         ,pfv.Cuantia_pasajero AS amountReviewed
@@ -156,9 +156,8 @@ class DaoClient {
 
             $result = mysqli_query($conn, $query);
 
-            if (mysqli_errno($conn)) {
-                throw new Exception('Error getting users: ' . mysqli_error($conn));
-            } else {
+            if (mysqli_errno($conn)) throw new Exception('Error getting users: ' . mysqli_error($conn));
+            else {
                 while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
                     
                     $client = new Client($row['nif'], $row['name'], $row['id'], $row['email']);
@@ -184,20 +183,15 @@ class DaoClient {
      * 
      */
     public function changeToSolicitarDatosPago($conn, $id) {
-         
         if ($conn) {
             $query = "UPDATE populetic_form.populetic_form_vuelos pfv
                       SET pfv.Id_Estado = 36
                       WHERE pfv.Id_Cliente = ". $id .";";
             $result = mysqli_query($conn, $query);
 
-            if (mysqli_errno($conn)) {
-                throw new Exception('Error getting users: ' . mysqli_error($conn));
-            }
-            
-        } else{
+            if (mysqli_errno($conn)) throw new Exception('Error getting users: ' . mysqli_error($conn));
+        } else
             throw new Exception('Error conecting to the sql database!');
-        } 
     }
 
     public function getIdReclamacion($conn, $id){
@@ -210,14 +204,11 @@ class DaoClient {
                       ORDER BY id_pfv ASC
                       LIMIT 1;";
             $result = mysqli_query($conn, $query);
-            if (mysqli_errno($conn)) {
-                throw new Exception('Error getting users: ' . mysqli_error($conn));
-            }
+            if (mysqli_errno($conn)) throw new Exception('Error getting users: ' . mysqli_error($conn));
             
             $id = mysqli_fetch_assoc($result)["id_pfv"];
-        } else{
+        } else
             throw new Exception('Error conecting to the sql database!');
-        }
         return $id;
     }
 
@@ -228,12 +219,9 @@ class DaoClient {
                       VALUES (". $reclamacionId .", CURRENT_TIMESTAMP,'36', '19', NULL, '0');";
             $result = mysqli_query($conn, $query);
 
-            if (mysqli_errno($conn)) {
-                throw new Exception('Error getting users: ' . mysqli_error($conn));
-            }   
-        } else{
+            if (mysqli_errno($conn)) throw new Exception('Error getting users: ' . mysqli_error($conn));
+        } else
             throw new Exception('Error conecting to the sql database!');
-        }
     }
 
     /**
@@ -269,9 +257,6 @@ class DaoClient {
             $result["amountLeft"] = $amountLeft;
             $result["amountToPay"] = $amountToPay;
 
-            //var_dump($resultsClientsMonth);
-            //echo "<br><hr>" . $month . " d ". $d . " Start ". $start . " TimeStamp ". $ts_start;
-
             $month = $month + 1;
             if ($month == 13) {
                 $month = 1;
@@ -293,10 +278,8 @@ class DaoClient {
             $bigestArray = $array2;
         }
 
-        foreach ($smallestArray as $row) {
-            $bigestArray[] = $row;
-        }
-
+        foreach ($smallestArray as $row) $bigestArray[] = $row;
+        
         return $bigestArray;
     }
 }

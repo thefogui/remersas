@@ -1,8 +1,8 @@
 <?php
 
-require_once "../../controller/VerifyController.php";
-require_once "../../controller/Controller.php";
-require_once "../../lib/model/dao/DaoUrlClient.php";
+require_once dirname(__FILE__) . "/../../controller/VerifyController.php";
+require_once dirname(__FILE__) . "/../../controller/Controller.php";
+require_once dirname(__FILE__) . "/../../lib/model/dao/DaoUrlClient.php";
 
 /**
  * This function verifies if the url that the used to get here is valid or not
@@ -59,14 +59,14 @@ try {
 ?>
 
 <!DOCTYPE html>
-    <?php include("layouts/header.php") ?>
+    <?php include(dirname(__FILE__) . "/layouts/header.php") ?>
 
     <body>
         <section>
             
         </section>
 
-        <?php include("layouts/scripts.php") ?>
+        <?php include(dirname(__FILE__) . "/layouts/scripts.php") ?>
         <!-- Main JS -->
         <script  type="text/javascript" src="../../web/js/main.js"></script>
     </body>

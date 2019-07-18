@@ -1,9 +1,9 @@
 <?php
 
-require_once "../config/config.php";
-include_once '../lib/model/dao/DaoClient.php';
-include_once '../lib/model/entity/Client.php';
-include("Controller.php");
+require_once dirname(__FILE__) . "/../config/config.php";
+include_once dirname(__FILE__) . '/../lib/model/dao/DaoClient.php';
+include_once dirname(__FILE__) . '/../lib/model/entity/Client.php';
+include(dirname(__FILE__) . "/Controller.php");
 
 session_start();
 //atributtes form

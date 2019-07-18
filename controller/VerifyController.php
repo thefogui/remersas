@@ -1,7 +1,7 @@
 <?php
 
-require_once "../../lib/model/dao/DaoUrlClient.php";
-require_once "../../config/config.php";
+require_once dirname(__FILE__) . "/../lib/model/dao/DaoUrlClient.php";
+require_once dirname(__FILE__) . "/../config/config.php";
 
 class VerifyController {
     
