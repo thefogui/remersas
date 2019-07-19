@@ -1,8 +1,6 @@
 <?php
 
-require_once dirname(__FILE__) . "/../../controller/VerifyController.php";
 require_once dirname(__FILE__) . "/../../controller/Controller.php";
-require_once dirname(__FILE__) . "/../../lib/model/dao/DaoUrlClient.php";
 
 /**
  * This function verifies if the url that the used to get here is valid or not
@@ -10,19 +8,14 @@ require_once dirname(__FILE__) . "/../../lib/model/dao/DaoUrlClient.php";
  */
 function checkUrl() {
     session_start();
-
-    $verifyController = new VerifyController();
     
     if (isset($_GET['email'])) {
 
         $email = $_GET['email']; //chekcs if the email insert in the url is a valid format
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) 
             throw new Exception("The email inserted isn't a valid format.");
-        }
 
-        if (isset($_GET['hash'])) {
-            //TODO: call the query with these parameters and redirect to the bank account form
-            
+        if (isset($_GET['hash'])) {            
             try {
                 $date = Controller::getInstance()->hashToActualData($_GET['hash']);
             
@@ -53,13 +46,10 @@ try {
 } catch (Exception $e) {
     echo 'Caught exception: ',  $e->getMessage(), "\n";
 }
-
-
-//TODO: Put load gif while this page is processed 
 ?>
 
 <!DOCTYPE html>
-    <?php include(dirname(__FILE__) . "/layouts/header.php") ?>
+    <?php include(dirname(__FILE__) . "/layouts/head.php") ?>
 
     <body>
         <section>

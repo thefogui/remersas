@@ -1,14 +1,48 @@
 <?php
 
 //TODO: make varifications here
+require_once dirname(__FILE__) . "/../../controller/Controller.php";
 
+function checkUrl() {
+    if (!isset($_GET["hash"])) return false;
 
+    $hash = $_GET["hash"];
+
+    if ($hash) {
+        $uncriptedHash = Controller::getInstance()->getDataFromUrlCode($hash);
+        $date = $uncriptedHash["date"];
+        $email = $uncriptedHash["email"];
+
+        if (Controller::getInstance()->checkExpiredOneDay($date)){
+            // Fallback behaviour goes here
+            //TODO: redirect or show error template: error code expired invalid 
+            return false;
+        } else 
+            return Controller::getInstance()->checkEmailDataBaseChanges($email);
+    } else {
+        // Fallback behaviour goes here
+        //TODO: redirect or show error template: error invalid 
+        return false;
+    }
+    return false;
+}
+
+try {
+    if (!checkUrl()) {
+        unset ($_SESSION['text']);
+        $_SESSION['text'] = "Error validation your code!";
+        header("Location: confirmation.php");
+    }
+} catch (Exception $e) {
+    die();
+}
 
 ?>
 
 <!DOCTYPE html>
     <head>
-        <?php include("layouts/header.php") ?>
+        <title>Populetic - Bank Account Form</title>
+        <?php include("layouts/head.php") ?>
         <link rel="stylesheet" href="../../web/css/bankAccountForm.css">
     </head>
     <body>
@@ -18,6 +52,7 @@
                     <div class="card-heading"></div>
                     <div class="card-body">
                         <h2 class="title">Insert your account information below</h2>
+                        <!-- TODO: PUT the email here, create a form controller -->
                         <form name="bankAccountForm" action="" method="POST" onsubmit="return validateForm()">
                             <div class="input-group">
                                 <input class="input--style-3 iban" type="text" name="iban" id="iban" placeholder="IBAN" size="35" required>

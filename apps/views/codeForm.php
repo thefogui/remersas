@@ -1,6 +1,48 @@
+<?php
+//TODO: verify if the client has acces
+
+require_once dirname(__FILE__) . "/../../controller/Controller.php";
+
+function checkUrl() {
+    if (!isset($_GET["hash"])) return false;
+
+    $hash = $_GET["hash"];
+
+    if ($hash) {
+        $uncriptedHash = Controller::getInstance()->getDataFromUrlCode($hash);
+        $date = $uncriptedHash["date"];
+        $email = $uncriptedHash["email"];
+        $code = $uncriptedHash["code"];
+
+        if (Controller::getInstance()->checkExpiredOneDay($date)){
+            // Fallback behaviour goes here
+            //TODO: redirect or show error template: error code expired invalid 
+            return false;
+        } else 
+            return Controller::getInstance()->checkEmailDataBaseChanges($email);
+    } else {
+        // Fallback behaviour goes here
+        //TODO: redirect or show error template: error invalid 
+        return false;
+    }
+    return false;
+}
+
+try {
+    if (!checkUrl()) {
+        unset ($_SESSION['text']);
+        $_SESSION['text'] = "Error validation your code!";
+        header("Location: confirmation.php");
+    }
+} catch (Exception $e) {
+    die();
+}
+?>
+
 <!DOCTYPE html>
     <head>
-        <?php include(dirname(__FILE__) . "/layouts/header.php") ?>
+        <title> Populetic - Validate your Code </title>
+        <?php include(dirname(__FILE__) . "/layouts/head.php") ?>
         <link rel="stylesheet" href="../../web/css/emailvalidation.css">
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     </head>

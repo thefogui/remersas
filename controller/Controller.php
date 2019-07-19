@@ -50,17 +50,18 @@ class Controller {
      * @param $email 
      * @param $hash
      */
-    function sendEmailValidation($info, $name, $email, $hash, $amount=0, $ref="MARIA SU", $languageId='en') {
+    function sendEmailValidation($info, $name, $email, $hash, $date, $amount=0, $ref="MARIA SU", $languageId='es', $codigo= "not defined") {
         $correo = $this->initPHPMailer();
         $mandrill = $this->initMandrill();
-        $templateSubject = " [Ref:" . $ref . "]";    
+        $templateSubject = "_(¡Hemos conseguido su indemnización! índiquenos dónde desea recibirla)";    
         $result = "Nothing";
     
         $emailInfo[] = array(
             "email" => utf8_encode($email),
             "name" => utf8_encode($name),
             "amount" => utf8_encode($amount),
-            "hash" => utf8_encode($hash)
+            "hash" => utf8_encode($hash),
+            "codigo" => utf8_encode($codigo)
         );
 
         try {
@@ -74,33 +75,29 @@ class Controller {
         
         //TODO: remove code below
         $result = "Nothing";
-        //check if the email extension is a populetic email.
         preg_match('/(\S+)(@(\S+))/', $email, $match);
         $emailExtension = $match[2];
-       // if ($emailExtension == "@populetic.com") {
-            
-            $to      = $email; // Send email to our user
-            $subject = 'Populetic | Email Verification'; // Give the email a subject 
-            $body = '
-            
-            Hello from team Populetic, 
-            Zombie ipsum reversus ab viral inferno' . $name . ', nam rick grimes malum cerebro. De carne lumbering animata corpora quaeritis. Summus brains sit​​, morbo vel maleficia? De apocalypsi gorger omero undead survivor dictum mauris. Hi mindless mortuis soulless creaturas, imo evil stalking monstra adventus resi dentevil vultus comedat cerebella viventium. Qui animated corpse, cricket bat max brucks terribilem incessu zomby.
-            
-            Please click this link to activate your account:
-            localhost/remesas/apps/views/verify.php?email=' . $email.'&hash=' . $hash . '
-            
-            '; // Our message above including the link
-                                
-            $correo->Subject = $subject;   
-            $correo->MsgHTML($body);
-            $correo->AddAddress($to, "Populetic");
- 
-            if( !$correo->Send() ) {
-                $result= "Error yes";
-            } else {
-                $result= "Error no";
-            }
-        //}
+        
+        $to      = $email; // Send email to our user
+        $subject = '¡Hemos conseguido su indemnización! índiquenos dónde desea recibirla'; // Give the email a subject 
+        $body = '
+        
+        Hello from team Populetic, 
+        Zombie ipsum reversus ab viral inferno' . $name . ', nam rick grimes malum cerebro. De carne lumbering animata corpora quaeritis. Summus brains sit​​, morbo vel maleficia? De apocalypsi gorger omero undead survivor dictum mauris. Hi mindless mortuis soulless creaturas, imo evil stalking monstra adventus resi dentevil vultus comedat cerebella viventium. Qui animated corpse, cricket bat max brucks terribilem incessu zomby.
+        
+        Please click this link to activate your account:
+        localhost/remesas/apps/views/verify.php?email=' . $email.'&hash=' . $hash . '
+        
+        '; // Our message above including the link
+                            
+        $correo->Subject = $subject;   
+        $correo->MsgHTML($body);
+        $correo->AddAddress($to, "Populetic");
+
+        if( !$correo->Send() ) 
+            $result= "Error yes";
+        else 
+            $result= "Error no";
         return $result;
     }
 
@@ -126,12 +123,10 @@ class Controller {
         $correo->MsgHTML($body);
         $correo->AddAddress($to, "Populetic");
 
-        if( !$correo->Send() ) {
+        if( !$correo->Send() )
             $result= "Error yes";
-        } else {
+        else 
             $result= "Error no";
-        }
- 
         return $result;
     }
 
@@ -239,19 +234,24 @@ class Controller {
      * @return true if the url still valid and false otherwise
      */
     public function checkExpireDate($date) {
-        $exp_date = strtotime($date . '+7 days');        
-        $today    = date("Y-m-d H:i:s");
-        $tsToday  = strtotime($today);
-
-        return ($tsToday > $exp_date);
+        if (DateTime::createFromFormat('Y-m-d H:i:s', $date) !== FALSE) {
+            $exp_date = strtotime($date . '+7 days');        
+            $today    = date("Y-m-d H:i:s");
+            $tsToday  = strtotime($today);
+            return ($tsToday > $exp_date);
+        }
+        return true;
     }
 
     public function checkExpiredOneDay($date) {
-        $exp_date = strtotime($date . '+1 days');        
-        $today    = date("Y-m-d H:i:s");
-        $tsToday  = strtotime($today);
+        if (DateTime::createFromFormat('Y-m-d H:i:s', $date) !== FALSE) {
+            $exp_date = strtotime($date . '+1 days');        
+            $today    = date("Y-m-d H:i:s");
+            $tsToday  = strtotime($today);
 
-        return ($tsToday > $exp_date);
+            return ($tsToday > $exp_date);
+        }
+        return true;
     }
 
     public function uniqidReal($lenght = 13) {
@@ -266,7 +266,7 @@ class Controller {
         return strtoupper(substr(bin2hex($bytes), 0, $lenght));
     }
 
-    public function generateUrlCodeValidation() {
+    public function generateUrlCodeValidation($email) {
         $date = date('Y-m-d H:i:s');
         $code = "";
         try {
@@ -275,10 +275,10 @@ class Controller {
             //TODO: redirect to error page
         }
         
-        $url = "date=" . $date . "code=" . $code;
+        $url = "date=" . $date . "code=" . $code . "email=" . $email;
         $url = $this->encryptText($url);
 
-        return array('url' => $url, 'code' => $code);
+        return array('url' => $url, 'code' => $code, 'email' => $email, 'date' => $date );
     }
 
     function between($start, $end, $string) {
@@ -300,8 +300,15 @@ class Controller {
 
         $date = $this->between('date=', 'code=', $url_decoded);
 
-        $code = $this->after('code=', $url_decoded);
+        $code = $this->between('code=', "email=", $url_decoded);
 
-        return array('date' => $date, 'code' => $code);
+        $email = $this->after('email=', $url_decoded);
+
+        return array('date' => $date, 'code' => $code, 'email' => $email);
+    }
+
+    public function checkEmailDataBaseChanges($email) {
+        //TODO: get t he email from databse and see if the estado changed recently.
+        return true;
     }
 }

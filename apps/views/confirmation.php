@@ -7,7 +7,10 @@ $text = $_SESSION['text'];
 ?>
 
 <!DOCTYPE html>
-    <?php include(dirname(__FILE__) . "/layouts/header.php") ?>
+    <head>
+        <title> Populetic - Informative Page </title>
+        <?php include(dirname(__FILE__) . "/layouts/head.php") ?>
+    </head>
     
     <body>
         <div class="box-login d-flex justify-content-center">  

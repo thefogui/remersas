@@ -1,7 +1,7 @@
 
 function validateForm() {
 
-	if (!$( "#iban" ).hasClass("iban")) return true;
+	if (!($( "#iban" ).hasClass("iban"))) return true;
     var IBAN = $('#iban').val();
     console.log(IBAN);
 

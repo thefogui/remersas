@@ -44,12 +44,15 @@ class DaoClient {
         $amountLeft = $amount;
     
         if($conn) {
-            $query = "SELECT 
-                         c.DocIdentidad AS nif
-                        ,CONCAT(c.Nombre, ' ',c.Apellidos) AS name
-                        ,pfv.Id_Cliente AS id
-                        ,c.Email AS email 
-                        ,pfv.Cuantia_pasajero AS amountReviewed
+            $query = "SELECT
+                        IFNULL(pfv.Ref, '') AS refencia 
+                            ,IFNULL(pfv.Codigo, '') AS codigo
+                            ,c.DocIdentidad AS nif
+                            ,CONCAT(c.Nombre, ' ',c.Apellidos) AS name
+                            ,pfv.Id_Cliente AS id
+                            ,c.Email AS email 
+                            ,pfv.langId AS lang
+                            ,pfv.Cuantia_pasajero AS amountReviewed
                     FROM 
                         populetic_form_vuelos pfv
                     INNER JOIN 
@@ -61,9 +64,9 @@ class DaoClient {
 
             $result = mysqli_query($conn, $query);
 
-            if (mysqli_errno($conn)) {
+            if (mysqli_errno($conn)) 
                 throw new Exception('Error getting users: ' . mysqli_error($conn));
-            } else {
+            else {
                 while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
                     
                     $client = new Client($row['nif'], $row['name'], $row['id'], $row['email']);
@@ -75,7 +78,7 @@ class DaoClient {
 
                     if ($amountToPay <= $amount) {
                         $amountLeft = $amountLeft - $clientAmount;
-                        $clientValue = array($row['nif'], utf8_encode($row['name']), $row['id'], utf8_encode($row['email']), $clientAmount);
+                        $clientValue = array($row['nif'], utf8_encode($row['name']), $row['id'], utf8_encode($row['email']), $clientAmount, $row['referencia'], $row['codigo'], $row['lang']);
                         $clients[] = $clientValue;
                     }
                 }
@@ -108,9 +111,9 @@ class DaoClient {
 
             $result = mysqli_query($conn, $query);
 
-            if (mysqli_errno($conn)) {
+            if (mysqli_errno($conn))
                 throw new Exception('Error getting users: ' . mysqli_error($conn));
-            } else {
+            else {
                 $d = mysqli_fetch_assoc($result)["d"];
             }
         }
@@ -132,12 +135,14 @@ class DaoClient {
 
         if ($conn) {
             $query = "SELECT 
-                            c.DocIdentidad AS nif
-                            ,c.Nombre AS name
+                            IFNULL(pfv.Ref, '') AS refencia 
+                            ,IFNULL(pfv.Codigo, '') AS codigo
+                            ,c.DocIdentidad AS nif
+                            ,CONCAT(c.Nombre, ' ',c.Apellidos) AS name
                             ,pfv.Id_Cliente AS id
                             ,c.Email AS email 
-                            ,pfv.Cantidadcompensacion AS amountReviewed
-                            ,pfv.Cuantia_pasajero
+                            ,pfv.langId AS lang
+                            ,pfv.Cuantia_pasajero AS amountReviewed
                         FROM 
                             populetic_form.populetic_form_vuelos pfv
                         INNER JOIN 
@@ -168,7 +173,7 @@ class DaoClient {
 
                     if ($amountToPay <= $amount) {
                         $amountLeft = $amountLeft - $clientAmount;
-                        $clientValue = array($row['nif'], utf8_encode($row['name']), $row['id'], utf8_encode($row['email']), $clientAmount);
+                        $clientValue = array($row['nif'], utf8_encode($row['name']), $row['id'], utf8_encode($row['email']), $clientAmount, $row['referencia'], $row['codigo'], $row['lang']);
                         $clients[] = $clientValue;
                     }
                 }

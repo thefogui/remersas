@@ -1,8 +1,7 @@
-
-
 <!DOCTYPE html>
     <head>
-        <?php include( dirname(__FILE__) . "/layouts/header.php") ?>
+        <title> Populetic - Email request </title>
+        <?php include( dirname(__FILE__) . "/layouts/head.php") ?>
         <link rel="stylesheet" href="../../web/css/emailvalidation.css">
     </head>
 
@@ -11,8 +10,7 @@
             <form class="align-self-center text-center form-box" method="POST" onsubmit="checkRecaptcha()" action="../../controller/emailFormController.php">
                 <img class="align-self-center" src="../../web/images/populetic.svg" alt="logo">
                 <p class="title">We gonna send the code to your email</p>
-                <h1 class="h3 mb-3 font-weight-normal">Insert your email here:</h1>
-                <input type="email" placeholder="Email" name="email" class="form-control " value="" autofocus="" required="" autocomplete="off">
+                <h1 class="h3 mb-3 font-weight-normal">Insert your email here:</h1>                <input type="email" placeholder="Email" name="email" class="form-control " value="" autofocus="" required="" autocomplete="off">
 
                 <div class="mt-4">
                     <input class="btn btn-lg btn-outline-info btn-block" type="submit" value="Send">

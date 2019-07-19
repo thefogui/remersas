@@ -16,7 +16,8 @@ $conn;
 function sendEmailCode($email){
     //TODO: get url
     $url = "localhost/remesas/";
-    $generatedCode = Controller::getInstance()->generateUrlCodeValidation();
+    //TODO: check if the user has
+    $generatedCode = Controller::getInstance()->generateUrlCodeValidation($email);
     $urlHash = $generatedCode['url'];
     $code = $generatedCode['code'];
 
@@ -33,4 +34,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo $e;
     }
 }
-

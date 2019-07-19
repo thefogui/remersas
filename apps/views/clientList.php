@@ -48,7 +48,7 @@ function generateTable($idName = '', $thead = '', $data = array(), $numVips = 0)
 
     foreach ($data as $row) {
         $content .= '<tr>';
-
+        //TODO: https://codepen.io/cristinaconacel/pen/zmgmxE
         if (is_array($row) || is_object($row)) {
             foreach ($row as $cow) {
                 if ($index < $numVips) {
@@ -84,7 +84,10 @@ if(array_key_exists('email-send', $_POST)) {
 ?>
 
 <!DOCTYPE html>
-    <?php include( dirname(__FILE__) . "/layouts/header.php") ?>
+    <head>
+        <title>Remesas - Populetic</title>
+        <?php include( dirname(__FILE__) . "/layouts/head.php") ?>
+    </head>
     
     <body>
         <div class="d-flex justify-content-center" style="margim-top:3em!important;">
@@ -131,7 +134,7 @@ if(array_key_exists('email-send', $_POST)) {
                             <h1>Clients</h1>
                             <img class="align-self-center load" src="../../web/images/loading.gif">
                             <div class="table-responsive">
-                                <?php echo getTable("table", "../../cache/", array("Nif", "Name", "Id", "Email", "Compensation (€)")) ?>
+                                <?php echo getTable("table", "../../cache/", array("Nif", "Name", "Id", "Email", "Compensation (€)", "Ref", "Codigo", "language")) ?>
                         
                             </div><!-- closing div table-responsive -->
                         </div>

@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-    <?php include(dirname(__FILE__) . "/layouts/header.php") ?>
+    <head>
+        <title> Populetic - Remesas Welcome </title>
+        <?php include(dirname(__FILE__) . "/layouts/head.php") ?>
+    </head>
+    
     
     <body>
-        <!-- TODO: loading gif -->
         <div class="box-login d-flex justify-content-center">
             <img class="align-self-center load" src="../../web/images/loading.gif">
             <form class="align-self-center text-center form-box" method="POST" onsubmit="showLoading()" action="../../controller/FormController.php">

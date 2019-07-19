@@ -12,45 +12,45 @@ class AppConfig {
         {
             if($_SERVER['SERVER_NAME'] != 'localhost')
             {
-            if( isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] == "dev-form.populetic.com" )
-            {
-                /* DEVELOPMENT SERVER */
-                $servername = "127.0.0.1"; 
-                $username = "root";
-                $password = "p0pprdfr0nt";
-            }
-            else
-            {        
-                $ip = shell_exec("/sbin/ifconfig  | grep 'inet '| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}'");
-                $ip = str_replace(PHP_EOL, '', $ip);
+                if( isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] == "dev-form.populetic.com" )
+                {
+                    /* DEVELOPMENT SERVER */
+                    $servername = "127.0.0.1"; 
+                    $username = "root";
+                    $password = "p0pprdfr0nt";
+                }
+                else
+                {        
+                    $ip = shell_exec("/sbin/ifconfig  | grep 'inet '| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}'");
+                    $ip = str_replace(PHP_EOL, '', $ip);
 
-                if( $ip == "172.31.41.83" ) //IP DE DESARROLLO
-                {
-                /* DEVELOPMENT SERVER */
-                $servername = "127.0.0.1"; 
-                $username = "root";
-                $password = "p0pprdfr0nt";
+                    if( $ip == "172.31.41.83" ) //IP DE DESARROLLO
+                    {
+                        /* DEVELOPMENT SERVER */
+                        $servername = "127.0.0.1"; 
+                        $username = "root";
+                        $password = "p0pprdfr0nt";
+                    }
+                    else 
+                    {
+                        $username = "populetic";
+                        $password = "p0pprdfr0nt";
+                        
+                        /* PRODUCTION SERVER */
+                        switch( $server )
+                        {
+                            case "production":
+                                $servername = "production-database.cjytdcwzxu1j.us-east-2.rds.amazonaws.com";          
+                            break;
+                            case "replica":
+                                $servername = "populetic-datawarehouse.cjytdcwzxu1j.us-east-2.rds.amazonaws.com";
+                            break;
+                            default:
+                                $servername = "production-database.cjytdcwzxu1j.us-east-2.rds.amazonaws.com";
+                            break;
+                        }
+                    }
                 }
-                else 
-                {
-                $username = "populetic";
-                $password = "p0pprdfr0nt";
-                
-                /* PRODUCTION SERVER */
-                switch( $server )
-                {
-                    case "production":
-                    $servername = "production-database.cjytdcwzxu1j.us-east-2.rds.amazonaws.com";          
-                    break;
-                    case "replica":
-                    $servername = "populetic-datawarehouse.cjytdcwzxu1j.us-east-2.rds.amazonaws.com";
-                    break;
-                    default:
-                    $servername = "production-database.cjytdcwzxu1j.us-east-2.rds.amazonaws.com";
-                    break;
-                }
-                }
-            }
             } 
             else 
             {
@@ -64,52 +64,52 @@ class AppConfig {
         {
             if (substr(php_uname(), 0, 7) == "Windows")
             {
-            /* LOCALHOST*/
-            $servername = "127.0.0.1";
-            $username   = "root";
-            $password   = "";
+                /* LOCALHOST*/
+                $servername = "127.0.0.1";
+                $username   = "root";
+                $password   = "";
             }
             else
             {
-            if( isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] == "dev-form.populetic.com" )
-            {
-                /* DEVELOPMENT SERVER */
-                $servername = "127.0.0.1"; 
-                $username = "root";
-                $password = "p0pprdfr0nt";
-            }
-            else
-            {               
-                $ip = shell_exec("/sbin/ifconfig  | grep 'inet '| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}'");
-                $ip = str_replace(PHP_EOL, '', $ip);
+                if( isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] == "dev-form.populetic.com" )
+                {
+                    /* DEVELOPMENT SERVER */
+                    $servername = "127.0.0.1"; 
+                    $username = "root";
+                    $password = "p0pprdfr0nt";
+                }
+                else
+                {               
+                    $ip = shell_exec("/sbin/ifconfig  | grep 'inet '| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}'");
+                    $ip = str_replace(PHP_EOL, '', $ip);
 
-                if( $ip == "172.31.41.83" ) //IP DE DESARROLLO
-                {
-                /* DEVELOPMENT SERVER */
-                $servername = "127.0.0.1"; 
-                $username = "root";
-                $password = "p0pprdfr0nt";
-                }   
-                else 
-                {
-                /* SERVER */
-                $username = "populetic";
-                $password = "p0pprdfr0nt";
-        
-                switch( $server )
-                {
-                    case "production":
-                    $servername = "production-database.cjytdcwzxu1j.us-east-2.rds.amazonaws.com";          
-                    break;
-                    case "replica":
-                    $servername = "populetic-datawarehouse.cjytdcwzxu1j.us-east-2.rds.amazonaws.com";
-                    break;
-                    default:
-                    $servername = "production-database.cjytdcwzxu1j.us-east-2.rds.amazonaws.com";
-                    break;
+                    if( $ip == "172.31.41.83" ) //IP DE DESARROLLO
+                    {
+                        /* DEVELOPMENT SERVER */
+                        $servername = "127.0.0.1"; 
+                        $username = "root";
+                        $password = "p0pprdfr0nt";
+                    }   
+                    else 
+                    {
+                        /* SERVER */
+                        $username = "populetic";
+                        $password = "p0pprdfr0nt";
+                
+                        switch( $server )
+                        {
+                            case "production":
+                                $servername = "production-database.cjytdcwzxu1j.us-east-2.rds.amazonaws.com";          
+                            break;
+                            case "replica":
+                                $servername = "populetic-datawarehouse.cjytdcwzxu1j.us-east-2.rds.amazonaws.com";
+                            break;
+                            default:
+                                $servername = "production-database.cjytdcwzxu1j.us-east-2.rds.amazonaws.com";
+                            break;
+                        }
+                    }
                 }
-                }
-            }
             }
         }
 
