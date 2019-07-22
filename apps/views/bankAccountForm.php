@@ -1,8 +1,18 @@
 <?php
 
-//TODO: make varifications here
-require_once dirname(__FILE__) . "/../../controller/Controller.php";
+session_start();
 
+require_once dirname(__FILE__) . "/../../controller/Controller.php";
+require_once dirname(__FILE__) . "/../../controller/BankAccountController.php";
+
+
+/***
+ * TODO: Pass this function to the controller
+ */
+/**
+ * Function to the check the url 
+ * get the key and value and check is the values aren't expired
+ */
 function checkUrl() {
     if (!isset($_GET["hash"])) return false;
 
@@ -11,17 +21,16 @@ function checkUrl() {
     if ($hash) {
         $uncriptedHash = Controller::getInstance()->getDataFromUrlCode($hash);
         $date = $uncriptedHash["date"];
-        $email = $uncriptedHash["email"];
+        $_SESSION["email"] = $uncriptedHash["email"];
+        $email = $_SESSION["email"];
 
         if (Controller::getInstance()->checkExpiredOneDay($date)){
             // Fallback behaviour goes here
-            //TODO: redirect or show error template: error code expired invalid 
             return false;
         } else 
             return Controller::getInstance()->checkEmailDataBaseChanges($email);
     } else {
-        // Fallback behaviour goes here
-        //TODO: redirect or show error template: error invalid 
+        // Fallback behaviour goes here 
         return false;
     }
     return false;
@@ -36,6 +45,10 @@ try {
 } catch (Exception $e) {
     die();
 }
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") 
+    $bankAccoubtController = new BankAccountController();
+    
 
 ?>
 
@@ -52,8 +65,13 @@ try {
                     <div class="card-heading"></div>
                     <div class="card-body">
                         <h2 class="title">Insert your account information below</h2>
-                        <!-- TODO: PUT the email here, create a form controller -->
+                        <!-- TODO: create a form controller -->
+
                         <form name="bankAccountForm" action="" method="POST" onsubmit="return validateForm()">
+                        <div class="input-group">
+                                <input class="input--style-3 iban" type="hidden" name="email" id="email" value="<?php echo $_SESSION["email"];?>" size="35" required>
+                            </div>
+                            
                             <div class="input-group">
                                 <input class="input--style-3 iban" type="text" name="iban" id="iban" placeholder="IBAN" size="35" required>
                             </div>
@@ -102,7 +120,7 @@ try {
                     $( "#iban" ).attr('placeholder','IBAN');
                     $( "#iban" ).attr('name','iban');
                 }
-            });     
+            });
         </script>
     </body>
 </html>

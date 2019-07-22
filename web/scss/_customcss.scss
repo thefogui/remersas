@@ -1,0 +1,53 @@
+/* VARS */
+@font-face  {
+	font-family: FuturaMedium;
+	src: url("../fonts/Futura-Medium/Futura-Medium.otf");
+}
+@font-face {
+	font-family: AvenirBook;
+	src: url("../fonts/Avenir/Avenir-Book.otf");
+}
+
+
+$primary   : #36375e; //Changed
+$secondary : #a3a3b4; //Changed
+$danger    : #fd0505;
+$warning   : #ffc107;
+$success   : #f47820; //Changed
+$info      : #17a2b8;
+$dark      : #343a40;
+$green     : #004d40;
+
+$box-color : #bfbfd1; //Changed
+$link      : #777199; //Changed
+$light     : #cac8d5; //Changed
+$bg-light  : #f2f2f2; //New
+$light-gray: #6a6a6a; //New
+//$ligth-blue: #444575; //New
+$h1-color  : #a5a5b7;
+
+$font-family-sans-serif: FuturaMedium, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+$font-family-monospace: FuturaMedium, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+$font-family-headers: 'Lato', sans-serif;
+$font-family-datepicker: AvenirBook, $font-family-sans-serif;
+
+/********************************/
+$lato   : $font-family-headers;
+$futura : $font-family-sans-serif;
+
+.btn-group-justified {
+		display: table;
+		width: 100%;
+		table-layout: fixed;
+		border-collapse: separate;
+	.btn,
+	.btn-group {
+		float: none;
+		display: table-cell;
+		width: 1%;
+		.btn {
+			width: 100%;
+		}
+	}
+}

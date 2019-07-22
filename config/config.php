@@ -41,13 +41,13 @@ class AppConfig {
                         {
                             case "production":
                                 $servername = "production-database.cjytdcwzxu1j.us-east-2.rds.amazonaws.com";          
-                            break;
+                                break;
                             case "replica":
                                 $servername = "populetic-datawarehouse.cjytdcwzxu1j.us-east-2.rds.amazonaws.com";
-                            break;
+                                break;
                             default:
                                 $servername = "production-database.cjytdcwzxu1j.us-east-2.rds.amazonaws.com";
-                            break;
+                                break;
                         }
                     }
                 }
@@ -100,13 +100,13 @@ class AppConfig {
                         {
                             case "production":
                                 $servername = "production-database.cjytdcwzxu1j.us-east-2.rds.amazonaws.com";          
-                            break;
+                                break;
                             case "replica":
                                 $servername = "populetic-datawarehouse.cjytdcwzxu1j.us-east-2.rds.amazonaws.com";
-                            break;
+                                break;
                             default:
                                 $servername = "production-database.cjytdcwzxu1j.us-east-2.rds.amazonaws.com";
-                            break;
+                                break;
                         }
                     }
                 }

@@ -5,7 +5,7 @@
  * @package 
  * @see Client.php
  */
-class ClientBankAccount extends Person {
+class ClientBankAccount {
     private $id;
     private $IBAN;
     private $titular;

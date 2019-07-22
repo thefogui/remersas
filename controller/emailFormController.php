@@ -6,7 +6,6 @@ include(dirname(__FILE__) . "/Controller.php");
 
 session_start();
 //atributtes form
-$conn;
 
 //functions
 
@@ -19,6 +18,7 @@ function sendEmailCode($email){
     //TODO: check if the user has
     $generatedCode = Controller::getInstance()->generateUrlCodeValidation($email);
     $urlHash = $generatedCode['url'];
+    
     $code = $generatedCode['code'];
 
     Controller::getInstance()->sendEmailCode($info, $name, $email, $hash, $code);

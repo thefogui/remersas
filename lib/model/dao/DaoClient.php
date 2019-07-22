@@ -26,7 +26,6 @@ class DaoClient {
         //TODO: query to get the amount reviewed
         return $amountReviewed;
     }
-
     
     /**
      * This function returns all the clients that has the state : 
@@ -271,6 +270,10 @@ class DaoClient {
             $ts_start = strtotime("+1 month", $ts_start);          
         }
         return $result;
+    }
+
+    public function checkIfClientHasCode() {
+        
     }
 
     private function mergeData($array1, $array2) {

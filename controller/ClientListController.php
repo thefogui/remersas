@@ -4,26 +4,25 @@ require_once dirname(__FILE__) . "/../config/config.php";
 include_once dirname(__FILE__) . '/../lib/model/dao/DaoUrlClient.php';
 include_once dirname(__FILE__) . '/../lib/model/dao/DaoClient.php';
 include_once dirname(__FILE__) . '/../lib/model/entity/UrlClient.php';
-include(dirname(__FILE__) . "/Controller.php");
+require_once dirname(__FILE__) . "/Controller.php";
 
 session_start();
 //atributtes form
 
-$conn;
-
-
 //functions
 
 /**
- * 
+ * function to send emails to the clients after read the json file
+ * @param $file the name of the json file 
+ * @source $source the folder that contains the json file
  */
-function sendEmails($file, $destination= "../cache/"){
+function sendEmails($file, $source = "../cache/"){
     
     $appConfig = new AppConfig();
     $conn = $appConfig->connect( "populetic_form", "replica" );
     $daoClient = new DaoClient();
 
-    $jsonData = file_get_contents($destination . $file . ".json", 'r');
+    $jsonData = file_get_contents($source . $file . ".json", 'r');
     $jsonArrayData = json_decode($jsonData, true);
 
     if ($jsonArrayData) {
@@ -47,7 +46,7 @@ function sendEmails($file, $destination= "../cache/"){
             $hash = "";
             $date = date('Y-m-d H:i:s');
             $hash = Controller::getInstance()->generateHash($date);
-            //TODO: get idioma
+            //TODO: save in the sql database how many time this email was sent
             $result = Controller::getInstance()->sendEmailValidation($info, $name, $email, $hash, $date, $ref, $lang, $codigo_vuelo);
         }
     } else 
@@ -60,6 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $file = 'clients';
         sendEmails($file);
         Controller::getInstance()->deleteJson($file, "../cache/");
+        session_destroy();
     } catch (Exception $e) {
         echo $e;
     }

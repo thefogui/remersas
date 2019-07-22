@@ -7,9 +7,8 @@ class Controller {
     private function __clone() {}
 
     public static function getInstance() {
-        if (!Controller::$instance instanceof self) {
+        if (!Controller::$instance instanceof self)
             Controller::$instance = new self();
-        }
         return Controller::$instance;
     }
 
@@ -101,6 +100,10 @@ class Controller {
         return $result;
     }
 
+    /**
+     * Function to send the email code to the clients 
+     * 
+     */
     function sendEmailCode($info, $name, $email, $hash, $code) {
         //TODO: edit email;
         $correo = $this->initPHPMailer();
@@ -132,7 +135,7 @@ class Controller {
 
     /**
      * Function to encrypt a text
-     * @param $value the text we want to encript
+     * @param value the text we want to encript
      * 
      */
     function encryptText($text) {
@@ -155,8 +158,8 @@ class Controller {
     }
 
     /**
-     * Function to decrypt a encrypt text
-     * @param the text encrypt
+     * Function to decrypt a encrypted text
+     * @param encryptedText the text encrypt
     */
     function decryptText($encryptedText) {
         if(!$encryptedText) 
@@ -174,6 +177,9 @@ class Controller {
         return openssl_decrypt(base64_decode($encryptedText), $encrypt_method, $key, 0, $iv);
     }
 
+    /**
+     * Set the phpmailer attributes
+     */
     function initPHPMailer() {
         date_default_timezone_set('Etc/UTC');
 
@@ -207,6 +213,9 @@ class Controller {
         return $correo;
     }
 
+    /**
+     * 
+     */
     private function initMandrill() {
         require_once( dirname(__FILE__) . "/../plugins/mandrill/mandrill.php");
 
@@ -290,6 +299,11 @@ class Controller {
         return substr($string, $ini, $len);
     }
 
+    /**
+     * Function that return a string after a string sequence
+     * @param start the string sequence
+     * @param str the string we want to remove the string sequence
+    */
     function after($start, $str) {
         if (!is_bool(strpos($str, $start)))
         return substr($str, strpos($str, $start)+strlen($start));
@@ -308,7 +322,7 @@ class Controller {
     }
 
     public function checkEmailDataBaseChanges($email) {
-        //TODO: get t he email from databse and see if the estado changed recently.
+        //TODO: get the email from databse and see if the estado changed recently.
         return true;
     }
 }

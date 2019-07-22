@@ -1,0 +1,39 @@
+/*!
+* Bootstrap v4.1.1 (https://getbootstrap.com/)
+* Copyright 2011-2018 The Bootstrap Authors
+* Copyright 2011-2018 Twitter, Inc.
+* Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+*/
+$blue     : #007bff  !default;
+$gray     : #6c757d  !default;
+$red      : #dc3545  !default;
+$yellow   : #ffc107  !default;
+$green    : #28a745  !default;
+$cyan     : #17a2b8  !default;
+$gray-dark: #343a40  !default;
+
+$primary  : $blue      !default;
+$secondary: $gray      !default;
+$success  : $green     !default;
+$info     : $cyan      !default;
+$warning  : $yellow    !default;
+$danger   : $red       !default;
+$dark     : $gray-dark !default;
+ 
+$indigo   : #6610f2  !default;
+$purple   : #6f42c1  !default;
+$pink     : #e83e8c  !default;
+$orange   : #fd7e14  !default;
+$teal     : #20c997  !default;
+$white    : #fff     !default;
+$black    : #000     !default;
+$light    : #f8f9fa  !default;
+
+$breakpoint-xs: 0      !default;
+$breakpoint-sm: 576px  !default;
+$breakpoint-md: 768px  !default;
+$breakpoint-lg: 992px  !default;
+$breakpoint-xl: 1200px !default;
+
+$font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
+$font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;

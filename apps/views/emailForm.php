@@ -7,7 +7,7 @@
 
     <body>
         <div class="box-login d-flex justify-content-center">
-            <form class="align-self-center text-center form-box" method="POST" onsubmit="checkRecaptcha()" action="../../controller/emailFormController.php">
+            <form class="align-self-center text-center form-box" method="POST" action="../../controller/emailFormController.php">
                 <img class="align-self-center" src="../../web/images/populetic.svg" alt="logo">
                 <p class="title">We gonna send the code to your email</p>
                 <h1 class="h3 mb-3 font-weight-normal">Insert your email here:</h1>                <input type="email" placeholder="Email" name="email" class="form-control " value="" autofocus="" required="" autocomplete="off">

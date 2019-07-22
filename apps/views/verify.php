@@ -7,7 +7,6 @@ require_once dirname(__FILE__) . "/../../controller/Controller.php";
  * @throws Exception if the email ins't a valid format
  */
 function checkUrl() {
-    session_start();
     
     if (isset($_GET['email'])) {
 
@@ -22,9 +21,11 @@ function checkUrl() {
                 if (!Controller::getInstance()->checkExpireDate($date)){
                     header("Location: emailForm.php?email=" . $_GET['email'] . '&' . $_GET['hash']);
                 } else{
-                    //TODO: change date
+                    //TODO: change text
                     unset ($_SESSION['text']);
-                    echo "erro date";
+                    echo var_export($_SESSION, true);
+                    die;
+                    
                     $_SESSION['text'] = "Error date!";
                     header("Location: confirmation.php");
                 }
@@ -33,14 +34,19 @@ function checkUrl() {
             }
         } else {
             // Fallback behaviour goes here
-            //TODO: redirect or show error template
+            redirect();
         }
     } else {
         // Fallback behaviour goes here
-         //TODO: redirect or show error template
+        redirect();
     }
 }
 
+function redirect() {
+
+}
+
+session_start();
 try {
     checkUrl();
 } catch (Exception $e) {

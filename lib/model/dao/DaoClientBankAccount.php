@@ -41,7 +41,7 @@ class DaoClientBankAcccount {
             $result = mysqli_query($conn, $query);
 
             if (mysqli_errno($conn)) {
-                throw new Exception('Error updating user bank account : ' . mysqli_error($conn));
+                throw new Exception('Error updating user bank account: ' . mysqli_error($conn));
             }
         }
     }
@@ -57,10 +57,8 @@ class DaoClientBankAcccount {
             $result = mysqli_query($conn, $query);
 
             if (mysqli_errno($conn)) {
-                throw new Exception('Error updating user bank account : ' . mysqli_error($conn));
+                throw new Exception('Error updating user bank account: ' . mysqli_error($conn));
             }
         }
     }
-
-    
 }
