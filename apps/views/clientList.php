@@ -111,6 +111,7 @@ if(array_key_exists('email-send', $_POST))
 ?>
 
 <!DOCTYPE html>
+<html lang="en">
     <head>
         <title>Remesas - Populetic</title>
         <?php include( dirname(__FILE__) . "/layouts/head.php") ?>
@@ -148,7 +149,7 @@ if(array_key_exists('email-send', $_POST))
                             </div><!-- closing div row -->
                             
                             <div class="table-responsive">
-                                <?php echo getTable("table", "../../cache/", array("Nif", "Name", "Id", "Email", "Compensation (€)", "Ref", "Codigo", "language")) ?>
+                                <?php echo getTable("table", "../../cache/", array("Nif", "Name", "Id", "Email", "Compensation (€)", "Ref", "Codigo", "language", "Reclamación")) ?>
                             </div><!-- closing div table-responsive -->
                         </div><!-- closing div card-body -->
                     </div><!-- closing div card justify-content-center shadow p-3 mb-5 bg-white rounded -->

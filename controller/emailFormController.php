@@ -12,11 +12,14 @@ session_start();
 /**
  * 
  */
-function sendEmailCode($email){
+function sendEmailCode($email, $hash){
     //TODO: get url
     $url = "localhost/remesas/";
-    //TODO: check if the user has
-    $generatedCode = Controller::getInstance()->generateUrlCodeValidation($email);
+    //TODO: check if the user has the acces getting the query email reclamacion id
+
+    $uncryptedHash = Controller::getInstance()->hashToActualData($hash);
+
+    $generatedCode = Controller::getInstance()->generateUrlCodeValidation($email, $uncryptedHash["idReclamacion"]);
     $urlHash = $generatedCode['url'];
     
     $code = $generatedCode['code'];
@@ -27,8 +30,9 @@ function sendEmailCode($email){
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
+    $hash = $_POST['hash'];
     try {
-        $hash = sendEmailCode($email);
+        $hash = sendEmailCode($email, $hash);
         header("Location: ../apps/views/codeForm.php?email=" . $email . "&hash=". $hash);
     } catch (Exception $e) {
         echo $e;

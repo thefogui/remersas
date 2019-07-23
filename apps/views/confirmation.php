@@ -3,10 +3,12 @@
 session_start();
 
 $text = $_SESSION['text'];
+session_destroy();
 
 ?>
 
 <!DOCTYPE html>
+<html lang="en">
     <head>
         <title> Populetic - Informative Page </title>
         <?php include(dirname(__FILE__) . "/layouts/head.php") ?>

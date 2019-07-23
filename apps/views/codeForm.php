@@ -12,6 +12,9 @@ function checkUrl() {
 
     if ($hash) {
         $uncriptedHash = Controller::getInstance()->getDataFromUrlCode($hash);
+        
+        var_dump($uncriptedHash);
+
         $date = $uncriptedHash["date"];
         $email = $uncriptedHash["email"];
 
@@ -43,6 +46,7 @@ try {
 ?>
 
 <!DOCTYPE html>
+<html lang="en">
     <head>
         <title> Populetic - Validate your Code </title>
         <?php include(dirname(__FILE__) . "/layouts/head.php") ?>
@@ -57,23 +61,30 @@ try {
 
                 <input type="hidden" name="hash" value="<?php echo $_GET['hash']; ?>">
 
-                <h1 class="h3 mb-3 font-weight-normal">Insert the code that we sent to your email here.</h1>
-                <input type="text" class="form-control" maxlength="6" placeholder="Ex. YZPW6A" name="code"  value="" autofocus="" required="" autocomplete="off">
+                <h1 class="h3 mb-3 font-weight-normal">
+                    Inserte el código que ha recibido en su correo:
+                </h1>
+                <input type="text" class="form-control" maxlength="6" placeholder="Código de verificación. Ej: SH34DS" name="code" onkeyup="this.value = this.value.toUpperCase();" value="" autofocus="" required="" autocomplete="off">
                 
                 <div class="mt-4">
                     <div class="g-recaptcha" data-sitekey="6LcnjRIUAAAAAKPYVfEL2M__Ix57s7zgQGVlCTux"></div>
                 </div><!-- closing div mt-4 -->
 
                 <div class="mt-4">
-                    <input class="btn btn-lg btn-outline-info btn-block" type="submit" value="Send">
+                    <input class="btn btn-lg btn-outline-info btn-block" type="submit" value="ENVIAR">
                 </div><!-- closing div mt-4 -->
 
                 <div class="mt-4">
                     <p>
-                        I didn't received any code.
-                        <!--  TODO: what to do here? -->
-                        <?php echo "<a href='emailForm.php?email=" . $_SESSION['email'] . "&hash=" . $_SESSION['hash'] . "'>Send it again</a>"; ?>
+                        <?php echo "<a href='emailForm.php?email=" . $_SESSION['email'] . "&hash=" . $_SESSION['hash'] . "'>Enviar el código de nuevo.</a>"; ?>
                     </p>
+
+                    <P>
+                    <!-- TODO: formulario de contacto para neviar email al administrador -->
+                        <a href="#">
+                            Informar de un problema (=enviar mail a admin)  
+                        </a>
+                    </P>
                 </div><!-- closing div mt-4 -->
 
                 <div class="mt-3 mb-3">
@@ -92,7 +103,7 @@ try {
                 var recaptcha = $("#g-recaptcha-response").val();
                 if (recaptcha === "") {
                     event.preventDefault();
-                    alert("Please check the recaptcha");
+                    alert('"Ups, Captcha no válido."');
                 }
             }
         </script>

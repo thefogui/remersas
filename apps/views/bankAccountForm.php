@@ -3,6 +3,8 @@
 session_start();
 
 require_once dirname(__FILE__) . "/../../controller/Controller.php";
+require_once "../../lib/model/dao/DaoClient.php";
+require_once "../../lib/model/entity/Client.php";
 require_once dirname(__FILE__) . "/../../controller/BankAccountController.php";
 
 
@@ -15,14 +17,27 @@ require_once dirname(__FILE__) . "/../../controller/BankAccountController.php";
  */
 function checkUrl() {
     if (!isset($_GET["hash"])) return false;
-
+    //TODO: PUt this in a controller
+    $appConfig = new AppConfig();
+    $conn = $appConfig->connect( "populetic_form", "replica" );
+    $daoClient = new DaoClient();
+    
     $hash = $_GET["hash"];
 
     if ($hash) {
+
         $uncriptedHash = Controller::getInstance()->getDataFromUrlCode($hash);
+
         $date = $uncriptedHash["date"];
         $_SESSION["email"] = $uncriptedHash["email"];
         $email = $_SESSION["email"];
+        $idReclamacion = $uncriptedHash["idReclamacion"];
+        //TODO: get the reclamacion
+
+        $reclmacion = $daoClient->getIdReclamacionById($conn, $idReclamacion);
+        var_dump($reclamacion);
+
+        $appConfig->closeConnection($conn);
 
         if (Controller::getInstance()->checkExpiredOneDay($date)){
             // Fallback behaviour goes here
@@ -41,7 +56,8 @@ try {
         unset ($_SESSION['text']);
         $_SESSION['text'] = "Error validation your code!";
         header("Location: confirmation.php");
-    }
+    } //else 
+        //getReclamacion();
 } catch (Exception $e) {
     die();
 }
@@ -49,10 +65,10 @@ try {
 if ($_SERVER["REQUEST_METHOD"] == "POST") 
     $bankAccoubtController = new BankAccountController();
     
-
 ?>
 
 <!DOCTYPE html>
+<html lang="en">
     <head>
         <title>Populetic - Bank Account Form</title>
         <?php include("layouts/head.php") ?>
@@ -65,7 +81,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
                     <div class="card-heading"></div>
                     <div class="card-body">
                         <h2 class="title">Insert your account information below</h2>
-                        <!-- TODO: create a form controller -->
 
                         <form name="bankAccountForm" action="" method="POST" onsubmit="return validateForm()">
                         <div class="input-group">

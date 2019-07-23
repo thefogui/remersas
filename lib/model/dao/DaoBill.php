@@ -14,6 +14,4 @@ class DaoBill {
     public function getConn() {
         return $this->conn;
     }
-
-   
 }

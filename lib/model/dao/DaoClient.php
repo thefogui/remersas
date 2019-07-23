@@ -44,7 +44,8 @@ class DaoClient {
     
         if($conn) {
             $query = "SELECT
-                        IFNULL(pfv.Ref, '') AS refencia 
+                            pfv.ID as id_reclamacion
+                            ,IFNULL(pfv.Ref, '') AS refencia 
                             ,IFNULL(pfv.Codigo, '') AS codigo
                             ,c.DocIdentidad AS nif
                             ,CONCAT(c.Nombre, ' ',c.Apellidos) AS name
@@ -77,14 +78,24 @@ class DaoClient {
 
                     if ($amountToPay <= $amount) {
                         $amountLeft = $amountLeft - $clientAmount;
-                        $clientValue = array($row['nif'], utf8_encode($row['name']), $row['id'], utf8_encode($row['email']), $clientAmount, $row['referencia'], $row['codigo'], $row['lang']);
+                        $clientValue = array(
+                            $row['nif'], 
+                            utf8_encode($row['name']), 
+                            $row['id'], 
+                            utf8_encode($row['email']), 
+                            $clientAmount, 
+                            $row['referencia'], 
+                            $row['codigo'], 
+                            $row['lang'],
+                            $row['id_reclamacion']
+                        );
                         $clients[] = $clientValue;
                     }
                 }
             }
             $clientsSize = count($clients);
         }
-        return array("clients"=>$clients,"amountLeft"=> $amountLeft, "amountToPay"=>$amountToPay, "totalClients"=>$clientsSize);
+        return array("clients"=>$clients, "amountLeft"=> $amountLeft, "amountToPay"=>$amountToPay, "totalClients"=>$clientsSize);
     }
 
      /**
@@ -112,9 +123,8 @@ class DaoClient {
 
             if (mysqli_errno($conn))
                 throw new Exception('Error getting users: ' . mysqli_error($conn));
-            else {
+            else
                 $d = mysqli_fetch_assoc($result)["d"];
-            }
         }
         return $d;
     }
@@ -134,7 +144,8 @@ class DaoClient {
 
         if ($conn) {
             $query = "SELECT 
-                            IFNULL(pfv.Ref, '') AS refencia 
+                            pfv.ID as id_reclamacion
+                            ,IFNULL(pfv.Ref, '') AS refencia 
                             ,IFNULL(pfv.Codigo, '') AS codigo
                             ,c.DocIdentidad AS nif
                             ,CONCAT(c.Nombre, ' ',c.Apellidos) AS name
@@ -172,7 +183,16 @@ class DaoClient {
 
                     if ($amountToPay <= $amount) {
                         $amountLeft = $amountLeft - $clientAmount;
-                        $clientValue = array($row['nif'], utf8_encode($row['name']), $row['id'], utf8_encode($row['email']), $clientAmount, $row['referencia'], $row['codigo'], $row['lang']);
+                        $clientValue = array(
+                            $row['nif'], 
+                            utf8_encode($row['name']), 
+                            $row['id'], 
+                            utf8_encode($row['email']), 
+                            $clientAmount, 
+                            $row['referencia'], 
+                            $row['codigo'], 
+                            $row['lang'],
+                            $row['id_reclamacion']);
                         $clients[] = $clientValue;
                     }
                 }
@@ -198,7 +218,7 @@ class DaoClient {
     }
 
     public function getIdReclamacion($conn, $id){
-        $id;
+        $id_result;
 
         if ($conn) {
             $query = "SELECT  `populetic_form_vuelos`.`ID` AS id_pfv, `Ref` AS ref
@@ -209,17 +229,50 @@ class DaoClient {
             $result = mysqli_query($conn, $query);
             if (mysqli_errno($conn)) throw new Exception('Error getting users: ' . mysqli_error($conn));
             
-            $id = mysqli_fetch_assoc($result)["id_pfv"];
+            $id_result = mysqli_fetch_assoc($result)["id_pfv"];
         } else
             throw new Exception('Error conecting to the sql database!');
-        return $id;
+        return $id_result;
+    }
+
+    public function getIdReclamacionById($conn, $idReclamacion) {
+        $row;
+        //TODO: get Nombre del pasajero: 
+        //Indemnización: 
+        //Comisión Populetic:
+        //IVA:
+        //Importe total a percibir: XXXX€
+
+        if ($conn) {
+            $query = "SELECT 
+                        pfv.ID AS id_reclamacion 
+                    , IFNULL(pfv.Ref, '') AS refencia 
+                    , CONCAT(c.Nombre, ' ',c.Apellidos) AS name 
+                    , pfv.langId AS lang
+                    , pfv.Cuantia_pasajero AS compensation
+                    FROM 
+                        populetic_form.populetic_form_vuelos pfv
+                    INNER JOIN 
+                        populetic_form.clientes c ON c.ID = pfv.Id_Cliente
+                    WHERE 
+                        pfv.ID = ". $idReclamacion . "
+                    ORDER BY 
+                        compensation";
+            $result = mysqli_query($conn, $query);
+
+            if (mysqli_errno($conn)) throw new Exception('Error getting users: ' . mysqli_error($conn));
+            
+            $row = mysqli_fetch_assoc($result);
+        } else
+            throw new Exception('Error conecting to the sql database!');
+        return $row;
     }
 
     public function insertLogChange($conn, $clienld, $reclamacionId) {
         //TODO: check if a row exists, otherwise insert
         if ($conn) {
             $query = "INSERT INTO halbrand.logs_estados (`Id_reclamacion`, `Data`, `Estado`, `Tipo`, `Id_Agente`, `Checked`) 
-                      VALUES (". $reclamacionId .", CURRENT_TIMESTAMP,'36', '19', NULL, '0');";
+                      VALUES (" . $reclamacionId . ", CURRENT_TIMESTAMP, '36', '19', NULL, '0');";
             $result = mysqli_query($conn, $query);
 
             if (mysqli_errno($conn)) throw new Exception('Error getting users: ' . mysqli_error($conn));

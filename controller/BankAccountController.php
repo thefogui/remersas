@@ -15,18 +15,17 @@ class BankAccountController {
     public function insertData() {
         $appConfig = new AppConfig();
 
-        $conn = $appConfig->connect( "populetic_form", "localhost" ); //connect to the sql databse
+        $conn = $appConfig->connect("populetic_form", "localhost"); //connect to the sql databse
         // Check connection
         if ($conn->connect_error)
             die("Connection failed: " . $conn->connect_error);
         
         //$result = $this->daoClientBankAccount->insert();
 
-
         $appConfig->closeConnection($conn); //close the connection
     }
 
-    public function redirectToInfo() {
+    public function redirectToInfoPage() {
 
     }
 }

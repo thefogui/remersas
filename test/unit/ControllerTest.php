@@ -1,7 +1,6 @@
 <?php
 
 require_once "../../controller/Controller.php";
-require_once "../../lib/model/dao/DaoUrlClient.php";
 
 class ControllerTest {
 

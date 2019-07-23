@@ -1,6 +1,6 @@
 <?php 
 
-class DaoClientBankAcccount {
+class DaoClientBankAccount {
     private $conn;
 
     public function setConn($conn) {
@@ -24,9 +24,8 @@ class DaoClientBankAcccount {
 
             $result = mysqli_query($conn, $query);
 
-            if (mysqli_errno($conn)) {
+            if (mysqli_errno($conn))
                 throw new Exception('Error inserting bank account into mysql: ' . mysqli_error($conn));
-            }
         }
     }
 
@@ -40,9 +39,8 @@ class DaoClientBankAcccount {
 
             $result = mysqli_query($conn, $query);
 
-            if (mysqli_errno($conn)) {
+            if (mysqli_errno($conn))
                 throw new Exception('Error updating user bank account: ' . mysqli_error($conn));
-            }
         }
     }
 
@@ -56,9 +54,8 @@ class DaoClientBankAcccount {
 
             $result = mysqli_query($conn, $query);
 
-            if (mysqli_errno($conn)) {
+            if (mysqli_errno($conn))
                 throw new Exception('Error updating user bank account: ' . mysqli_error($conn));
-            }
         }
     }
 }

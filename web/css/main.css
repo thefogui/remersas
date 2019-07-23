@@ -28,7 +28,7 @@
 
 body {
   background-color: #f5f5f5 !important;
-  font: 100% Helvetica, sans-serif;
+  font-family: 100% Helvetica, sans-serif;
   color: #333;
   height: 100%;
   margin-bottom: 60px; }
@@ -55,10 +55,10 @@ a {
     color: #F47820; }
 
 .card {
-  margin-top: 2em !important; }
+  margin-top: 2em; }
 
 .custom {
-  width: 300px !important; }
+  width: 300px; }
 
 .load {
   display: none; }

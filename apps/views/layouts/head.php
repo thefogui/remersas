@@ -1,5 +1,4 @@
 <meta charset="UTF-8">
-
 <meta name="author" content="Vitor Carvalho">
 <meta name="copyright" content="3 Registered">
 <meta name="description" content="Under construction">

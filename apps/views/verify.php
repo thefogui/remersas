@@ -16,16 +16,13 @@ function checkUrl() {
 
         if (isset($_GET['hash'])) {            
             try {
-                $date = Controller::getInstance()->hashToActualData($_GET['hash']);
-            
-                if (!Controller::getInstance()->checkExpireDate($date)){
-                    header("Location: emailForm.php?email=" . $_GET['email'] . '&' . $_GET['hash']);
+                $uncryptedHash = Controller::getInstance()->hashToActualData($_GET['hash']);
+
+                if (!Controller::getInstance()->checkExpireDate($uncryptedHash["expiringDate"])){
+                    header("Location: emailForm.php?email=" . $_GET['email'] . '&hash=' . $_GET['hash']);
                 } else{
                     //TODO: change text
                     unset ($_SESSION['text']);
-                    echo var_export($_SESSION, true);
-                    die;
-                    
                     $_SESSION['text'] = "Error date!";
                     header("Location: confirmation.php");
                 }
@@ -55,7 +52,10 @@ try {
 ?>
 
 <!DOCTYPE html>
-    <?php include(dirname(__FILE__) . "/layouts/head.php") ?>
+<html lang="en">
+    <head>
+        <?php include(dirname(__FILE__) . "/layouts/head.php") ?>
+    </head>
 
     <body>
         <section>

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="en">
     <head>
         <title> Populetic - Remesas Welcome </title>
         <?php include(dirname(__FILE__) . "/layouts/head.php") ?>
@@ -7,11 +8,11 @@
     
     <body>
         <div class="box-login d-flex justify-content-center">
-            <img class="align-self-center load" src="../../web/images/loading.gif">
+            <img class="align-self-center load" src="../../web/images/loading.gif" alt="load">
             <form class="align-self-center text-center form-box" method="POST" onsubmit="showLoading()" action="../../controller/FormController.php">
                 
                 <img class="align-self-center" src="../../web/images/populetic.svg" alt="logo">
-                <h1 class="h3 mb-3 font-weight-normal">_(msgEjemplo.1) 2550€ _(msgEjemplo.2)</h1>
+                <h1 class="h3 mb-3 font-weight-normal">Insert the amount of money</h1>
                 <input type="number" id="amount" name="amount" class="form-control " value="" 
                     placeholder="Amount " autofocus="" required="" autocomplete="off">
 

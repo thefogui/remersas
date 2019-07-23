@@ -34,11 +34,10 @@ class Controller {
      */
     function deleteJson($name, $source = "../cache/") {
         $fileRouter = $source . $name . '.json';
-        if (file_exists($fileRouter)) {
+        if (file_exists($fileRouter))
             unlink($fileRouter);
-        } else {
+         else 
             throw new Exception('Error deleting file: ' . $fileRouter .' does not exist!');
-        }
     }
 
     /**
@@ -224,8 +223,9 @@ class Controller {
         return $mandrill;
     }
 
-    public function generateHash($expireDate) {
-        return base64_encode(bin2hex($expireDate));
+    public function generateHash($expireDate, $idReclamacion) {
+        $messageToEncrypt = "date=" . $expireDate . "id=" . $idReclamacion;
+        return base64_encode(bin2hex($messageToEncrypt));
     }
 
     /**
@@ -233,8 +233,11 @@ class Controller {
      * 
      */
     public function hashToActualData($hash) {
-        $uncriptedHash = hex2bin(base64_decode($hash));        
-        return $uncriptedHash;
+        $uncriptedHash = hex2bin(base64_decode($hash));
+        $idReclamacion = $this->after("id=", $uncriptedHash);
+        $expiringDate = $this->between("date=", "id=", $uncriptedHash);
+
+        return array("expiringDate" => $expiringDate, "idReclamacion" => $idReclamacion);
     }
 
     /**
@@ -265,17 +268,17 @@ class Controller {
 
     public function uniqidReal($lenght = 13) {
         // uniqid gives 13 chars, but you could adjust it to your needs.
-        if (function_exists("random_bytes")) {
+        if (function_exists("random_bytes")) 
             $bytes = random_bytes(ceil($lenght / 2));
-        } elseif (function_exists("openssl_random_pseudo_bytes")) {
+        elseif (function_exists("openssl_random_pseudo_bytes")) 
             $bytes = openssl_random_pseudo_bytes(ceil($lenght / 2));
-        } else {
+        else 
             throw new Exception("no cryptographically secure random function available");
-        }
+        
         return strtoupper(substr(bin2hex($bytes), 0, $lenght));
     }
 
-    public function generateUrlCodeValidation($email) {
+    public function generateUrlCodeValidation($email, $idReclamacion) {
         $date = date('Y-m-d H:i:s');
         $code = "";
         try {
@@ -284,10 +287,15 @@ class Controller {
             //TODO: redirect to error page
         }
         
-        $url = "date=" . $date . "code=" . $code . "email=" . $email;
+        $url = "date=" . $date . "code=" . $code . "email=" . $email . "id=" . $idReclamacion;
         $url = $this->encryptText($url);
 
-        return array('url' => $url, 'code' => $code, 'email' => $email, 'date' => $date );
+        return array('url' => $url, 
+                    'code' => $code, 
+                    'email' => $email, 
+                    'date' => $date, 
+                    "idReclamacion" => $idReclamacion 
+        );
     }
 
     function between($start, $end, $string) {
@@ -316,13 +324,25 @@ class Controller {
 
         $code = $this->between('code=', "email=", $url_decoded);
 
-        $email = $this->after('email=', $url_decoded);
+        $email = $this->between('email=', 'id=', $url_decoded);
 
-        return array('date' => $date, 'code' => $code, 'email' => $email);
+        $idReclamacion = $this->after("id=", $url_decoded);
+
+        return array('date' => $date, 
+                    'code' => $code, 
+                    'email' => $email, 
+                    'idReclamacion' => $idReclamacion
+        );
     }
 
     public function checkEmailDataBaseChanges($email) {
-        //TODO: get the email from databse and see if the estado changed recently.
+        //TODO: get the email from database and see if the estado changed recently.
         return true;
+    }
+
+    public function rediectToInfoPage($message) {
+        unset ($_SESSION['text']);
+        $_SESSION['text'] = $message;
+        header("Location: ../apps/views/confirmation.php");
     }
 }

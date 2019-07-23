@@ -1,9 +1,7 @@
 <?php
 
 require_once dirname(__FILE__) . "/../config/config.php";
-include_once dirname(__FILE__) . '/../lib/model/dao/DaoUrlClient.php';
 include_once dirname(__FILE__) . '/../lib/model/dao/DaoClient.php';
-include_once dirname(__FILE__) . '/../lib/model/entity/UrlClient.php';
 require_once dirname(__FILE__) . "/Controller.php";
 
 session_start();
@@ -37,16 +35,17 @@ function sendEmails($file, $source = "../cache/"){
             $ref = $user[5];
             $codigo_vuelo = $user[6];
             $lang = $user[7];
+            $idReclamacio = $user[8];
 
             $daoClient->changeToSolicitarDatosPago($conn, $clientId);
-            $reclamacionID = $daoClient->getIdReclamacion($conn, $clientId);
-            $daoClient->insertLogChange($conn, $clientId, $reclamacionID);
+            //$reclamacionID = $daoClient->getIdReclamacion($conn, $clientId);
+            $daoClient->insertLogChange($conn, $clientId, $idReclamacio);
 
             $info = "";
             $hash = "";
             $date = date('Y-m-d H:i:s');
-            $hash = Controller::getInstance()->generateHash($date);
-            //TODO: save in the sql database how many time this email was sent
+            $hash = Controller::getInstance()->generateHash($date, $idReclamacio);
+            //TODO: save it in database how many time this email was sent
             $result = Controller::getInstance()->sendEmailValidation($info, $name, $email, $hash, $date, $ref, $lang, $codigo_vuelo);
         }
     } else 
@@ -59,13 +58,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $file = 'clients';
         sendEmails($file);
         Controller::getInstance()->deleteJson($file, "../cache/");
-        session_destroy();
+        
     } catch (Exception $e) {
         echo $e;
     }
 }
 
 //TODO: change this text
-$_SESSION['text'] = "Emails sent to the users";
+$_SESSION['text'] = "Emails sent to the clients";
 
 header("Location: ../apps/views/confirmation.php");
