@@ -7,7 +7,7 @@
     </head>
 
     <body>
-        <div class="box-login d-flex justify-content-center">
+        <div class="box d-flex justify-content-center">
             <form class="align-self-center text-center form-box" method="POST" action="../../controller/emailFormController.php">
                 <img class="align-self-center" src="../../web/images/populetic.svg" alt="logo">
                 <h1 class="h3 mb-3 font-weight-normal">Por favor, introduzca el correo electrónico desde el que efectuó su reclamación:</h1>
@@ -22,13 +22,13 @@
 
                 <p>Recibirá en este correo el código de verificación.</p>
 
-                <div class="mt-3 mb-3">
-                    <p class="text-muted">Populetic © <?php echo date("Y"); ?></p>
-                </div><!-- closing div mt-3 mb-3 -->
+                
             </form>
         </div> <!-- closing div container -->
         
         <!-- TODO: validate the form -->
+
+        <?php include(dirname(__FILE__) . "/layouts/footer.php") ?>
 
         <?php include(dirname(__FILE__) . "/layouts/scripts.php") ?>
         <!-- Main JS -->

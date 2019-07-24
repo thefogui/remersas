@@ -103,22 +103,34 @@ class Controller {
      * Function to send the email code to the clients 
      * 
      */
-    function sendEmailCode($info, $name, $email, $hash, $code) {
+    function sendEmailCode($info, $name, $email, $hash, $code, $refReclamacion) {
         //TODO: edit email;
         $correo = $this->initPHPMailer();
 
         $result = "Nothing";
+        //TODO: get the user name
         //check if the email extension is a populetic email.
         
         $to      = $email; // Send email to our user
-        $subject = 'Populetic | Email Verification'; // Give the email a subject 
+        $subject = 'Asunto: Clave de aceso - Solicitud pago indemnización ' . $refReclamacion; // Give the email a subject 
         $body = '
-        
-        Hello from team Populetic, 
-        Zombie ipsum reversus ab viral inferno' . $name . ', nam rick grimes malum cerebro. De carne lumbering animata corpora quaeritis. Summus brains sit​​, morbo vel maleficia? De apocalypsi gorger omero undead survivor dictum mauris. Hi mindless mortuis soulless creaturas, imo evil stalking monstra adventus resi dentevil vultus comedat cerebella viventium. Qui animated corpse, cricket bat max brucks terribilem incessu zomby.
-        
-        YOUR CODE IS: ' .  $code . '
-        
+    
+        <p style="color:black">Apreciado/a, ' . $name . '</p>
+        <p style="color:black">Hemos recibido su solicitud de verificación de los datos bancarios.</p>
+        <p style="color:black">Su clave segura de acceso es: <span style="font-weight:bold"> ' .  $code .'</span></p>
+        <br>
+        <br>
+        <p style="color:black">Gracias, </p>
+        <p style="color:black">El Equipo de Populetic</p>
+        <br> 
+        <img width="230" height="75" src="https://ci5.googleusercontent.com/proxy/6YtNeNXk-Org0Zf-MfnzOORNDJjnYW48xOER4fr6PQxOmaItPmT2uC65TCud330gaTcVIfypAqEu5iQffink5H1jEsI_A7TPDFLm2A=s0-d-e1-ft#https://www.populetic.com/templates/images/logos/logo.png" alt="logo">
+        <br>
+        <p style="font-weight:bold;text-decoration:underline;">www.populetic.com</p>
+        <p style="color:#0B5394;">+34 93 445 97 64</p>
+        <br>
+        <p style="font-size:0.8em;color:#36375E">
+            Este mensaje se dirige, de modo exclusivo, a su destinatario y contiene información confidencial, cuya divulgación, copia o utilización no autorizada es contraria a la ley. <span style="font-weight:bold">Si recibe este mensaje por error, le rogamos nos lo comunique de inmediato</span> y lo elimine sin conservar copia del mismo ni de sus documentos adjuntos  
+        </p>
         '; // Our message above including the link
                             
         $correo->Subject = $subject;   

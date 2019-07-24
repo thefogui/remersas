@@ -19,12 +19,10 @@
                 <div class="mt-4">
                     <input class="btn btn-lg btn-outline-info btn-block" type="submit" value="Send">
                 </div><!-- closing div mt-4 -->
-
-                <div class="mt-3 mb-3">
-                    <p class="text-muted">Populetic © <?php echo date("Y"); ?></p>
-                </div><!-- closing div mt-3 mb-3 -->
             </form>
         </div> <!-- closing div container -->
+
+        <?php include(dirname(__FILE__) . "/layouts/footer.php") ?>
 
         <?php include("layouts/scripts.php") ?>
         <script>

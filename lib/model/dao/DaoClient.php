@@ -45,7 +45,7 @@ class DaoClient {
         if($conn) {
             $query = "SELECT
                             pfv.ID as id_reclamacion
-                            ,IFNULL(pfv.Ref, '') AS refencia 
+                            ,IFNULL(pfv.Ref, '') AS referencia 
                             ,IFNULL(pfv.Codigo, '') AS codigo
                             ,c.DocIdentidad AS nif
                             ,CONCAT(c.Nombre, ' ',c.Apellidos) AS name
@@ -87,7 +87,8 @@ class DaoClient {
                             $row['referencia'], 
                             $row['codigo'], 
                             $row['lang'],
-                            $row['id_reclamacion']
+                            $row['id_reclamacion'],
+                            true
                         );
                         $clients[] = $clientValue;
                     }
@@ -192,7 +193,8 @@ class DaoClient {
                             $row['referencia'], 
                             $row['codigo'], 
                             $row['lang'],
-                            $row['id_reclamacion']);
+                            $row['id_reclamacion'], 
+                            false);
                         $clients[] = $clientValue;
                     }
                 }

@@ -24,7 +24,11 @@ function sendEmailCode($email, $hash){
     
     $code = $generatedCode['code'];
 
-    Controller::getInstance()->sendEmailCode($info, $name, $email, $hash, $code);
+    //TODO: get the reclamacion referencia
+
+    $refReclamacion = $uncryptedHash["idReclamacion"];
+
+    Controller::getInstance()->sendEmailCode($info, $name, $email, $hash, $code, $refReclamacion);
     return $urlHash;
 }
 
