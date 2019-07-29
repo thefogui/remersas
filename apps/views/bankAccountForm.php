@@ -27,7 +27,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         <?php include("layouts/head.php") ?>
     </head>
     <body>
-
         <?php include( dirname(__FILE__) . "/layouts/header.php") ?>
 
         <div class="container" id="box">
@@ -35,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
                 <div class="card col-sm-4" id="first">
                     <div class="card-header">
                         <h5 class="text-left mb-0">Desglose de su reclamacion:</h5>
-                    </div>
+                    </div><!-- closing div card-header -->
 
                     <div class="card-body" id="info">
                         <p class="card-text text-left">Nombre del pasajero:</p>
@@ -47,18 +46,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
                         <p class="card-text text-left">IVA</p>
                         <p class="card-text">xxx</p>
                         <p class="card-text text-left">Importe total a percibir</p>
-                        <p  id="amount"><?php echo $_SESSION["reclamacion"]['compensation'] ?>€</p>
-                    </div>
-                </div>
+                        <p id="amount"><?php echo $_SESSION["reclamacion"]['compensation'] ?>€</p>
+                    </div><!-- closing div card-body -->
+                </div><!-- closing card col-sm-4 -->
                 <div class="card col-sm fix-width" id="second">
                     <div class="card-header text-left">
                         <h5 class="mb-0">Datos Bancarios:</h5>
-                    </div>
+                    </div><!-- closing div card-header -->
                     <div class="card-body">
                         <form action="" method="POST" onsubmit="return validateForm()">
                             <div class="form-group">
                                 <input class="form-control iban bank-account-number" type="text" name="IBAN" placeholder="IBAN" id="iban" size="35" required>
-                            </div>
+                            </div><!-- clsoing div form-group -->
 
                             <input type="hidden" name="email" id="email" value="<?php echo $_SESSION["email"];?>" size="35">
 
@@ -69,29 +68,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
                                         <label class="form-check-label" for="formCheck-1">
                                             No dispongo de IBAN
                                         </label>
-                                    </div>
-                                </div>
+                                    </div><!-- closing div form-check d-flex -->
+                                </div><!-- closing div form-group col-md-6 my-auto -->
                                 <div class="form-group col-md-6">
                                     <input class="form-control"  style="visibility:hidden;" type="text" placeholder="swift" name="swift" id="swift" value="" size="35">
-                                </div>
-                            </div>
+                                </div><!-- closing div form-group col-md-6  -->
+                            </div><!-- closing div form-row -->
 
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <input class="form-control" type="text" name="address" placeholder="Direccion"  required="">
-                                </div>
+                                </div><!-- closing div form-group col-md-6  -->
                                 <div class="form-group col-md-6">
                                     <input class="form-control" type="text" name="phone" placeholder="Telefono" autocomplete="off" autofocus="" inputmode="tel" required="">
-                                </div>
-                            </div>
+                                </div><!-- closing div form-group col-md-6  -->
+                            </div><!-- closing div form-row -->
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <input class="form-control" type="text" name="titular" placeholder="Titular de la cuenta" style="height: 53px;min-height: 53px;min-width: 200px;" required="">
-                                </div>
+                                </div><!-- closing div form-group col-md-6  -->
                                 <div class="form-group col-md-6">
                                     <input class="form-control" value="<?php echo $_SESSION["email"];?>" type="text" name="email" placeholder="Email" style="height: 53px;min-height: 53px;min-width: 200px;" autocomplete="off" autofocus="" inputmode="email" required="">
-                                </div>
-                            </div>
+                                </div><!-- closing div form-group col-md-6  -->
+                            </div><!-- closing div form-row -->
 
                             <div class="form-group">
                                 <p class="text-left">
@@ -99,19 +98,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
                                     Si has recibido más de un email de este tipo, deben poner los datos bancarios en todos los emails recibidos. &nbsp;
                                     <br>
                                 </p>
-                            </div>
+                            </div><!-- closing div form-group -->
 
                             <div class="form-group">
                                 <button class="btn btn-primary btn-block d-lg-flex flex-row-reverse justify-content-lg-center" id="btn-form-send"
                                         type="submit">
                                     ENVIAR
                                 </button>
-                            </div>
+                            </div><!-- closing div form-group -->
                         </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+                    </div><!-- closing div card-body-->
+                </div><!-- closing div card -->
+            </div><!-- closing div row -->
+        </div><!-- closing div container -->
 
         <?php include(dirname(__FILE__) . "/layouts/footer.php") ?>
 
@@ -122,7 +121,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         <script>
             $('.chk-iban').change(function() {
                 if(this.checked) {
-                    //Do stuff
+                    //if the client mark the checkbox this remove the iban class
                     $( "#iban" ).removeClass( "iban" );
                     $( "#iban" ).attr('placeholder','Bank account number');
                     $( "#iban" ).attr('name','bank-account-number');

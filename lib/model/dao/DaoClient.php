@@ -255,6 +255,8 @@ class DaoClient {
                         pfv.ID = ". $idReclamacion . "
                     ORDER BY 
                         compensation";
+
+            //TODO: calcular client amount again
             $result = mysqli_query($conn, $query);
 
             if (mysqli_errno($conn)) throw new Exception('Error getting users: ' . mysqli_error($conn));

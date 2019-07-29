@@ -164,7 +164,7 @@ if(array_key_exists('email-send', $_POST))
                 </form>
                 </div><!-- closing div send-email-div -->
             </div><!-- closing div container -->
-        </div><!-- closing div container d-flex justify-content-center-->
+        </div><!-- closing div container d-flex justify-content-center -->
         
         <?php include("layouts/scripts.php") ?>
 

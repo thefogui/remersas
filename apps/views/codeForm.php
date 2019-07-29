@@ -35,7 +35,7 @@ try {
             <div class="card">
                 <div class="card-header text-left">
                     <h5 class="mb-0">Verificación de Usuario</h5>
-                </div>
+                </div><!-- closing div card-header text-left -->
 
                 <div class="card-body">
                     <p class="text-left card-text">Inserte el código que ha recibido en su correo:</p>
@@ -49,24 +49,28 @@ try {
                             <div class="g-recaptcha" data-sitekey="6LcnjRIUAAAAAKPYVfEL2M__Ix57s7zgQGVlCTux" ></div>
                         </div><!-- closing div mt-4 -->
 
-
                         <div class="form-group text-left">
-                            <a href='emailForm.php?email=" . $_SESSION['email'] . "&hash=" . $_SESSION['hash'] . "'>
+                            <a href='emailForm.php?email= <?php echo $_SESSION['email'] . "&hash=" . $_SESSION['hash']; ?>'>
                                 <span style="text-decoration: underline;">Informar de un problema (=enviar mail a admin)
                                 </span>
                             </a>
-                        </div>
+                        </div><!-- closing div form-group text-left -->
                         <div class="form-group text-left">
                             <span>
-                                <a href="#">Enviar el código de nuevo.
+                                <a href="#">
+                                    Enviar el código de nuevo.
                                 </a>
                             </span>
-                        </div>
-                        <div class="form-group"><button class="btn btn-primary btn-block d-lg-flex flex-row-reverse justify-content-lg-center" id="btn-form-send" type="submit">ENVIAR</button></div>
+                        </div><!-- closing div form-group text-left -->
+                        <div class="form-group">
+                            <button class="btn btn-primary btn-block d-lg-flex flex-row-reverse justify-content-lg-center" id="btn-form-send" type="submit">
+                                ENVIAR
+                            </button>
+                        </div><!-- closing div form-group -->
                     </form>
-                </div>
-            </div>
-        </div>
+                </div><!-- closing div card-body -->
+            </div><!-- clsoing div card -->
+        </div><!-- clsoing div container code-form-container -->
 
         <?php include(dirname(__FILE__) . "/layouts/footer.php") ?>
 
