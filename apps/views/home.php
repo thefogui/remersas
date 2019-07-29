@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <link rel="stylesheet" href="../../web/css/bootstrap.min.css">
         <title> Populetic - Remesas Welcome </title>
         <?php include(dirname(__FILE__) . "/layouts/head.php") ?>
     </head>
-    
     
     <body>
         <div class="box-login d-flex justify-content-center">
@@ -22,7 +22,7 @@
             </form>
         </div> <!-- closing div container -->
 
-        <?php include(dirname(__FILE__) . "/layouts/footer.php") ?>
+        <?php /*include(dirname(__FILE__) . "/layouts/footer.php")*/ ?>
 
         <?php include("layouts/scripts.php") ?>
         <script>

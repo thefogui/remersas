@@ -4,37 +4,10 @@ session_start();
 
 require_once dirname(__FILE__) . "/../../controller/Controller.php";
 
-function checkUrl() {
-    if (!isset($_GET["hash"])) return false;
-
-    $hash = $_GET["hash"];
-    $_SESSION['hash'] = $hash;
-
-    if ($hash) {
-        $uncriptedHash = Controller::getInstance()->getDataFromUrlCode($hash);
-        
-        var_dump($uncriptedHash);
-
-        $date = $uncriptedHash["date"];
-        $email = $uncriptedHash["email"];
-
-        $_SESSION['email'] = $email;
-        $code = $uncriptedHash["code"];
-
-        if (Controller::getInstance()->checkExpiredOneDay($date)){
-            // Fallback behaviour goes here
-            return false;
-        } else 
-            return Controller::getInstance()->checkEmailDataBaseChanges($email);
-    } else {
-        // Fallback behaviour goes here
-        return false;
-    }
-    return false;
-}
-
 try {
-    if (!checkUrl()) {
+    $hash = $_GET["hash"];
+
+    if (!Controller::getinstance()->checkUrl($hash)) {
         unset($_SESSION['text']);
         $_SESSION['text'] = "Error validation your code!";
         echo $_SESSION['text'];
@@ -55,43 +28,47 @@ try {
     </head>
 
     <body>
-        <div class="box-login d-flex justify-content-center">
-            <form class="align-self-center text-center form-box" method="POST" onsubmit="checkRecaptcha()" action="../../controller/ClientController.php">
-                <img class="align-self-center" src="../../web/images/populetic.svg" alt="logo">
 
-                <input type="hidden" name="hash" value="<?php echo $_GET['hash']; ?>">
+        <?php include( dirname(__FILE__) . "/layouts/header.php") ?>
 
-                <h1 class="h3 mb-3 font-weight-normal">
-                    Inserte el código que ha recibido en su correo:
-                </h1>
-                <input type="text" class="form-control" maxlength="6" placeholder="Código de verificación. Ej: SH34DS" name="code" onkeyup="this.value = this.value.toUpperCase();" value="" autofocus="" required="" autocomplete="off">
-                
-                <div class="mt-4">
-                    <div class="g-recaptcha" data-sitekey="6LcnjRIUAAAAAKPYVfEL2M__Ix57s7zgQGVlCTux"></div>
-                </div><!-- closing div mt-4 -->
+        <div class="container" id="email-form-container">
+            <div class="card">
+                <div class="card-header text-left">
+                    <h5 class="mb-0">Verificación de Usuario</h5>
+                </div>
 
-                <div class="mt-4">
-                    <input class="btn btn-lg btn-outline-info btn-block" type="submit" value="ENVIAR">
-                </div><!-- closing div mt-4 -->
+                <div class="card-body">
+                    <p class="text-left card-text">Inserte el código que ha recibido en su correo:</p>
 
-                <div class="mt-4">
-                    <p>
-                        <?php echo "<a href='emailForm.php?email=" . $_SESSION['email'] . "&hash=" . $_SESSION['hash'] . "'>Enviar el código de nuevo.</a>"; ?>
-                    </p>
+                    <form method="POST" onsubmit="checkRecaptcha()" action="../../controller/ClientController.php">
+                        <input type="hidden" name="hash" value="<?php echo $_GET['hash']; ?>">
 
-                    <P>
-                    <!-- TODO: formulario de contacto para neviar email al administrador -->
-                        <a href="#">
-                            Informar de un problema (=enviar mail a admin)  
-                        </a>
-                    </P>
-                </div><!-- closing div mt-4 -->
+                        <input type="text" class="form-control" maxlength="6" placeholder="Código de verificación. Ej: SH34DS" name="code" onkeyup="this.value = this.value.toUpperCase();" value="" autofocus="" required="" autocomplete="off">
 
-                <div class="mt-3 mb-3">
-                    <p class="text-muted">Populetic © <?php echo date("Y"); ?></p>
-                </div><!-- closing div mt-3 mb-3 -->
-            </form>
-        </div> <!-- closing div container -->
+                        <div class="mt-4 text-center">
+                            <div class="g-recaptcha" data-sitekey="6LcnjRIUAAAAAKPYVfEL2M__Ix57s7zgQGVlCTux" ></div>
+                        </div><!-- closing div mt-4 -->
+
+
+                        <div class="form-group text-left">
+                            <a href='emailForm.php?email=" . $_SESSION['email'] . "&hash=" . $_SESSION['hash'] . "'>
+                                <span style="text-decoration: underline;">Informar de un problema (=enviar mail a admin)
+                                </span>
+                            </a>
+                        </div>
+                        <div class="form-group text-left">
+                            <span>
+                                <a href="#">Enviar el código de nuevo.
+                                </a>
+                            </span>
+                        </div>
+                        <div class="form-group"><button class="btn btn-primary btn-block d-lg-flex flex-row-reverse justify-content-lg-center" id="btn-form-send" type="submit">ENVIAR</button></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <?php include(dirname(__FILE__) . "/layouts/footer.php") ?>
 
         <?php include( dirname(__FILE__) . "/layouts/scripts.php") ?>
         <!-- Main JS -->

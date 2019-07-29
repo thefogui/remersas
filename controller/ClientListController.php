@@ -26,16 +26,16 @@ function sendEmails($file, $source = "../cache/"){
     if ($jsonArrayData) {
         //check ../lib/dao/DaoClient.php yo see the other the data is saved
         //TODO: save the identify for each cow.
-        foreach ($jsonArrayData as $user) {
-            $email = $user[3];
-            //TODO: check in the database if the email was sent to this user recently.
-            $name = $user[1];
-            $clientId = $user[2];
-            $amount = $user[4];
-            $ref = $user[5];
-            $codigo_vuelo = $user[6];
-            $lang = $user[7];
-            $idReclamacio = $user[8];
+        foreach ($jsonArrayData as $client) {
+            $email = $client["email"];
+            //TODO: check in the database if the email was sent to this client recently.
+            $name = $client["name"];
+            $clientId = $client["idClient"];
+            $amount = $client["clientAmount"];
+            $ref = $client["referencia"];
+            $lang = $client["lang"];
+            $idReclamacio = $client["id_reclamacion"];
+            $codigo_vuelo = $client["codigo"];
 
             $daoClient->changeToSolicitarDatosPago($conn, $clientId);
             //$reclamacionID = $daoClient->getIdReclamacion($conn, $clientId);

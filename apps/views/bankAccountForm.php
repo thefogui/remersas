@@ -24,8 +24,7 @@ function checkUrl() {
     
     $hash = $_GET["hash"];
 
-    if ($hash) {
-
+    if (isset($hash)) {
         $uncriptedHash = Controller::getInstance()->getDataFromUrlCode($hash);
 
         $date = $uncriptedHash["date"];
@@ -34,8 +33,7 @@ function checkUrl() {
         $idReclamacion = $uncriptedHash["idReclamacion"];
         //TODO: get the reclamacion
 
-        $reclmacion = $daoClient->getIdReclamacionById($conn, $idReclamacion);
-        var_dump($reclamacion);
+        $reclamacion = $daoClient->getIdReclamacionById($conn, $idReclamacion);
 
         $appConfig->closeConnection($conn);
 
@@ -56,8 +54,7 @@ try {
         unset ($_SESSION['text']);
         $_SESSION['text'] = "Error validation your code!";
         header("Location: confirmation.php");
-    } //else 
-        //getReclamacion();
+    }
 } catch (Exception $e) {
     die();
 }
@@ -75,49 +72,75 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         <link rel="stylesheet" href="../../web/css/bankAccountForm.css">
     </head>
     <body>
-        <div class="page-wrapper bg-gra-01 p-t-180 p-b-100 font-poppins">
-            <div class="wrapper wrapper--w780">
-                <div class="card card-3">
-                    <div class="card-heading"></div>
-                    <div class="card-body">
-                        <h2 class="title">Insert your account information below</h2>
 
-                        <form name="bankAccountForm" action="" method="POST" onsubmit="return validateForm()">
-                        <div class="input-group">
-                                <input class="input--style-3 iban" type="hidden" name="email" id="email" value="<?php echo $_SESSION["email"];?>" size="35" required>
-                            </div>
-                            
-                            <div class="input-group">
-                                <input class="input--style-3 iban" type="text" name="iban" id="iban" placeholder="IBAN" size="35" required>
-                            </div>
+        <?php include( dirname(__FILE__) . "/layouts/header.php") ?>
 
-                            <div class="input-group">
-                                <input class="form-check-input chk-iban" type="checkbox" id="iban-checkbox">
-                                <label class="form-check-label" for="iban-checkbox">
-                                    I don't have it.
+        <div class="container" id="box">
+            <div class="card" id="first">
+                <div class="card-header">
+                    <h5 class="text-left mb-0">Desglose de su reclamacion:</h5>
+                </div>
+                <div class="card-body" id="info">
+                    <p class="card-text text-left">Nombre del pasajero:</p>
+                    <p class="card-text text-left">Joan Pepito</p>
+                    <p class="card-text text-left">Indenizacion</p>
+                    <p class="card-text">xxx</p>
+                    <p class="card-text text-left">Comision Populetic</p>
+                    <p class="card-text">xxx</p>
+                    <p class="card-text text-left">IVA</p>
+                    <p class="card-text">xxx</p>
+                    <p class="card-text text-left">Importe total a percibir</p>
+                    <p class="card-text">xxx</p>
+                </div>
+            </div>
+            <div class="card" id="second">
+                <div class="card-header text-left">
+                    <h5 class="mb-0">Datos Bancarios:</h5>
+                </div>
+                <div class="card-body">
+                    <form action="" method="POST" onsubmit="return validateForm()">
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="IBAN" placeholder="IBAN" id="iban" size="35" required>
+                        </div>
+
+                        <input type="hidden" name="email" id="email" value="<?php echo $_SESSION["email"];?>" size="35" required>
+
+                        <div class="text-left form-group">
+                            <div class="form-check d-flex">
+                                <input class="form-check-input" type="checkbox" id="formCheck-1">
+                                <label class="form-check-label" for="formCheck-1">
+                                    No dispongo de IBAN
                                 </label>
                             </div>
-
-                            <div class="input-group">
-                                <input class="input--style-3" type="text" id="bank-account-titular" name="bank-account-titular" placeholder="Bank Account Titular" size="75" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <input class="form-control" type="text" name="address" placeholder="Direccion"  required="">
                             </div>
-                            <div class="input-group">
-                                <input class="input--style-3" type="text" id="bank-account-address" name="bank-account-address" placeholder="invoice address" size="75" required>
+                            <div class="form-group col-md-6">
+                                <input class="form-control" type="text" name="phone" placeholder="Telefono" autocomplete="off" autofocus="" inputmode="tel" required="">
                             </div>
-                            <div class="input-group">
-                                <input class="input--style-3" type="email" placeholder="Email" name="email">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <input class="form-control" type="text" name="titular" placeholder="Titular de la cuenta" style="height: 53px;min-height: 53px;min-width: 200px;" required="">
                             </div>
-                            <div class="input-group">
-                                <input class="input--style-3" type="text" placeholder="Phone" name="phone">
+                            <div class="form-group col-md-6">
+                                <input class="form-control" type="text" name="email" placeholder="Email" style="height: 53px;min-height: 53px;min-width: 200px;" autocomplete="off" autofocus="" inputmode="email" required="">
                             </div>
-                            <div class="p-t-10">
-                                <button class="submit-btn btn btn-success btn--orange" type="submit">Submit</button>
-                            </div>
-                        </form>
+                        </div>
+                    </form>
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-block d-lg-flex flex-row-reverse justify-content-lg-center" id="btn-form-send"
+                                type="submit">
+                            ENVIAR
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
+
+        <?php include(dirname(__FILE__) . "/layouts/footer.php") ?>
 
         <?php include("layouts/scripts.php") ?>
         <!-- Main JS -->

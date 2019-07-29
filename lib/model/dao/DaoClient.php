@@ -44,21 +44,21 @@ class DaoClient {
     
         if($conn) {
             $query = "SELECT
-                            pfv.ID as id_reclamacion
-                            ,IFNULL(pfv.Ref, '') AS referencia 
-                            ,IFNULL(pfv.Codigo, '') AS codigo
-                            ,c.DocIdentidad AS nif
-                            ,CONCAT(c.Nombre, ' ',c.Apellidos) AS name
-                            ,pfv.Id_Cliente AS id
-                            ,c.Email AS email 
-                            ,pfv.langId AS lang
-                            ,pfv.Cuantia_pasajero AS amountReviewed
+                         pfv.ID AS id_reclamacion
+                        , IFNULL(pfv.Ref, '') AS refencia 
+                        , IFNULL(pfv.Codigo, '') AS codigo
+                        ,c.DocIdentidad AS nif
+                        , CONCAT(c.Nombre, ' ',c.Apellidos) AS name
+                        ,pfv.Id_Cliente AS id
+                        ,c.Email AS email 
+                        ,pfv.langId AS lang
+                        ,pfv.Cuantia_pasajero AS amountReviewed
                     FROM 
                         populetic_form_vuelos pfv
                     INNER JOIN 
                         clientes c ON c.ID = pfv.Id_Cliente
                     WHERE 
-                        pfv.Id_Estado = 36 
+                        pfv.Id_Estado = 36
                     ORDER BY 
                         amountReviewed";
 
@@ -79,16 +79,16 @@ class DaoClient {
                     if ($amountToPay <= $amount) {
                         $amountLeft = $amountLeft - $clientAmount;
                         $clientValue = array(
-                            $row['nif'], 
-                            utf8_encode($row['name']), 
-                            $row['id'], 
-                            utf8_encode($row['email']), 
-                            $clientAmount, 
-                            $row['referencia'], 
-                            $row['codigo'], 
-                            $row['lang'],
-                            $row['id_reclamacion'],
-                            true
+                            "idClient" => $row['id'],
+                            "nif" => $row['nif'], 
+                            "name" => utf8_encode($row['name']),
+                            "email" => utf8_encode($row['email']), 
+                            "clientAmount" => $clientAmount, 
+                            "referencia" => $row['referencia'], 
+                            "lang" => $row['lang'],
+                            "id_reclamacion" => $row['id_reclamacion'],
+                            "codigo" => $row['codigo'],
+                            "vipSattus" => true
                         );
                         $clients[] = $clientValue;
                     }
@@ -107,18 +107,21 @@ class DaoClient {
      */
     public function getTheOldestDate($conn) {
         if ($conn) {
+
+            $timeLimit = strtotime("-1 year");
+
             $query = "SELECT 
-                        lg.Data As d
+                        lg.Data AS d
                     FROM 
                         populetic_form.populetic_form_vuelos pfv
                     INNER JOIN 
                         halbrand.logs_estados lg ON pfv.ID = lg.Id_reclamacion
                     WHERE 
-                        pfv.Id_Estado = 18 AND 
-                        lg.Estado = 18
+                        pfv.Id_Estado = 18 
+                    AND 
+                        lg.Data > " . $timeLimit . " 
                     ORDER BY
-                        d
-                    LIMIT 1"; 
+                        d"; 
 
             $result = mysqli_query($conn, $query);
 
@@ -145,15 +148,16 @@ class DaoClient {
 
         if ($conn) {
             $query = "SELECT 
-                            pfv.ID as id_reclamacion
-                            ,IFNULL(pfv.Ref, '') AS refencia 
-                            ,IFNULL(pfv.Codigo, '') AS codigo
+                            pfv.ID AS id_reclamacion
+                            , IFNULL(pfv.Ref, '') AS refencia 
+                            , IFNULL(pfv.Codigo, '') AS codigo
                             ,c.DocIdentidad AS nif
-                            ,CONCAT(c.Nombre, ' ',c.Apellidos) AS name
+                            , CONCAT(c.Nombre, ' ',c.Apellidos) AS name
                             ,pfv.Id_Cliente AS id
                             ,c.Email AS email 
                             ,pfv.langId AS lang
                             ,pfv.Cuantia_pasajero AS amountReviewed
+                            ,FROM_UNIXTIME(lg.Data) AS `date`
                         FROM 
                             populetic_form.populetic_form_vuelos pfv
                         INNER JOIN 
@@ -165,7 +169,7 @@ class DaoClient {
                             AND 
                             MONTH(FROM_UNIXTIME(lg.data)) =" . $month .
                             " AND
-                            YEAR(FROM_UNIXTIME(lg.data)) =20" . $year .
+                            YEAR(FROM_UNIXTIME(lg.data)) = " . $year .
                         " ORDER BY 
                             amountReviewed";
 
@@ -185,16 +189,17 @@ class DaoClient {
                     if ($amountToPay <= $amount) {
                         $amountLeft = $amountLeft - $clientAmount;
                         $clientValue = array(
-                            $row['nif'], 
-                            utf8_encode($row['name']), 
-                            $row['id'], 
-                            utf8_encode($row['email']), 
-                            $clientAmount, 
-                            $row['referencia'], 
-                            $row['codigo'], 
-                            $row['lang'],
-                            $row['id_reclamacion'], 
-                            false);
+                            "idClient" => $row['id'],
+                            "nif" => $row['nif'], 
+                            "name" => utf8_encode($row['name']),
+                            "email" => utf8_encode($row['email']), 
+                            "clientAmount" => $clientAmount, 
+                            "referencia" => $row['referencia'], 
+                            "lang" => $row['lang'],
+                            "id_reclamacion" => $row['id_reclamacion'],
+                            "codigo" => $row['codigo'],
+                            "vipSattus" => true
+                        );
                         $clients[] = $clientValue;
                     }
                 }
@@ -273,8 +278,9 @@ class DaoClient {
     public function insertLogChange($conn, $clienld, $reclamacionId) {
         //TODO: check if a row exists, otherwise insert
         if ($conn) {
-            $query = "INSERT INTO halbrand.logs_estados (`Id_reclamacion`, `Data`, `Estado`, `Tipo`, `Id_Agente`, `Checked`) 
-                      VALUES (" . $reclamacionId . ", CURRENT_TIMESTAMP, '36', '19', NULL, '0');";
+            $query = "INSERT INTO 
+                        halbrand.logs_estados (`Id_reclamacion`, `Data`, `Estado`, `Tipo`, `Id_Agente`, `Checked`) 
+                        VALUES (" . $reclamacionId . ", CURRENT_TIMESTAMP, '36', '1', '19', '0');";
             $result = mysqli_query($conn, $query);
 
             if (mysqli_errno($conn)) throw new Exception('Error getting users: ' . mysqli_error($conn));
@@ -301,7 +307,7 @@ class DaoClient {
         $amountToPay = $result["amountToPay"];
 
         $month = intval(date("m", $d));
-        $year = intval(date("y", $d));
+        $year = intval(date("Y", $d));
         
         $result["numVips"] = intval($result["totalClients"]);
 

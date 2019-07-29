@@ -3,30 +3,38 @@
     <head>
         <title> Populetic - Email request </title>
         <?php include( dirname(__FILE__) . "/layouts/head.php") ?>
-        <link rel="stylesheet" href="../../web/css/emailvalidation.css">
     </head>
 
     <body>
-        <div class="box d-flex justify-content-center">
-            <form class="align-self-center text-center form-box" method="POST" action="../../controller/emailFormController.php">
-                <img class="align-self-center" src="../../web/images/populetic.svg" alt="logo">
-                <h1 class="h3 mb-3 font-weight-normal">Por favor, introduzca el correo electrónico desde el que efectuó su reclamación:</h1>
-                
-                <input type="hidden" name="hash" value="<?php echo $_GET['hash']; ?>">
-                
-                <input type="email" placeholder="Email" name="email" class="form-control " value="" autofocus="" required="" autocomplete="off">
 
-                <div class="mt-4">
-                    <input class="btn btn-lg btn-outline-info btn-block" type="submit" value="ENVIAR">
-                </div><!-- closing div mt-4 -->
+        <?php include( dirname(__FILE__) . "/layouts/header.php") ?>
 
-                <p>Recibirá en este correo el código de verificación.</p>
-
-                
-            </form>
-        </div> <!-- closing div container -->
-        
-        <!-- TODO: validate the form -->
+        <div class="container" id="code-form-container">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="text-left mb-0">Confirmación de Email<br></h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-left card-text">
+                        Por favor, introduzca el correo electrónico&nbsp;&nbsp;
+                        <strong>desde el que efectuó su reclamación:</strong>
+                        <br>
+                    </p>
+                    <form method="POST" action="../../controller/emailFormController.php">
+                        <input type="hidden" name="hash" value="<?php echo $_GET['hash']; ?>">
+                        <div class="form-group">
+                            <input class="form-control" type="email" style="" placeholder="Email" name="email" class="form-control " value="" autofocus="" required="" autocomplete="off">
+                        </div>
+                        <p class="text-left"><i class="icon ion-ios-information-outline"></i>Recibirá en este correo el código de verificación.&nbsp;<br></p>
+                        <div class="form-group">
+                            <button class="btn btn-primary btn-block d-lg-flex flex-row-reverse justify-content-lg-center" id="btn-form-send" type="submit">
+                                ENVIAR
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
         <?php include(dirname(__FILE__) . "/layouts/footer.php") ?>
 

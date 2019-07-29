@@ -19,7 +19,8 @@
 <!-- JQuery -->
 
 <!-- Booststrap CSS -->
-<link rel="stylesheet" href="../../web/css/bootstrap.min.css">
+<link rel="stylesheet" href="../../web/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="../../web/fonts/ionicons.min.css">
 
 <!-- Main CSS -->
 <link rel="stylesheet" href="../../web/css/main.css">

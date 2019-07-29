@@ -357,4 +357,30 @@ class Controller {
         $_SESSION['text'] = $message;
         header("Location: ../apps/views/confirmation.php");
     }
+
+    public function checkUrl($hash) {
+        if (!isset($hash)) return false;
+    
+        $_SESSION['hash'] = $hash;
+    
+        if ($hash) {
+            $uncriptedHash = $this->getInstance()->getDataFromUrlCode($hash);
+    
+            $date = $uncriptedHash["date"];
+            $email = $uncriptedHash["email"];
+    
+            $_SESSION['email'] = $email;
+            $code = $uncriptedHash["code"];
+    
+            if ($this->getInstance()->checkExpiredOneDay($date)){
+                // Fallback behaviour goes here
+                return false;
+            } else 
+                return $this->getInstance()->checkEmailDataBaseChanges($email);
+        } else {
+            // Fallback behaviour goes here
+            return false;
+        }
+        return false;
+    }
 }
