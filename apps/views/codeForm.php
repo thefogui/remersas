@@ -31,7 +31,7 @@ try {
 
         <?php include( dirname(__FILE__) . "/layouts/header.php") ?>
 
-        <div class="container" id="email-form-container">
+        <div class="container code-form-container" id="box">
             <div class="card">
                 <div class="card-header text-left">
                     <h5 class="mb-0">Verificación de Usuario</h5>

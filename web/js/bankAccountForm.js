@@ -1,9 +1,7 @@
 
 function validateForm() {
-
 	if (!($( "#iban" ).hasClass("iban"))) return true;
     var IBAN = $('#iban').val();
-    console.log(IBAN);
 
     var iban = IBAN.replace( / /g, "" ).toUpperCase(),
 		ibancheckdigits = "",
@@ -19,7 +17,6 @@ function validateForm() {
 	// Basic Bank Account Number (BBAN) - up to 30 chars
 	var minimalIBANlength = 5;
 	if ( iban.length < minimalIBANlength ) {
-        alert("Ivalid IBAN");
 		return false;
 	}
 
@@ -104,7 +101,6 @@ function validateForm() {
 	if ( typeof bbanpattern !== "undefined" ) {
 		ibanregexp = new RegExp( "^[A-Z]{2}\\d{2}" + bbanpattern + "$", "" );
 		if ( !( ibanregexp.test( iban ) ) ) {
-            alert("Ivalid IBAN");
 			return false; // Invalid country specific format
 		}
 	}

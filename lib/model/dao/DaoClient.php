@@ -16,16 +16,6 @@ class DaoClient {
     public function getConn() {
         return $this->conn;
     }
-
-    /**
-     * Function to get the client Amount Reviewed
-     * @param $clientId the id used to identify the client
-     */
-    private function getClientAmountReviewed($clienld) {
-        $amountReviewed = 400;
-        //TODO: query to get the amount reviewed
-        return $amountReviewed;
-    }
     
     /**
      * This function returns all the clients that has the state : 

@@ -104,11 +104,9 @@ class Controller {
      * 
      */
     function sendEmailCode($info, $name, $email, $hash, $code, $refReclamacion) {
-        //TODO: edit email;
         $correo = $this->initPHPMailer();
 
         $result = "Nothing";
-        //TODO: get the user name
         //check if the email extension is a populetic email.
         
         $to      = $email; // Send email to our user
@@ -382,5 +380,38 @@ class Controller {
             return false;
         }
         return false;
+    }
+
+    public function checkUrlbankAccountView($hash) {
+        if (!isset($hash)) return false;
+
+        require_once "../../lib/model/dao/DaoClient.php";
+        require_once "../../lib/model/entity/Client.php";
+
+        $appConfig = new AppConfig();
+        $daoClient = new DaoClient();
+
+        $conn = $appConfig->connect( "populetic_form", "replica" );
+        
+        $uncriptedHash = Controller::getInstance()->getDataFromUrlCode($hash);
+
+        $date = $uncriptedHash["date"];
+        $_SESSION["email"] = $uncriptedHash["email"];
+        $email = $_SESSION["email"];
+        $idReclamacion = $uncriptedHash["idReclamacion"];
+
+        $reclamacion = $daoClient->getIdReclamacionById($conn, $idReclamacion);
+
+        if (!isset($reclamacion)) return false;
+
+        $_SESSION["reclamacion"] = $reclamacion;
+
+        $appConfig->closeConnection($conn);
+
+        if (Controller::getInstance()->checkExpiredOneDay($date)){
+            return false;
+        } else 
+            return Controller::getInstance()->checkEmailDataBaseChanges($email);
+        return false;  
     }
 }

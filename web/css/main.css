@@ -30,7 +30,12 @@ body {
   height: 100vh;
   width: 100vw;
   min-width: 100vw;
-  min-height: 100vh; }
+  min-height: 100vh; 
+}
+
+.fix-width {
+  width: 410px!important;
+}
 
 .box {
   padding-top: 90px;
@@ -91,7 +96,6 @@ a {
 
 /*# sourceMappingURL=main.css.map */
 
-
 .card-text {
   margin-bottom: 10px;
   color: #6a6a6a;
@@ -104,7 +108,7 @@ img {
 
 .navbar {
   border-bottom: 1px solid #cacaca;
-  height: 70px;
+  height: 8vh;
   background: white;
 }
 
@@ -114,7 +118,7 @@ footer {
   color: white;
   padding: 23px;
   position: absolute;
-  /*bottom: 0;*/
+  bottom: 0;
   width: 100%;
 }
 
@@ -152,48 +156,6 @@ footer {
   margin-top: 90px;
 }
 
-@media (min-width: 576px) {
-  #info {
-    width: 80%;
-    margin-right: auto;
-    margin-left: auto;
-  }
-}
-
-@media (min-width: 768px) {
-  #info {
-    width: 60%;
-  }
-}
-
-@media (min-width: 992px) {
-  #box {
-    width: 800px;
-  }
-}
-
-@media (min-width: 992px) {
-  #first {
-    width: 300px;
-    float: left;
-    height: 410px;
-    padding: 0px;
-  }
-}
-
-@media (min-width: 992px) {
-  #second {
-    overflow: hidden;
-    margin-top: 90px;
-    height: 410px;
-  }
-}
-
-@media (min-height: 970px) {
-  #box {
-    margin: 30px auto;
-  }
-}
 
 .btn.btn-primary.btn-block.d-lg-flex.flex-row-reverse.justify-content-lg-center {
   background-color: #F47820;
@@ -209,12 +171,8 @@ footer {
   padding: 15px;
 }
 
-body {
-  height: 100%;
-}
-
 #box {
-  min-height: 100vh;
+  min-height: 92vh;
   overflow: hidden;
   display: block;
   position: relative;
@@ -226,15 +184,6 @@ body {
   border-radius: 0px;
   padding: 25px 15px;
   color: #bfbfd1;
-}
-
-@media (min-width: 1200px) {
-  #logo {
-    display: block;
-    float: left;
-    position: absolute;
-    left: 30px;
-  }
 }
 
 .form-check-label {
@@ -266,6 +215,18 @@ input:focus {
   color: #bfbfd1;
 }
 
+input[type=checkbox] {
+  border-radius: 0px;
+}
+
+#amount {
+  font-size: 2.0em;
+  margin: 0px!important;
+  height: auto;
+  padding: 0px;
+  line-height: normal;
+}
+
 @media (min-width: 992px) {
   #info {
     padding: 0px;
@@ -273,13 +234,62 @@ input:focus {
   }
 }
 
-input[type=checkbox] {
-  border-radius: 0px;
+@media (min-width: 1200px) {
+  #logo {
+    display: block;
+    float: left;
+    position: absolute;
+    left: 30px;
+  }
 }
 
 @media (min-width: 576px) {
-  #code-form-container, #email-form-container {
+  .code-form-container, .email-form-container {
     width: 420px;
   }
 }
 
+@media (min-width: 900px) {
+  #first {
+    width: 330px;
+    float: left;
+    height: 500px;
+    padding: 0px;
+  }
+}
+
+@media (min-width: 992px) {
+  #second {
+    overflow: hidden;
+    margin-top: 90px;
+    height: 500px;
+  }
+}
+
+@media (min-width: 576px) {
+  #info {
+    width: 80%;
+    margin-right: auto;
+    margin-left: auto;
+  }
+}
+
+@media (min-width: 768px) {
+  #info {
+    width: 70%;
+  }
+}
+
+@media (min-height: 970px) {
+  #box {
+    margin: 30px auto;
+  }
+}
+
+@media (min-width: 900px) {
+  .row {
+    width: 800px!important;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

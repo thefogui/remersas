@@ -9,7 +9,7 @@
 
         <?php include( dirname(__FILE__) . "/layouts/header.php") ?>
 
-        <div class="container" id="code-form-container">
+        <div class="container email-form-container" id="box">
             <div class="card">
                 <div class="card-header">
                     <h5 class="text-left mb-0">Confirmación de Email<br></h5>
@@ -25,7 +25,7 @@
                         <div class="form-group">
                             <input class="form-control" type="email" style="" placeholder="Email" name="email" class="form-control " value="" autofocus="" required="" autocomplete="off">
                         </div>
-                        <p class="text-left"><i class="icon ion-ios-information-outline"></i>Recibirá en este correo el código de verificación.&nbsp;<br></p>
+                        <p class="text-left"><i class="icon ion-ios-information-outline"></i>  Recibirá en este correo el código de verificación.&nbsp;<br></p>
                         <div class="form-group">
                             <button class="btn btn-primary btn-block d-lg-flex flex-row-reverse justify-content-lg-center" id="btn-form-send" type="submit">
                                 ENVIAR
