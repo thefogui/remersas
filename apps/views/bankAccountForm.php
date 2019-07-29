@@ -93,9 +93,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
                             </div><!-- closing div form-row -->
 
                             <div class="form-group">
-                                <p class="text-left">
+                                <p class="text-left color-green">
                                     <i class="icon ion-ios-information-outline"></i>  
-                                    Si has recibido más de un email de este tipo, deben poner los datos bancarios en todos los emails recibidos. &nbsp;
+                                    Si has recibido más de un email de este tipo, debes poner los datos bancarios en todos los emails recibidos. &nbsp;
                                     <br>
                                 </p>
                             </div><!-- closing div form-group -->

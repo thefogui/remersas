@@ -14,7 +14,7 @@
                 <img class="align-self-center" src="../../web/images/populetic.svg" alt="logo">
                 <h1 class="h3 mb-3 font-weight-normal">Insert the amount of money</h1>
                 <input type="number" id="amount" name="amount" class="form-control " value="" 
-                    placeholder="Amount " autofocus="" required="" autocomplete="off">
+                    placeholder="Amount " autofocus="" required="" autocomplete="off" min="40" max="15000">
 
                 <div class="mt-4">
                     <input class="btn btn-lg btn-outline-info btn-block" type="submit" value="Send">

@@ -17,7 +17,7 @@
 
                 <div class="card-body">
                     <p class="text-left card-text">
-                        Por favor, introduzca el correo electrónico&nbsp;&nbsp;
+                        Por favor, introduzca el correo electrónico&nbsp;
                         <strong>desde el que efectuó su reclamación:</strong>
                         <br>
                     </p>
@@ -27,7 +27,7 @@
                             <input class="form-control" type="email" style="" placeholder="Email" name="email" class="form-control " value="" autofocus="" required="" autocomplete="off">
                         </div><!-- closing div form-group -->
 
-                        <p class="text-left">
+                        <p class="text-left color-green">
                             <i class="icon ion-ios-information-outline"></i>  
                             Recibirá en este correo el código de verificación.&nbsp;
                             <br>

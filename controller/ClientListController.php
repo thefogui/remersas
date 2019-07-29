@@ -25,7 +25,6 @@ function sendEmails($file, $source = "../cache/"){
 
     if ($jsonArrayData) {
         //check ../lib/dao/DaoClient.php yo see the other the data is saved
-        //TODO: save the identify for each cow.
         foreach ($jsonArrayData as $client) {
             $email = $client["email"];
             //TODO: check in the database if the email was sent to this client recently.
@@ -38,7 +37,6 @@ function sendEmails($file, $source = "../cache/"){
             $codigo_vuelo = $client["codigo"];
 
             $daoClient->changeToSolicitarDatosPago($conn, $clientId);
-            //$reclamacionID = $daoClient->getIdReclamacion($conn, $clientId);
             $daoClient->insertLogChange($conn, $clientId, $idReclamacio);
 
             $info = "";
