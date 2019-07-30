@@ -399,6 +399,7 @@ class Controller {
         $_SESSION["email"] = $uncriptedHash["email"];
         $email = $_SESSION["email"];
         $idReclamacion = $uncriptedHash["idReclamacion"];
+        $_SESSION['id_claim'] = $idReclamacion;
 
         $reclamacion = $daoClient->getIdReclamacionById($conn, $idReclamacion);
 
@@ -413,5 +414,15 @@ class Controller {
         } else 
             return Controller::getInstance()->checkEmailDataBaseChanges($email);
         return false;  
+    }
+
+    public function redirectToInfoPage($message="", $error_message="") {
+        unset($_SESSION['text']);
+        unset($_SESSION["error_message"]);
+        if (isset($message))
+            $_SESSION['text'] = $message;
+        if (isset($error_message))
+            $_SESSION["error_message"] = $error_message;
+        header("Location: confirmation.php");
     }
 }

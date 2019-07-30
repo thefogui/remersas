@@ -12,12 +12,23 @@ try {
         $_SESSION['text'] = "Error validation your code!";
         header("Location: confirmation.php");
     }
+
+    $iva = 0.21;
+    $commission = 0.25;
+
+    $amountReviewed = $_SESSION["reclamacion"]['compensation'];
+
+    $amountReviewed = $amountReviewed - ($amountReviewed * $commission)  - ($amountReviewed * $iva);
+    $_SESSION["total_client"] = $amountReviewed;
 } catch (Exception $e) {
     die();
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") 
-    $bankAccoubtController = new BankAccountController();
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $bankAccountController = new BankAccountController();
+    $bankAccountController->insertData();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -38,15 +49,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 
                     <div class="card-body" id="info">
                         <p class="card-text text-left">Nombre del pasajero:</p>
-                        <p class="card-text text-left"><?php echo $_SESSION["reclamacion"]['name'] ?></p>
+                        <p class="card-text text-left"><?= $_SESSION["reclamacion"]['name'] ?></p>
                         <p class="card-text text-left">Indenizacion</p>
-                        <p class="card-text">xxx</p>
+                        <p class="card-text"><?= $_SESSION["reclamacion"]['compensation'] ?></p>
                         <p class="card-text text-left">Comision Populetic</p>
-                        <p class="card-text">xxx</p>
+                        <p class="card-text"><?=$_SESSION["reclamacion"]['compensation']*0.25?></p>
                         <p class="card-text text-left">IVA</p>
-                        <p class="card-text">xxx</p>
+                        <p class="card-text">21%</p>
                         <p class="card-text text-left">Importe total a percibir</p>
-                        <p id="amount"><?php echo $_SESSION["reclamacion"]['compensation'] ?>€</p>
+                        <p id="amount">
+                            <?= $_SESSION["total_client"]; ?>€
+                        </p>
                     </div><!-- closing div card-body -->
                 </div><!-- closing card col-sm-4 -->
                 <div class="card col-sm fix-width" id="second">
@@ -56,10 +69,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
                     <div class="card-body">
                         <form action="" method="POST" onsubmit="return validateForm()">
                             <div class="form-group">
-                                <input class="form-control iban bank-account-number" type="text" name="IBAN" placeholder="IBAN" id="iban" size="35" required>
+                                <input class="form-control iban bank-account-number" type="text" name="account_number" placeholder="IBAN" id="iban" size="35" required>
                             </div><!-- clsoing div form-group -->
-
-                            <input type="hidden" name="email" id="email" value="<?php echo $_SESSION["email"];?>" size="35">
 
                             <div class="form-row">
                                 <div class="form-group col-md-6 my-auto">
@@ -71,13 +82,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
                                     </div><!-- closing div form-check d-flex -->
                                 </div><!-- closing div form-group col-md-6 my-auto -->
                                 <div class="form-group col-md-6">
-                                    <input class="form-control"  style="visibility:hidden;" type="text" placeholder="swift" name="swift" id="swift" value="" size="35">
+                                    <input class="form-control"  style="visibility:hidden;" type="text" placeholder="Swift" maxlength="11" name="swift" id="swift" value="" size="35">
                                 </div><!-- closing div form-group col-md-6  -->
                             </div><!-- closing div form-row -->
 
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <input class="form-control" type="text" name="address" placeholder="Direccion"  required="">
+                                    <input class="form-control" type="text" name="address" placeholder="Dirección"  required="">
                                 </div><!-- closing div form-group col-md-6  -->
                                 <div class="form-group col-md-6">
                                     <input class="form-control" type="text" name="phone" placeholder="Telefono" autocomplete="off" autofocus="" inputmode="tel" required="">
@@ -88,7 +99,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
                                     <input class="form-control" type="text" name="titular" placeholder="Titular de la cuenta" style="height: 53px;min-height: 53px;min-width: 200px;" required="">
                                 </div><!-- closing div form-group col-md-6  -->
                                 <div class="form-group col-md-6">
-                                    <input class="form-control" value="<?php echo $_SESSION["email"];?>" type="text" name="email" placeholder="Email" style="height: 53px;min-height: 53px;min-width: 200px;" autocomplete="off" autofocus="" inputmode="email" required="">
+                                    <input id="email-fix-padding" class="form-control" value="<?php echo $_SESSION["email"];?>" type="text" name="email" placeholder="Email" style="height: 53px;min-height: 53px;min-width: 200px;" autocomplete="off" autofocus="" inputmode="email" required="">
+                                    <i class="icon ion-ios-email-outline d-xl-flex justify-content-xl-start"></i>
                                 </div><!-- closing div form-group col-md-6  -->
                             </div><!-- closing div form-row -->
 
@@ -107,7 +119,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
                                 </button>
                             </div><!-- closing div form-group -->
                         </form>
-                    </div><!-- closing div card-body-->
+                    </div><!-- closing div card-body -->
                 </div><!-- closing div card -->
             </div><!-- closing div row -->
         </div><!-- closing div container -->
@@ -122,16 +134,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
             $('.chk-iban').change(function() {
                 if(this.checked) {
                     //if the client mark the checkbox this remove the iban class
-                    $( "#iban" ).removeClass( "iban" );
-                    $( "#iban" ).attr('placeholder','Bank account number');
-                    $( "#iban" ).attr('name','bank-account-number');
+                    $("#iban").removeClass( "iban" );
+                    $("#iban").attr('placeholder','Bank account number');
                     $("#swift").css('visibility', 'visible');
                     $("#swift").attr("required", true);
                 } else {
-                    $( "#iban" ).addClass( "iban" );
-                    $( "#iban" ).attr('placeholder','IBAN');
-                    $( "#iban" ).attr('name','iban');
+                    $("#iban").addClass( "iban" );
+                    $("#iban").attr('placeholder','IBAN');
                     $("#swift").css('visibility', 'hidden');
+                    $("#swift").attr("required", false);
                 }
             });
         </script>

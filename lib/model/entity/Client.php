@@ -23,10 +23,10 @@ class Client extends Person {
      * Function to calculate the amount of money is need to play to a client
      * La fórmula para calcular la cantidad a pagar a cada cliente es: (cantidad_obtenida x 0.25) x 1.21
      */
-    public function amountToPay($amountReviewed = 0, $iva = 1.21, $commission = 0.25) {
+    public function amountToPay($amountReviewed = 0, $iva = 0.21, $commission = 0.25) {
         $amountClient = 0.;
 
-        $amountClient = $amountReviewed - ($amountReviewed * $commission) * $iva;
+        $amountClient = $amountReviewed - ($amountReviewed * $commission) - ($amountReviewed * $iva);
 
         return $amountClient;
     }
