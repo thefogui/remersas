@@ -104,11 +104,33 @@ class DaoClientTest {
         echo "<br>";
         $appConfig->closeConnection($conn);
     }
+
+    function testGetClaimsRealted() {
+        echo "<br>";
+        echo "-------------------------------";
+        echo "<br>";
+        echo "Testing Insert Log Change";
+        echo "<br>";
+        $appConfig = new AppConfig();
+        $daoClient = new DaoClient();
+
+        $conn = $appConfig->connect( "populetic_form", "replica" );
+        
+        $emailClaim =  "vitor.carvalho@populetic.com";
+
+        $idClaim = 536;
+
+        var_dump($daoClient->getAllCalims($conn, $emailClaim, $idClaim));
+        echo "<br>";
+        echo "-------------------------------";
+        echo "<br>";
+    }
 }
 
 $daoClient = new DaoClientTest();
 //$daoClient->testGetMonth();
 //$daoClient->testGetClientsByMonth();
-$daoClient->testChangeToSolicitarDatosPago();
-$daoClient->testgetIdReclamacion();
-$daoClient->testInsertLogChange();
+//$daoClient->testChangeToSolicitarDatosPago();
+//$daoClient->testgetIdReclamacion();
+//$daoClient->testInsertLogChange();
+$daoClient->testGetClaimsRealted();

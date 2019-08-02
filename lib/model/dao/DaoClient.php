@@ -35,7 +35,7 @@ class DaoClient {
         if($conn) {
             $query = "SELECT
                          pfv.ID AS id_reclamacion
-                        , IFNULL(pfv.Ref, '') AS refencia 
+                        , IFNULL(pfv.Ref, '') AS referencia 
                         , IFNULL(pfv.Codigo, '') AS codigo
                         ,c.DocIdentidad AS nif
                         , CONCAT(c.Nombre, ' ',c.Apellidos) AS name
@@ -43,6 +43,7 @@ class DaoClient {
                         ,c.Email AS email 
                         ,pfv.langId AS lang
                         ,pfv.Cuantia_pasajero AS amountReviewed
+                        ,pfv.Acompanyante AS listAssociates
                     FROM 
                         populetic_form_vuelos pfv
                     INNER JOIN 
@@ -78,7 +79,8 @@ class DaoClient {
                             "lang" => $row['lang'],
                             "id_reclamacion" => $row['id_reclamacion'],
                             "codigo" => $row['codigo'],
-                            "vipSattus" => true
+                            "vipSattus" => true, 
+                            "listAssociates" => $row["listAssociates"]
                         );
                         $clients[] = $clientValue;
                     }
@@ -139,7 +141,7 @@ class DaoClient {
         if ($conn) {
             $query = "SELECT 
                             pfv.ID AS id_reclamacion
-                            , IFNULL(pfv.Ref, '') AS refencia 
+                            , IFNULL(pfv.Ref, '') AS referencia 
                             , IFNULL(pfv.Codigo, '') AS codigo
                             ,c.DocIdentidad AS nif
                             , CONCAT(c.Nombre, ' ',c.Apellidos) AS name
@@ -147,6 +149,7 @@ class DaoClient {
                             ,c.Email AS email 
                             ,pfv.langId AS lang
                             ,pfv.Cuantia_pasajero AS amountReviewed
+                            ,pfv.Acompanyante AS listAssociates
                             ,FROM_UNIXTIME(lg.Data) AS `date`
                         FROM 
                             populetic_form.populetic_form_vuelos pfv
@@ -157,7 +160,7 @@ class DaoClient {
                         WHERE 
                             pfv.Id_Estado = 18 
                             AND 
-                            MONTH(FROM_UNIXTIME(lg.data)) =" . $month .
+                            MONTH(FROM_UNIXTIME(lg.data)) = " . $month .
                             " AND
                             YEAR(FROM_UNIXTIME(lg.data)) = " . $year .
                         " ORDER BY 
@@ -188,7 +191,8 @@ class DaoClient {
                             "lang" => $row['lang'],
                             "id_reclamacion" => $row['id_reclamacion'],
                             "codigo" => $row['codigo'],
-                            "vipSattus" => true
+                            "vipSattus" => false,
+                            "listAssociates" => $row["listAssociates"]
                         );
                         $clients[] = $clientValue;
                     }
@@ -206,7 +210,7 @@ class DaoClient {
         if ($conn) {
             $query = "UPDATE populetic_form.populetic_form_vuelos pfv
                       SET pfv.Id_Estado = 36
-                      WHERE pfv.Id_Cliente = ". $id .";";
+                      WHERE pfv.ID = ". $id .";";
             $result = mysqli_query($conn, $query);
 
             if (mysqli_errno($conn)) throw new Exception('Error getting users: ' . mysqli_error($conn));
@@ -234,16 +238,10 @@ class DaoClient {
 
     public function getIdReclamacionById($conn, $idReclamacion) {
         $row;
-        //TODO: get Nombre del pasajero: 
-        //Indemnización: 
-        //Comisión Populetic:
-        //IVA:
-        //Importe total a percibir: XXXX€
-
         if ($conn) {
             $query = "SELECT 
                         pfv.ID AS id_reclamacion 
-                    , IFNULL(pfv.Ref, '') AS refencia 
+                    , IFNULL(pfv.Ref, '') AS referencia 
                     , CONCAT(c.Nombre, ' ',c.Apellidos) AS name 
                     , pfv.langId AS lang
                     , pfv.Cuantia_pasajero AS compensation
@@ -256,7 +254,6 @@ class DaoClient {
                     ORDER BY 
                         compensation";
 
-            //TODO: calcular client amount again
             $result = mysqli_query($conn, $query);
 
             if (mysqli_errno($conn)) throw new Exception('Error getting users: ' . mysqli_error($conn));
@@ -267,12 +264,12 @@ class DaoClient {
         return $row;
     }
 
-    public function insertLogChange($conn, $clienld, $reclamacionId) {
+    public function insertLogChange($conn, $clienld, $reclamacionId, $estado) {
         //TODO: check if a row exists, otherwise insert
         if ($conn) {
             $query = "INSERT INTO 
                         halbrand.logs_estados (`Id_reclamacion`, `Data`, `Estado`, `Tipo`, `Id_Agente`, `Checked`) 
-                        VALUES (" . $reclamacionId . ", CURRENT_TIMESTAMP, '36', '1', '19', '0');";
+                        VALUES (" . $reclamacionId . ", CURRENT_TIMESTAMP, " . "'" . $estado . "' , '1', '19', '0');";
             $result = mysqli_query($conn, $query);
 
             if (mysqli_errno($conn)) throw new Exception('Error getting users: ' . mysqli_error($conn));
@@ -285,7 +282,6 @@ class DaoClient {
      */
     public function getClients($conn, $amount) {
         $result = $this->getClientVip($conn, $amount);
-        //TODO: https://jnjsite.com/php7-paralelizando-procesos-aprovechando-procesador-al-100/
         ini_set('max_execution_time', 300);
         set_time_limit(300);
 
@@ -325,8 +321,61 @@ class DaoClient {
         return $result;
     }
 
-    public function checkIfClientHasCode() {
-        
+    public function getAllCalims($conn, $email, $id) {
+        $listOfClaims = array();
+
+        if ($conn) {
+            $query = "SELECT 
+                        pfv.ID AS id_reclamacion
+                        , IFNULL(pfv.Ref, '') AS referencia 
+                        , IFNULL(pfv.Codigo, '') AS codigo
+                        ,c.DocIdentidad AS nif
+                        , CONCAT(c.Nombre, ' ',c.Apellidos) AS name
+                        ,pfv.Id_Cliente AS id
+                        ,c.Email AS email 
+                        ,pfv.langId AS lang
+                        ,pfv.Cuantia_pasajero AS amountReviewed 
+                    FROM 
+                        populetic_form.populetic_form_vuelos pfv 
+                    INNER JOIN
+                        populetic_form.clientes c
+                    ON 
+                        pfv.Id_Cliente = c.ID
+                    WHERE 
+                        c.Email = " . "'". $email ."'" .
+                    " AND
+                        pfv.Id_Estado = 36 
+                     AND
+                        pfv.Ref IS NOT NULL;";
+
+            $result = mysqli_query($conn, $query);
+
+            if (mysqli_errno($conn)) throw new Exception('Error getting users: ' . mysqli_error($conn));
+            else {
+                while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+                    $client = new Client($row['nif'], $row['name'], $row['id'], $row['email']);
+
+                    $clientAmount = $client->amountToPay($row['amountReviewed']);
+                    $compensation = ($row['amountReviewed'] - $clientAmount);
+
+                    $claimInfo = array(
+                        "idClient" => $row['id'],
+                        "nif" => $row['nif'], 
+                        "name" => utf8_encode($row['name']),
+                        "email" => utf8_encode($row['email']), 
+                        "clientAmount" => $clientAmount, 
+                        "referencia" => $row['referencia'], 
+                        "lang" => $row['lang'],
+                        "id_reclamacion" => $row['id_reclamacion'],
+                        "compensation" => $row['amountReviewed'],
+                        "comision" => $compensation
+                    );
+                
+                    array_push($listOfClaims, $claimInfo);
+                }
+            }
+        }
+        return $listOfClaims;
     }
 
     private function mergeData($array1, $array2) {

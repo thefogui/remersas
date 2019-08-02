@@ -48,19 +48,32 @@ class Controller {
      * @param $email 
      * @param $hash
      */
-    function sendEmailValidation($info, $name, $email, $hash, $date, $amount=0, $ref="MARIA SU", $languageId='es', $codigo= "not defined") {
+    function sendEmailValidation($name, $email, $hash, $date, $amount=0, 
+                                $ref="X0000XXX", $languageId='es', 
+                                $codigo= "not defined", $listClaimRefs) {
         $correo = $this->initPHPMailer();
         $mandrill = $this->initMandrill();
         $templateSubject = "_(¡Hemos conseguido su indemnización! índiquenos dónde desea recibirla)";    
         $result = "Nothing";
-    
-        $emailInfo[] = array(
-            "email" => utf8_encode($email),
-            "name" => utf8_encode($name),
-            "amount" => utf8_encode($amount),
-            "hash" => utf8_encode($hash),
-            "codigo" => utf8_encode($codigo)
-        );
+
+        if (isset($listClaimRefs)) {
+            $emailInfo[] = array(
+                "email" => utf8_encode($email),
+                "name" => utf8_encode($name),
+                "amount" => utf8_encode($amount),
+                "hash" => utf8_encode($hash),
+                "codigo" => utf8_encode($codigo),
+                "reclamacionesRelaciones" => $listClaimRefs
+            );
+        } else {
+            $emailInfo[] = array(
+                "email" => utf8_encode($email),
+                "name" => utf8_encode($name),
+                "amount" => utf8_encode($amount),
+                "hash" => utf8_encode($hash),
+                "codigo" => utf8_encode($codigo)
+            );
+        }
 
         try {
             sendMandrillBatchMail($mandrill, $ref, $email, 'correo_verificación_datos_bancarios_' . $languageId, $templateSubject, $emailInfo, 0);
@@ -77,17 +90,27 @@ class Controller {
         $emailExtension = $match[2];
         
         $to      = $email; // Send email to our user
-        $subject = '¡Hemos conseguido su indemnización! índiquenos dónde desea recibirla'; // Give the email a subject 
+        $subject = '¡Hemos conseguido su indemnización! índiquenos dónde desea recibirla ' . $ref; // Give the email a subject 
         $body = '
         
         Hello from team Populetic, 
         Zombie ipsum reversus ab viral inferno' . $name . ', nam rick grimes malum cerebro. De carne lumbering animata corpora quaeritis. Summus brains sit​​, morbo vel maleficia? De apocalypsi gorger omero undead survivor dictum mauris. Hi mindless mortuis soulless creaturas, imo evil stalking monstra adventus resi dentevil vultus comedat cerebella viventium. Qui animated corpse, cricket bat max brucks terribilem incessu zomby.
         
         Please click this link to activate your account:
-        localhost/remesas/apps/views/verify.php?email=' . $email.'&hash=' . $hash . '
+
+        <br>
+        <br>
+        <br>
+        <br>
+
+        localhost/remesas/apps/views/verify.php?email=' . $email.'&hash=' . $hash ; // Our message above including the link
         
-        '; // Our message above including the link
-                            
+        if (isset($listClaimRefs)) {
+            foreach ($listClaimRefs as $claimRef) {
+                $body .= "<br>Referencia relacionada " . $claimRef;
+            }
+        } 
+
         $correo->Subject = $subject;   
         $correo->MsgHTML($body);
         $correo->AddAddress($to, "Populetic");
@@ -414,6 +437,30 @@ class Controller {
         } else 
             return Controller::getInstance()->checkEmailDataBaseChanges($email);
         return false;  
+    }
+
+    public function getListOfClaims($emailClaim, $idClaim) {
+        require_once "../lib/model/dao/DaoClient.php";
+        require_once "../lib/model/entity/Client.php";
+        require_once "../config/config.php";
+
+        $appConfig = new AppConfig();
+        $daoClient = new DaoClient();
+
+        $conn = $appConfig->connect( "populetic_form", "replica" );
+
+        $claims = $daoClient->getAllCalims($conn, $emailClaim, $idClaim);
+        
+        return $claims;
+    }
+
+    public function getClaims ($emailClaim, $idClaim) {
+        require_once "../lib/model/dao/DaoClient.php";
+        require_once "../lib/model/entity/Client.php";
+        require_once "../config/config.php";
+
+        $appConfig = new AppConfig();
+        $daoClient = new DaoClient();
     }
 
     public function redirectToInfoPage($message="", $error_message="") {

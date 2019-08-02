@@ -31,7 +31,7 @@ class BankAccountController {
         if ($conn->connect_error)
             die("Connection failed: " . $conn->connect_error);
         
-        try{
+        try {
             $this->daoClientBankAccount->insert($conn, $account_number, $account_holder, $billing_address, $email_client, $phone_client, $id_claim, $swift);
         }  catch (Exception $e) {
             $message = 'Error inserting data in sql : ';

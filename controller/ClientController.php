@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 
 include(dirname(__FILE__) . "/Controller.php");
@@ -8,10 +9,15 @@ function validateCode($hash) {
 
     $getCode = Controller::getInstance()->getDataFromUrlCode($hash);
     $code = $getCode['code'];
+    
+    if ($formCode != $code) return false;
+    
     $date = $getCode['date'];
+    
+    $emailClaim = $getCode['email'];
+    $idClaim = $getCode['idReclamacion'];
 
-    if ($formCode != $code)
-        return false;
+    $_SESSION["claims"] = Controller::getInstance()->getListOfClaims($emailClaim, $idClaim);
 
     return !Controller::getInstance()->checkExpiredOneDay($date);
 }
