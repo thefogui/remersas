@@ -1,8 +1,12 @@
 * {
   margin: 0;
-  paddin: 0;
+  padding: 0;
   box-sizing: border-box;
   font-family: 'Open Sans', sans-serif;
+}
+
+body {
+  margin-top: 0px;
 }
 
 nav {
@@ -13,7 +17,7 @@ nav {
   color: white;
   background-color: #1f1f1f;
   padding: 10px;
-  float: left;
+  top: 0;
 }
 
 .hamburguer-bt {
@@ -55,8 +59,8 @@ nav a {
 }
 
 nav a:hover {
-  color: orange;
-  border-bottom: 1px solid orange;
+  color: #ff9f43;
+  border-bottom: 1px solid #ff9f43;
   text-decoration: none;
 }
 
@@ -89,6 +93,7 @@ section {
 -moz-box-shadow: 0px 0px 17px 1px rgba(0,0,0,0.56);
 box-shadow: 0px 0px 17px 1px rgba(0,0,0,0.56);
 }
+
 .card .header {
   background-color: white;
 }
@@ -126,8 +131,8 @@ box-shadow: 0px 0px 17px 1px rgba(0,0,0,0.56);
 }
 
 .form-button:hover {
-  border: 1px solid orange;
-  color: orange;
+  border: 1px solid #ff9f43;
+  color: #ff9f43;
 }
 
 #amount{
@@ -138,4 +143,12 @@ box-shadow: 0px 0px 17px 1px rgba(0,0,0,0.56);
   font-size: 1.2em;
 }
 
-  
+.table {
+  display: none;
+  width: 900px;
+  height: 500px;
+}
+
+.p-footer {
+  padding-right: 1.0em;
+}  

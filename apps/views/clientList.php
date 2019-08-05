@@ -2,10 +2,11 @@
 include(dirname(__FILE__) . "/../../controller/Controller.php");
 
 /**
- * Function to get the table data, reads a json file and print the table with values 
+ * Function to get the table data, reads a json file and print the table with values
  * @param $idName the table id
  * @param $source the json folder
- * @param $thead the table head
+ * @param string $thead the table head
+ * @return string
  */
 function getTable($idName, $source, $thead = '') {
     $file = 'clients';
@@ -22,23 +23,26 @@ function getTable($idName, $source, $thead = '') {
 
 /**
  * This function generates a bootstrap table
- * @param $idName html id of the table
- * @param $thead an array that contains the data to put in the head of the table
- * @param $data actual array that contains the data we want to put in the table
+ * @param string $idName html id of the table
+ * @param string $thead an array that contains the data to put in the head of the table
+ * @param array $data actual array that contains the data we want to put in the table
+ * @param int $numVips
+ * @return string
  */
 function generateTable($idName = '', $thead = '', $data = array(), $numVips = 0) {
     $content = "";
     $index = 0;
 
     $content .= '<table' . ($idName ? ' id="' . $idName . '"' : '') . ' class="table table-striped table-bordered" cellspacing="0" width="100%">';
-
     $content .= '<thead class="thead-dark">';
     $content .= '<tr>';
+
     foreach ($thead as $cow) {
         $content .= '<th>';
         $content .= $cow;
         $content .= '</th>';
     }
+
     $content .= '</tr>';
     $content .= '</thead>';
 

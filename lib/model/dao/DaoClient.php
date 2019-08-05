@@ -16,14 +16,15 @@ class DaoClient {
     public function getConn() {
         return $this->conn;
     }
-    
+
     /**
-     * This function returns all the clients that has the state : 
+     * This function returns all the clients that has the state :
      * 'solicitar datos pago'
-     * 
-     * @param amount the amount of money
-     * @param conn the connection with the sql
+     *
+     * @param $amount int the amount of money
+     * @param $conn mysqli the connection with the sql
      * @return array that contains the clients array the amount to pay to the vips clients and the amount left after pay clients.
+     * @throws Exception
      */
     public function getClientVip($conn, $amount) {
         $state = 'solicitar datos pago';
@@ -44,7 +45,7 @@ class DaoClient {
                         ,pfv.langId AS lang
                         ,pfv.Cuantia_pasajero AS amountReviewed
                         ,pfv.Acompanyante AS listAssociates
-                    FROM 
+                    FROM    
                         populetic_form_vuelos pfv
                     INNER JOIN 
                         clientes c ON c.ID = pfv.Id_Cliente
@@ -219,7 +220,7 @@ class DaoClient {
     }
 
     public function getIdReclamacion($conn, $id){
-        $id_result;
+        $id_result = null;
 
         if ($conn) {
             $query = "SELECT  `populetic_form_vuelos`.`ID` AS id_pfv, `Ref` AS ref
@@ -237,7 +238,8 @@ class DaoClient {
     }
 
     public function getIdReclamacionById($conn, $idReclamacion) {
-        $row;
+        $row = null;
+
         if ($conn) {
             $query = "SELECT 
                         pfv.ID AS id_reclamacion 
@@ -278,7 +280,8 @@ class DaoClient {
     }
 
     /**
-     * 
+     *
+     * @throws exception
      */
     public function getClients($conn, $amount) {
         $result = $this->getClientVip($conn, $amount);
@@ -286,7 +289,12 @@ class DaoClient {
         set_time_limit(300);
 
         $amountLeft = $result["amountLeft"];
-        $d = $this->getTheOldestDate($conn);
+
+        try {
+            $d = $this->getTheOldestDate($conn);
+        } catch (exception $e) {
+
+        }
 
         $start = date("Y-m-d H:i:s", $d);
         $ts_start = $d;

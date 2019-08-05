@@ -13,31 +13,29 @@ class DaoClientBankAccount {
 
     /**
      * Function to insert the client bank account into the database
-     * @param $clientId foreign key of the client
-     * @param $bankAccount the client bank account
-     * @throws error connecting with the database
-     * 
+     * @param $conn
+     * @param $account_number
+     * @param $account_holder
+     * @param $billing_address
+     * @param $emailClaim
+     * @param $phone_client
+     * @param $id_claim
+     * @param string $swift
+     * @throws Exception
      */
     public function insert($conn, $account_number, $account_holder, $billing_address, 
-                        $email_client, $phone_client ,$id_claim, $swift = "") {
+                        $emailClaim, $phone_client ,$id_claim, $swift = "") {
         if($conn) {
-            $query = "INSERT IGNORE INTO populetic_form.bank_account_info (account_number, swift, account_holder, billing_address, email_client, phone_client, id_claim)
-            VALUES ("
-            ."'". $account_number ."'" . ", " 
-            ."'". $swift ."'" . ", " 
-            ."'". $account_holder ."'".  ", " 
-            ."'". $billing_address ."'". ", " 
-            ."'". $email_client ."'".  ", " 
-            ."'". $phone_client ."'".  ", " 
-            ."'". $id_claim ."'" . ");"; 
-            
+            $query = sprintf("INSERT IGNORE INTO populetic_form.bank_account_info (account_number, swift, account_holder, billing_address, email_client, phone_client, id_claim)
+            VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s');", $account_number, $swift, $account_holder, $billing_address, $emailClaim, $phone_client, $id_claim);
+
             $result = mysqli_query($conn, $query);
 
             if (mysqli_errno($conn))
                 throw new Exception('Error inserting bank account into mysql: ' . mysqli_error($conn));
         
-            $this->updateToReadyToPayment($conn, $id);
-            $this->deletePendingBankAccount($email_client);
+            $this->updateToReadyToPayment($conn, $id_claim);
+            $this->deletePendingBankAccount($conn, $emailClaim);
         }
     }
 
@@ -53,12 +51,20 @@ class DaoClientBankAccount {
 
     /**
      * Function to update an existent bank account
-     * 
+     * @param $conn
+     * @param $id
+     * @param $account_number
+     * @param $swift
+     * @param $account_holder
+     * @param $billing_address
+     * @param $email_client
+     * @param $id_claim
+     * @throws Exception
      */
     public function update($conn, $id, $account_number, $swift, $account_holder, $billing_address, $email_client, $id_claim) {
         if($conn) {
             $query = "UPDATE populetic_form.bank_account_info 
-                    SET "; //TODO: finish this query
+                    SET ";
             if (isset($account_number))
                 $query .= "account_number = " . $account_number;
             if (isset($swift))
@@ -114,7 +120,7 @@ class DaoClientBankAccount {
 
     //TODO: after test this change to private
     public function updateTimesSentTheEmail($conn, $email) {
-        //-- si ya existe y es distin to a 3
+        //-- si ya exist y es distinto a 3
         $query = "UPDATE populetic_form.pending_bank_account pba
                     SET pba.number_of_times_sent = pba.number_of_times_sent + 1
                     WHERE pba.email_claim = " . "'" . $email . "';";
@@ -122,7 +128,7 @@ class DaoClientBankAccount {
         $result = mysqli_query($conn, $query);
 
         if (mysqli_errno($conn))
-            throw new Exception('Error chaging the state of claim with id '. $id . ' ' . mysqli_error($conn));
+            throw new Exception('Error  ' . mysqli_error($conn));
     }
 
     public function updatePendingBankAccount($conn, $emailClaim, $idClaim) {
@@ -146,13 +152,22 @@ class DaoClientBankAccount {
                 
                 if (!isset($numberOfTimesSent)){
                     //insert the information
-                    $this->insertIntoPendingBankAccount($conn, $emailClaim, $idClaim);
+                    try {
+                        $this->insertIntoPendingBankAccount($conn, $emailClaim, $idClaim);
+                    } catch (Exception $e) {
+                    }
                 }else if ($numberOfTimesSent == 3){
                     //update to 'SIN DATOS PAGO'
-                    $this->changeStateToWithoutBankAccount($conn, $idClaim);
+                    try {
+                        $this->changeStateToWithoutBankAccount($conn, $idClaim);
+                    } catch (Exception $e) {
+                    }
                 } else {
                     //increment the time the email was sent
-                    $this->updateTimesSentTheEmail($conn, $emailClaim);
+                    try {
+                        $this->updateTimesSentTheEmail($conn, $emailClaim);
+                    } catch (Exception $e) {
+                    }
                     //TODO: insert log estados
                     
                 }
@@ -170,5 +185,9 @@ class DaoClientBankAccount {
 
         if (mysqli_errno($conn))
             throw new Exception('Error deleting the sql entry ' . mysqli_error($conn));
+    }
+
+    public function getAllAccounts($conn) {
+
     }
 }

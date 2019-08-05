@@ -56,17 +56,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!-- Main JS -->
         <script type="text/javascript" src="../../web/js/main.js"></script>
         <script type="text/javascript" src="../../web/js/bankAccountForm.js"></script>
-        <script>
+        <script type="text/javascript">
             $('.chk-iban').change(function() {
+                var ibanInput =  $("#iban");
+
                 if(this.checked) {
                     //if the client mark the checkbox this remove the iban class
-                    $("#iban").removeClass( "iban" );
-                    $("#iban").attr('placeholder','Bank account number');
+                    ibanInput.removeClass( "iban" );
+                    ibanInput.attr('placeholder','Bank account number');
                     $("#swift").css('visibility', 'visible');
                     $("#swift").attr("required", true);
                 } else {
-                    $("#iban").addClass( "iban" );
-                    $("#iban").attr('placeholder','IBAN');
+                    ibanInput.addClass( "iban" );
+                    ibanInput.attr('placeholder','IBAN');
                     $("#swift").css('visibility', 'hidden');
                     $("#swift").attr("required", false);
                 }

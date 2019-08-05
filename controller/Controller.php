@@ -14,9 +14,9 @@ class Controller {
 
     /**
      * This function saves a Json file suitn the array parameter
-     * @param array thw array vector we want to create the json file
-     * @param name the name of the jsson file
-     * @param destination the folder that we gonna save the file
+     * @param $name the name of the jsson file
+     * @param $array
+     * @param string $destination the folder that we gonna save the file
      */
     function arrayToJson($name, $array, $destination = "../cache/") {
         $fp = fopen($destination . $name . ".json", 'w');
@@ -26,10 +26,11 @@ class Controller {
 
     /**
      * Function to delete a json file
-     * be carefull using it 
-     * 
+     * be carefull using it
+     *
      * @param $name file name
-     * @param $source file source folder
+     * @param string $source file source folder
+     * @throws Exception
      * @exception throws an exception if the file does not exist
      */
     function deleteJson($name, $source = "../cache/") {
@@ -42,11 +43,19 @@ class Controller {
 
     /**
      * Function to send an email to an user
-     * 
-     * @param $info
-     * @param $name 
-     * @param $email 
+     *
+     * @param $name
+     * @param $email
      * @param $hash
+     * @param $date
+     * @param int $amount
+     * @param string $ref
+     * @param string $languageId
+     * @param string $codigo
+     * @param $listClaimRefs
+     * @return string
+     * @throws Mandrill_Error
+     * @throws phpmailerException
      */
     function sendEmailValidation($name, $email, $hash, $date, $amount=0, 
                                 $ref="X0000XXX", $languageId='es', 
@@ -168,7 +177,8 @@ class Controller {
     /**
      * Function to encrypt a text
      * @param value the text we want to encript
-     * 
+     *
+     * @return bool|string
      */
     function encryptText($text) {
         if(!$text) 
@@ -192,7 +202,8 @@ class Controller {
     /**
      * Function to decrypt a encrypted text
      * @param encryptedText the text encrypt
-    */
+     * @return bool|string
+     */
     function decryptText($encryptedText) {
         if(!$encryptedText) 
             return false;
@@ -344,7 +355,8 @@ class Controller {
      * Function that return a string after a string sequence
      * @param start the string sequence
      * @param str the string we want to remove the string sequence
-    */
+     * @return bool|string
+     */
     function after($start, $str) {
         if (!is_bool(strpos($str, $start)))
         return substr($str, strpos($str, $start)+strlen($start));
@@ -471,5 +483,9 @@ class Controller {
         if (isset($error_message))
             $_SESSION["error_message"] = $error_message;
         header("Location: confirmation.php");
+    }
+
+    public function getBankAccountData() {
+
     }
 }

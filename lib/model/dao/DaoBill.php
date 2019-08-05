@@ -2,7 +2,7 @@
 
 /**
  * Class used to crud the bill class
- * @see Bill.php
+ * @see Invoice.php
  */
 class DaoBill {
     private $conn;

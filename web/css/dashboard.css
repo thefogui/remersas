@@ -1,8 +1,11 @@
 * {
   margin: 0;
-  paddin: 0;
+  padding: 0;
   box-sizing: border-box;
   font-family: 'Open Sans', sans-serif; }
+
+body {
+  margin-top: 0px; }
 
 nav {
   display: block;
@@ -12,7 +15,7 @@ nav {
   color: white;
   background-color: #1f1f1f;
   padding: 10px;
-  float: left; }
+  top: 0; }
 
 .hamburguer-bt {
   cursor: pointer;
@@ -47,8 +50,8 @@ nav a {
   margin-bottom: 10px; }
 
 nav a:hover {
-  color: orange;
-  border-bottom: 1px solid orange;
+  color: #ff9f43;
+  border-bottom: 1px solid #ff9f43;
   text-decoration: none; }
 
 section {
@@ -110,8 +113,8 @@ section {
   text-transform: uppercase; }
 
 .form-button:hover {
-  border: 1px solid orange;
-  color: orange; }
+  border: 1px solid #ff9f43;
+  color: #ff9f43; }
 
 #amount {
   width: 100%;
@@ -119,5 +122,13 @@ section {
   margin: 10px;
   padding: 5px;
   font-size: 1.2em; }
+
+.table {
+  display: none;
+  width: 900px;
+  height: 500px; }
+
+.p-footer {
+  padding-right: 1.0em; }
 
 /*# sourceMappingURL=dashboard.css.map */
