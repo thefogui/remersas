@@ -24,6 +24,7 @@ class Invoice {
         $this->daoInvoke = new DaoInvoke($conn);
         try {
             $this->getInvokeData();
+            $this->getClaimData();
         } catch (Exception $e) {
             throw new \mysql_xdevapi\Exception("Can't read the data from database: " . $e->getMessage());
         }
@@ -54,5 +55,9 @@ class Invoice {
 
     public function __toString() {
         return "";
+    }
+
+    private function getClaimData() {
+
     }
 }
