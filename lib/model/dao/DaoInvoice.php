@@ -4,9 +4,9 @@
  * Class used to crud the invoice class
  * @see Invoice.php
  */
-class DaoInvoke {
+class DaoInvoice {
     private $conn;
-
+    
     /**
      * DaoInvoke constructor.
      * @param $conn
@@ -23,7 +23,7 @@ class DaoInvoke {
         return $this->conn;
     }
 
-    public function getInvokeData($claimId) {
+    public function getInvoiceData($claimId) {
         $query = sprintf("SELECT ID AS id,
                     num_serial AS serialNumber,
                     id_Reclamacion AS claimId,
@@ -50,7 +50,8 @@ class DaoInvoke {
         }
     }
 
-    public function getClaim ($claimId) {
+    //TODO: check this query wehn Xavi comeback
+    public function getClaim($claimId) {
         $query = sprintf("SELECT populetic_form_vuelos.*
                                 ,disrupted_flights.flight_number as fnumber
                                 ,disrupted_flights.flight_date   as fdate
@@ -101,8 +102,85 @@ class DaoInvoke {
         if (mysqli_errno($this->conn))
             throw new Exception('Error getting invokes: ' . mysqli_error($this->conn));
         else {
+            $claimData = array();
+
             $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-            return $row;
+
+            $claimData["ref"] = (isset($row['Ref']) && !empty($row['Ref']) ? $row['Ref'] : "");
+            $claimData["stateId"] = (isset($row['Id_Estado']) && !empty($row['Id_Estado']) ? $row['Id_Estado'] : "");
+            $claimData["langId"] = (isset($row['langId']) && !empty($row['langId']) ? $row['langId'] : "");
+            $claimData["amountClient"] = (isset($row['Cuantia_pasajero']) && !empty($row['Cuantia_pasajero']) ? $row['Cuantia_pasajero'] : "");
+            $claimData["clientId"] = (isset($row['Id_Cliente']) && !empty($row['Id_Cliente']) ? $row['Id_Cliente'] : "");
+
+            return $claimData;
+        }
+    }
+
+    public function getClient($clientId) {
+        $query = sprintf("SELECT 
+                        c.Nombre, 
+                        c.Apellidos, 
+                        c.Email, 
+                        c.Localidad, 
+                        c.Domicilio, 
+                        c.DocIdentidad 
+                    FROM 
+                        clientes c 
+                    WHERE
+                        ID = %s", $clientId);
+
+        $result = mysqli_query($this->conn, $query);
+
+        if (mysqli_errno($this->conn))
+            throw new Exception('Error getting client: ' . mysqli_error($this->conn));
+        else {
+            $clientData = array();
+            
+            $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+
+            $clientData["name"] = (isset($row['Nombre']) && !empty($row['Nombre']) ? utf8_encode($row['Nombre']) : "");
+            $clientData["surname"] = (isset($row['Apellidos']) && !empty($row['Apellidos']) ? utf8_encode($row['Apellidos']) : "");
+            $clientData["email"] = (isset($row['Email']) && !empty($row['Email']) ? utf8_encode($row['Email']) : "");
+            $clientData["city"] = (isset($row['Localidad']) && !empty($row['Localidad']) ? $row['Localidad'] : "");
+            $clientData["address"] = (isset($row['Domicilio']) && !empty($row['Domicilio']) ? $row['Domicilio'] : "");
+            $clientData["dni"] = (isset($row['DocIdentidad']) && !empty($row['DocIdentidad']) ? $row['DocIdentidad'] : "");
+
+            return $clientData;
+        }
+    }
+
+    public function getBillingPreferences() {
+        $query = "SELECT * FROM billing_preferences WHERE ID = 1";
+
+        $result = mysqli_query($this->conn, $query);
+
+        if (mysqli_errno($this->conn))
+            throw new Exception('Error getting client: ' . mysqli_error($this->conn));
+        else {
+            $billingPreference = array();
+
+            $billingPreference["fee"] = (isset($row['Fee']) && !empty($row['Fee']) ? ($row['Fee']) : "");
+            $billingPreference["iva"] = (isset($row['IVA']) && !empty($row['IVA']) ? ($row['IVA']) : "");
+            $billingPreference["ivaType"] = (isset($row['Type_IVA']) && !empty($row['Type_IVA']) ? ($row['Type_IVA']) : "");
+            $billingPreference["cobradoCliente"] = (isset($row['Cobrado_cliente']) && !empty($row['Cobrado_cliente']) ? ($row['Cobrado_cliente']) : "");
+            $billingPreference["cobradoPopuletic"] = (isset($row['Cobrado_populetic']) && !empty($row['Cobrado_populetic']) ? ($row['Cobrado_populetic']) : "");
+            $billingPreference["cancelado_con_cargo"] = (isset($row['Cancelada_con_cargo']) && !empty($row['Cancelada_con_cargo']) ? ($row['Cancelada_con_cargo']) : "");
+            $billingPreference["cuantidadFactura"] = (isset($row['Cant_factura']) && !empty($row['Cant_factura']) ? ($row['Cant_factura']) : "");
+
+            return $billingPreference;
+        }
+    }
+
+    public function getBankAccountInfo($claimId) {
+        $query = "SELECT * FROM ";
+
+        $result = mysqli_query($this->conn, $query);
+
+        if (mysqli_errno($this->conn))
+            throw new Exception('Error getting client: ' . mysqli_error($this->conn));
+        else {
+            $billingPreference = array();
+
         }
     }
 }

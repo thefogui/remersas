@@ -13,18 +13,12 @@ session_start();
  * 
  */
 function sendEmailCode($email, $hash){
-    //TODO: get url
-    $url = "localhost/remesas/";
-    //TODO: check if the user has the acces getting the query email reclamacion id
-
     $uncryptedHash = Controller::getInstance()->hashToActualData($hash);
 
     $generatedCode = Controller::getInstance()->generateUrlCodeValidation($email, $uncryptedHash["idReclamacion"]);
     $urlHash = $generatedCode['url'];
     
     $code = $generatedCode['code'];
-
-    //TODO: get the reclamacion referencia
 
     $refReclamacion = $uncryptedHash["idReclamacion"];
 

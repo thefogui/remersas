@@ -12,6 +12,7 @@ class BankAccountController {
     }
 
     public function insertData() {
+        $swift = "";
         $appConfig = new AppConfig();
 
         $account_number = $_POST["account_number"];
@@ -25,7 +26,7 @@ class BankAccountController {
         $id_claim = $_SESSION['id_claim'];
         $phone_client = $_POST["phone"];
 
-        $conn = $appConfig->connect("populetic_form", "localhost"); //connect to the sql databse
+        $conn = $appConfig->connect("populetic_form", "localhost"); //connect to the sql database
         
         // Check connection
         if ($conn->connect_error)
@@ -34,7 +35,7 @@ class BankAccountController {
         try {
             $this->daoClientBankAccount->insert($conn, $account_number, $account_holder, $billing_address, $email_client, $phone_client, $id_claim, $swift);
         }  catch (Exception $e) {
-            $message = 'Error inserting data in sql : ';
+            $message = 'Error inserting data in sql: ';
             $message .=  $e->getMessage() . "<br>";
             $this->redirectToInfoPage($message);
         }

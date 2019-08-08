@@ -171,4 +171,4 @@ $daoBillTest = new DaoClientBankAccountTest();
 //$daoBillTest->testchangeStateToWithoutBankAccount();
 //$daoBillTest->testDeletePendingBankAccount();
 //$daoBillTest->testUpdateTimesSentTheEmail();
-//$daoBillTest->testupdatePendingBankAccount();
+$daoBillTest->testupdatePendingBankAccount();

@@ -29,7 +29,7 @@ function getTable($idName, $source, $thead = '') {
  * @param int $numVips
  * @return string
  */
-function generateTable($idName = '', $thead = '', $data = array(), $numVips = 0) {
+function generateTable($idName = '', $thead = array(), $data = array(), $numVips = 0) {
     $content = "";
     $index = 0;
 
@@ -93,7 +93,7 @@ function checkAmountLeft() {
         $output .= "</h1>";
     }
 
-    $output;
+    return $output;
 }
 
 function checkAmountToPay() {
@@ -110,8 +110,11 @@ function checkAmountToPay() {
     return $output;
 }
 
-if(array_key_exists('email-send', $_POST)) 
-    sendEmails();
+if(array_key_exists('email-send', $_POST))
+    try {
+        sendEmails();
+    } catch (Exception $e) {
+    }
 ?>
 
 <!DOCTYPE html>
@@ -137,7 +140,7 @@ if(array_key_exists('email-send', $_POST))
                 </div><!-- closing div row -->
 
                 <div class="row">
-                    <?php echo checkAmountLeft() ?>
+                    <?php echo checkAmountLeft(); ?>
                 </div><!-- closing div row -->
 
                 <div class="row">
@@ -161,11 +164,11 @@ if(array_key_exists('email-send', $_POST))
                 </div><!-- closing div row -->
 
                 <div class="send-email-div">
-                <form method="post" action="../../controller/ClientListController.php" onsubmit="showLoading()">
-                    <div class="w-25 p-3 center-block">
-                        <input class="btn btn-lg btn-outline-info btn-block custom" type="submit" name="email-send" id="email-send-button" value="Send Email to clients">
-                    </div><!-- closing div mt-4 -->
-                </form>
+                    <form method="post" action="../../controller/ClientListController.php" onsubmit="showLoading()">
+                        <div class="w-25 p-3 center-block">
+                            <input class="btn btn-lg btn-outline-info btn-block custom" type="submit" name="email-send" id="email-send-button" value="Send Email to clients">
+                        </div><!-- closing div mt-4 -->
+                    </form>
                 </div><!-- closing div send-email-div -->
             </div><!-- closing div container -->
         </div><!-- closing div container d-flex justify-content-center -->

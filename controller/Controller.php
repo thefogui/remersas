@@ -379,12 +379,7 @@ class Controller {
                     'idReclamacion' => $idReclamacion
         );
     }
-
-    public function checkEmailDataBaseChanges($email) {
-        //TODO: get the email from database and see if the estado changed recently.
-        return true;
-    }
-
+    
     public function rediectToInfoPage($message) {
         unset ($_SESSION['text']);
         $_SESSION['text'] = $message;
@@ -466,15 +461,6 @@ class Controller {
         return $claims;
     }
 
-    public function getClaims ($emailClaim, $idClaim) {
-        require_once "../lib/model/dao/DaoClient.php";
-        require_once "../lib/model/entity/Client.php";
-        require_once "../config/config.php";
-
-        $appConfig = new AppConfig();
-        $daoClient = new DaoClient();
-    }
-
     public function redirectToInfoPage($message="", $error_message="") {
         unset($_SESSION['text']);
         unset($_SESSION["error_message"]);
@@ -486,6 +472,12 @@ class Controller {
     }
 
     public function getBankAccountData() {
+        require_once "../../lib/model/dao/DaoClientBankAccount.php";
+        require_once "../../lib/model/entity/Client.php";
+        require_once "../../config/config.php";
 
+        $appConfig = new AppConfig();
+        $daoClientBankAccount = new DaoClientBankAccount();
+        return $daoClientBankAccount->getAllAccounts($appConfig->connect("populetic_form", "replica"));
     }
 }

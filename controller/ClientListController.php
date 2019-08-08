@@ -28,8 +28,9 @@ function getJsonData($file, $source = "../cache/") {
 
 /**
  * function to send emails to the clients after read the json file
- * @param $file the name of the json file 
+ * @param $file the name of the json file
  * @source $source the folder that contains the json file
+ * @throws Exception
  */
 function sendEmails($dictEmails) {
     $appConfig = new AppConfig();
@@ -38,13 +39,6 @@ function sendEmails($dictEmails) {
     $daoClientBankAccount = new DaoClientBankAccount();
 
     foreach ($dictEmails as $email => $arrayClaimInfo) {
-        $name;
-        $clientId;
-        $amount;
-        $ref;
-        $lang;
-        $idReclamacio;
-        $codigo_vuelo;
         $listClaimRefs = array();
 
         if (count($arrayClaimInfo) == 1) {
@@ -56,6 +50,7 @@ function sendEmails($dictEmails) {
             $lang = $arrayClaimInfo[0]["lang"];
             $idReclamacio = $arrayClaimInfo[0]["id_reclamacion"];
             $codigo_vuelo = $arrayClaimInfo[0]["codigo"];
+
             $daoClient->changeToSolicitarDatosPago($conn, $idReclamacio);
             $daoClient->insertLogChange($conn, $clientId, $idReclamacio, '36');
             
@@ -82,14 +77,12 @@ function sendEmails($dictEmails) {
                     $idReclamacio = $claimInfo["id_reclamacion"];
                     $codigo_vuelo = $claimInfo["codigo"];
                 }
+
                 $daoClient->changeToSolicitarDatosPago($conn, $idReclamacio);
                 $daoClient->insertLogChange($conn, $clientId, $idReclamacio, '36');
             }
-            
         }
 
-
-        $hash = "";
         $date = date('Y-m-d H:i:s');
         $hash = Controller::getInstance()->generateHash($date, $idReclamacio);
         $result = Controller::getInstance()->sendEmailValidation($name, $email, $hash, $date, $amount,
@@ -97,6 +90,7 @@ function sendEmails($dictEmails) {
                                                                  $codigo_vuelo, $listClaimRefs);
         
         $daoClientBankAccount->updatePendingBankAccount($conn, $email, $idReclamacio);
+
         
         $appConfig->closeConnection($conn);
     }    

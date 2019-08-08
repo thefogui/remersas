@@ -44,7 +44,7 @@ class DaoClientBankAccount {
         //-- cambiar de estado a 'LISTO PARA PAGO' si ya insertado los datos de pago y exit
         $query = "UPDATE populetic_form.populetic_form_vuelos pfv
                 SET pfv.Id_Estado = 37
-                WHERE pfv.Id_Cliente = ". $id .";";
+                WHERE pfv.ID = ". $id .";";
 
         $result = mysqli_query($conn, $query);
     }
@@ -92,10 +92,10 @@ class DaoClientBankAccount {
     public function insertIntoPendingBankAccount($conn, $emailClaim, $idClaim) {
         if($conn) {
             $query = "INSERT INTO 
-                        populetic_form.pending_bank_account (email_claim, principal_claim)
+                        populetic_form.pending_bank_account (id_claim, email_claim)
                     VALUES ("
-                        . "'" . $emailClaim . "'" . ", " 
-                        . "'" . $idClaim . "'" ."
+                        . "'" . $idClaim . "'" . ", "
+                        . "'" . $emailClaim . "'" ."
                     );";
 
             $result = mysqli_query($conn, $query);
@@ -115,7 +115,7 @@ class DaoClientBankAccount {
         $result = mysqli_query($conn, $query);
 
         if (mysqli_errno($conn))
-            throw new Exception('Error chaging the state of claim with id '. $id . ' ' . mysqli_error($conn));
+            throw new Exception('Error changing the state of claim with id '. $id . ' ' . mysqli_error($conn));
     }
 
     //TODO: after test this change to private
@@ -160,6 +160,7 @@ class DaoClientBankAccount {
                     //update to 'SIN DATOS PAGO'
                     try {
                         $this->changeStateToWithoutBankAccount($conn, $idClaim);
+                        $this->insertLogChange($conn, $idClaim, '31');
                     } catch (Exception $e) {
                     }
                 } else {
@@ -168,8 +169,6 @@ class DaoClientBankAccount {
                         $this->updateTimesSentTheEmail($conn, $emailClaim);
                     } catch (Exception $e) {
                     }
-                    //TODO: insert log estados
-                    
                 }
             }
         }
@@ -187,7 +186,61 @@ class DaoClientBankAccount {
             throw new Exception('Error deleting the sql entry ' . mysqli_error($conn));
     }
 
-    public function getAllAccounts($conn) {
+    private function insertLogChange($conn, $reclamacionId, $estado) {
+        if ($conn) {
+            $query = sprintf("INSERT INTO 
+                        halbrand.logs_estados (`Id_reclamacion`, `Data`, `Estado`, `Tipo`, `Id_Agente`, `Checked`) 
+                        VALUES (%s, CURRENT_TIMESTAMP, '%s' , '1', '19', '0');", $reclamacionId, $estado);
+            $result = mysqli_query($conn, $query);
 
+            if (mysqli_errno($conn)) throw new Exception('Error getting users: ' . mysqli_error($conn));
+        } else
+            throw new Exception('Error connecting to the sql database!');
+    }
+
+    public function getAllAccounts($conn) {
+        if($conn) {
+            $query = "SELECT
+                         pfv.ID AS id_reclamacion
+                        , IFNULL(pfv.Ref, '') AS referencia 
+                        , IFNULL(pfv.Codigo, '') AS codigo
+                        ,c.DocIdentidad AS nif
+                        , CONCAT(c.Nombre, ' ',c.Apellidos) AS name
+                        ,pfv.Id_Cliente AS id
+                        ,c.Email AS email 
+                        ,pfv.langId AS lang
+                        ,pfv.Cuantia_pasajero AS amountReviewed
+                    FROM    
+                        populetic_form_vuelos pfv
+                    INNER JOIN 
+                        clientes c ON c.ID = pfv.Id_Cliente
+                    WHERE 
+                        pfv.Id_Estado = 37";
+
+            $result = mysqli_query($conn, $query);
+
+            if (mysqli_errno($conn))
+                throw new Exception('Error getting users: ' . mysqli_error($conn));
+            else {
+                $bankAccountArray = array();
+
+                while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+                    $bankAccount = array("idReclamacion" => $row['id_reclamacion'],
+                                        "ref" => $row['referencia'],
+                                        "nif" => $row['nif'],
+                                        "id" => $row['id'],
+                                        "email" => $row['email'],
+                                        "lang" => $row['lang'],
+                                        "amountReviewed" => $row['amountReviewed'],
+                                        "name" => $row['name']
+                                    );
+
+                    array_push($bankAccountArray, $bankAccount);
+
+                }
+                return $bankAccountArray;
+            }
+        }
+        return null;
     }
 }

@@ -267,7 +267,6 @@ class DaoClient {
     }
 
     public function insertLogChange($conn, $clienld, $reclamacionId, $estado) {
-        //TODO: check if a row exists, otherwise insert
         if ($conn) {
             $query = "INSERT INTO 
                         halbrand.logs_estados (`Id_reclamacion`, `Data`, `Estado`, `Tipo`, `Id_Agente`, `Checked`) 
@@ -388,15 +387,15 @@ class DaoClient {
 
     private function mergeData($array1, $array2) {
         $smallestArray = $array2;
-        $bigestArray = $array1;
+        $biggestArray = $array1;
 
         if (count($array1) < count($array2)) {
             $smallestArray = $array1;
-            $bigestArray = $array2;
+            $biggestArray = $array2;
         }
 
-        foreach ($smallestArray as $row) $bigestArray[] = $row;
+        foreach ($smallestArray as $row) $biggestArray[] = $row;
         
-        return $bigestArray;
+        return $biggestArray;
     }
 }

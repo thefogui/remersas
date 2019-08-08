@@ -1,6 +1,6 @@
 $(document).ready(function () {
-    $('#table').DataTable({
-        "pageLength": 10
+    $('.table-striped').DataTable({
+        "pageLength": 10,
+        "autoWidth": false
     });
-
 });

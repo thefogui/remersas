@@ -128,13 +128,14 @@ class AppConfig {
         if( $conn->connect_error ) 
         {
             die("Connection failed (".$servername.") : " . $conn->connect_error);
-            return false;
         }
         else
         {
             return $conn;
         }
     }
+
+
 
     /**
      * Class to close the connectiong with mysql

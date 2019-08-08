@@ -36,9 +36,6 @@ a {
     }
 }
 
-.card {
-    margin-top: 2em;
-}
 
 .custom {
     width: 300px;
@@ -80,3 +77,14 @@ a {
     display: inline-block;
 }
 
+.table-striped {
+    width: 100%;
+    color: white;
+    text-align: right;
+}
+
+.table-content {
+    width: 100%;
+    color: white;
+    text-align: left;
+}

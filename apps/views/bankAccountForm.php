@@ -46,7 +46,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $template->comision = $claim['comision'];
 
                 echo $template;
-                
             }
         ?>
 
