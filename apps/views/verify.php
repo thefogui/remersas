@@ -10,7 +10,7 @@ function checkUrl() {
     
     if (isset($_GET['email'])) {
 
-        $email = $_GET['email']; //chekcs if the email insert in the url is a valid format
+        $email = $_GET['email']; //checks if the email insert in the url is a valid format
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) 
             throw new Exception("The email inserted isn't a valid format.");
 
@@ -49,21 +49,3 @@ try {
 } catch (Exception $e) {
     echo 'Caught exception: ',  $e->getMessage(), "\n";
 }
-?>
-
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <?php include(dirname(__FILE__) . "/layouts/head.php") ?>
-    </head>
-
-    <body>
-        <section>
-            
-        </section>
-
-        <?php include(dirname(__FILE__) . "/layouts/scripts.php") ?>
-        <!-- Main JS -->
-        <script  type="text/javascript" src="../../web/js/main.js"></script>
-    </body>
-</html>

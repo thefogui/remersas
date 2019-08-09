@@ -71,7 +71,7 @@ include(dirname(__FILE__) . "/../../controller/Controller.php");
 
         <script>
             function showLoading() {
-                $('.load').css('display','block');
+                $('.load').css('display', 'block');
                 $('section').css('display', 'none');
             }
         </script>

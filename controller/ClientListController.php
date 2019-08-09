@@ -28,9 +28,9 @@ function getJsonData($file, $source = "../cache/") {
 
 /**
  * function to send emails to the clients after read the json file
- * @param $file the name of the json file
- * @source $source the folder that contains the json file
+ * @param $dictEmails
  * @throws Exception
+ * @source $source the folder that contains the json file
  */
 function sendEmails($dictEmails) {
     $appConfig = new AppConfig();
@@ -91,7 +91,6 @@ function sendEmails($dictEmails) {
         
         $daoClientBankAccount->updatePendingBankAccount($conn, $email, $idReclamacio);
 
-        
         $appConfig->closeConnection($conn);
     }    
 }

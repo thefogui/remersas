@@ -6,36 +6,33 @@ include_once dirname(__FILE__) . '/../lib/model/entity/Client.php';
 include(dirname(__FILE__) . "/Controller.php");
 
 session_start();
-//atributtes form
-$amount = "";
-$conn;
-
-
 //functions
 
 /**
  * This function reads the databse and get the clients with vip status
- * 
+ *
  * @param $amount amount of money the user speciefied in the form
+ * @return
+ * @throws exception
  */
 function getClients($amount) {
     $daoClient = new DaoClient();
     $appConfig = new AppConfig();
     
-    $conn = $appConfig->connect( "populetic_form", "localhost" ); //connect to the sql databse
+    $conn = $appConfig->connect( "populetic_form", "localhost" ); //connect to the sql database
+
     // Check connection
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    $resultQuery = $daoClient->getClients($conn, $amount); //clients, ammountLeft, amountToPay
+    $resultQuery = $daoClient->getClients($conn, $amount); //clients, amountLeft, amountToPay
 
-    $clients = $resultQuery['clients'];
-
-    $_SESSION["amountLeft"] = $resultQuery["amountLeft"];
+    $clients                 = $resultQuery['clients'];
+    $_SESSION["amountLeft"]  = $resultQuery["amountLeft"];
     $_SESSION["amountToPay"] = $resultQuery["amountToPay"];
-    $_SESSION["numClients"] = $resultQuery["totalClients"];
-    $_SESSION["numVips"] = $resultQuery["numVips"];
+    $_SESSION["numClients"]  = $resultQuery["totalClients"];
+    $_SESSION["numVips"]     = $resultQuery["numVips"];
 
     $appConfig->closeConnection($conn); //close the connection
 

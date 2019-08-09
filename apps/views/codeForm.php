@@ -43,7 +43,9 @@ try {
                     <form method="POST" onsubmit="checkRecaptcha()" action="../../controller/ClientController.php">
                         <input type="hidden" name="hash" value="<?php echo $_GET['hash']; ?>">
 
-                        <input type="text" class="form-control" maxlength="6" placeholder="Código de verificación. Ej: SH34DS" name="code" onkeyup="this.value = this.value.toUpperCase();" value="" autofocus="" required="" autocomplete="off">
+                        <input type="text" class="form-control" maxlength="6" placeholder="Código de verificación. Ej: SH34DS"
+                               name="code" onkeyup="this.value = this.value.toUpperCase();" value="" autofocus="" required=""
+                               autocomplete="off">
 
                         <div class="mt-4 text-center">
                             <div class="g-recaptcha" data-sitekey="6LcnjRIUAAAAAKPYVfEL2M__Ix57s7zgQGVlCTux" ></div>
@@ -63,7 +65,8 @@ try {
                             </span>
                         </div><!-- closing div form-group text-left -->
                         <div class="form-group">
-                            <button class="btn btn-primary btn-block d-lg-flex flex-row-reverse justify-content-lg-center" id="btn-form-send" type="submit">
+                            <button class="btn btn-primary btn-block d-lg-flex flex-row-reverse justify-content-lg-center"
+                                    id="btn-form-send" type="submit">
                                 ENVIAR
                             </button>
                         </div><!-- closing div form-group -->

@@ -26,4 +26,4 @@
 
 <!-- Main CSS -->
 <link rel="stylesheet" href="../../web/css/main.css">
-
+<link rel="stylesheet" href="../../web/css/style.css">

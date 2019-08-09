@@ -108,10 +108,30 @@ class ControllerTest {
             echo "<br>";
         }
     }
+
+    function testView() {
+        include "../../apps/views/View.php";
+        echo "-------------------------------";
+        echo "<br>";
+        echo "**** Testing get display view ****";
+        echo "<br>";
+
+        $template = "/../../apps/views/layouts/nav.php";
+
+        $values = array (
+                "home" => "home",
+                "facturas" => "facturas",
+                "remesas" => "remesas",
+                "form" => "lokie"
+        );
+
+        echo Controller::getInstance()->displayView($template, $values);
+    }
 }
 
 $controllerTest = new ControllerTest();
 /*$controllerTest->testEncryptFunction();
 $controllerTest->testDecryptText();
 $controllerTest->testSendEmail();*/
-$controllerTest->testUrlValidation();
+//$controllerTest->testUrlValidation();
+$controllerTest->testView();

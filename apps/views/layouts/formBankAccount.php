@@ -24,10 +24,12 @@
             <div class="card-header text-left">
                 <h5 class="mb-0">Datos Bancarios:</h5>
             </div><!-- closing div card-header -->
+
             <div class="card-body">
                 <form action="" method="POST" onsubmit="return validateForm()">
                     <div class="form-group">
-                        <input class="form-control iban bank-account-number" type="text" name="account_number" placeholder="IBAN" id="iban" size="35" required>
+                        <input class="form-control iban bank-account-number" type="text" name="account_number" placeholder="IBAN"
+                               id="iban" size="35" required>
                     </div><!-- clsoing div form-group -->
 
                     <div class="form-row">
@@ -39,8 +41,10 @@
                                 </label>
                             </div><!-- closing div form-check d-flex -->
                         </div><!-- closing div form-group col-md-6 my-auto -->
+
                         <div class="form-group col-md-6">
-                            <input class="form-control"  style="visibility:hidden;" type="text" placeholder="Swift" maxlength="11" name="swift" id="swift" value="" size="35">
+                            <input class="form-control"  style="visibility:hidden;" type="text" placeholder="Swift" maxlength="11" name="swift"
+                                   id="swift" value="" size="35">
                         </div><!-- closing div form-group col-md-6  -->
                     </div><!-- closing div form-row -->
 
@@ -48,16 +52,22 @@
                         <div class="form-group col-md-6">
                             <input class="form-control" type="text" name="address" placeholder="Dirección"  required="">
                         </div><!-- closing div form-group col-md-6  -->
+
                         <div class="form-group col-md-6">
-                            <input class="form-control" type="text" name="phone" placeholder="Telefono" autocomplete="off" autofocus="" inputmode="tel" required="">
+                            <input class="form-control" type="text" name="phone" placeholder="Telefono" autocomplete="off"
+                                   autofocus="" inputmode="tel" required="">
                         </div><!-- closing div form-group col-md-6  -->
                     </div><!-- closing div form-row -->
+
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <input class="form-control" type="text" name="titular" placeholder="Titular de la cuenta" style="height: 53px;min-height: 53px;min-width: 200px;" required="">
+                            <input class="form-control" type="text" name="titular" placeholder="Titular de la cuenta"
+                                   style="height: 53px;min-height: 53px;min-width: 200px;" required="">
                         </div><!-- closing div form-group col-md-6  -->
+
                         <div class="form-group col-md-6">
-                            <input id="email-fix-padding" class="form-control" value="<?= $email; ?>" type="text" name="email" placeholder="Email" style="height: 53px;min-height: 53px;min-width: 200px;" autocomplete="off" autofocus="" inputmode="email" required="">
+                            <input id="email-fix-padding" class="form-control" value="<?= $email; ?>" type="text" name="email"
+                                   placeholder="Email" style="height: 53px;min-height: 53px;min-width: 200px;" autocomplete="off" autofocus="" inputmode="email" required="">
                             <i class="icon ion-ios-email-outline d-xl-flex justify-content-xl-start"></i>
                         </div><!-- closing div form-group col-md-6  -->
                     </div><!-- closing div form-row -->

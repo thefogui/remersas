@@ -9,6 +9,7 @@ class View {
 
     /**
      * Initialize a new view context.
+     * @param $template
      */
     public function __construct($template) {
         $this->vars = array();

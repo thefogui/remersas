@@ -1,17 +1,17 @@
 <?php
-
-session_start();
 require_once dirname(__FILE__) . "/../../controller/Controller.php";
 require_once dirname(__FILE__) . "/../../controller/BankAccountController.php";
 require 'View.php' ;
+
+session_start();
 
 try {
     $hash = $_GET["hash"];
 
     if (!Controller::getInstance()->checkUrlbankAccountView($hash)) {
         unset ($_SESSION['text']);
-        $_SESSION['text'] = "Error validation your code!";
-        header("Location: confirmation.php");
+        $_SESSION['text'] = 'Error validation your code!';
+        header('Location: confirmation.php');
     }
 } catch (Exception $e) {
     die();
@@ -19,7 +19,7 @@ try {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $bankAccountController = new BankAccountController();
-    $bankAccountController->insertData();
+    $bankAccountController->insertDataIntoBankAccountDataBase();
 }
 
 ?>

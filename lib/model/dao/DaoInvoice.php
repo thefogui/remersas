@@ -173,7 +173,7 @@ class DaoInvoice {
 
     public function getBankAccountInfo($claimId) {
         $query = "SELECT * FROM ";
-
+        //TODO: finish this query
         $result = mysqli_query($this->conn, $query);
 
         if (mysqli_errno($this->conn))

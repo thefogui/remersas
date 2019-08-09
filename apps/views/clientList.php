@@ -33,7 +33,8 @@ function generateTable($idName = '', $thead = array(), $data = array(), $numVips
     $content = "";
     $index = 0;
 
-    $content .= '<table' . ($idName ? ' id="' . $idName . '"' : '') . ' class="table table-striped table-bordered" cellspacing="0" width="100%">';
+    $content .= '<table' . ($idName ? ' id="' . $idName . '"' : '') . ' class="table table-striped table-bordered" cellspacing="0" 
+                 width="100%">';
     $content .= '<thead class="thead-dark">';
     $content .= '<tr>';
 
@@ -157,7 +158,10 @@ if(array_key_exists('email-send', $_POST))
                             </div><!-- closing div row -->
                             
                             <div class="table-responsive">
-                                <?php echo getTable("table", "../../cache/", array("Nif", "Name", "Email", "Compensation (€)", "Ref", "language", "Reclamación", "es vip?")) ?>
+                                <?php
+                                echo getTable("table", "../../cache/", array("Nif", "Name", "Email",
+                                        "Compensation (€)", "Ref", "language", "Reclamación", "es vip?"));
+                                ?>
                             </div><!-- closing div table-responsive -->
                         </div><!-- closing div card-body -->
                     </div><!-- closing div card justify-content-center shadow p-3 mb-5 bg-white rounded -->
@@ -166,7 +170,8 @@ if(array_key_exists('email-send', $_POST))
                 <div class="send-email-div">
                     <form method="post" action="../../controller/ClientListController.php" onsubmit="showLoading()">
                         <div class="w-25 p-3 center-block">
-                            <input class="btn btn-lg btn-outline-info btn-block custom" type="submit" name="email-send" id="email-send-button" value="Send Email to clients">
+                            <input class="btn btn-lg btn-outline-info btn-block custom" type="submit" name="email-send"
+                                   id="email-send-button" value="Send Email to clients">
                         </div><!-- closing div mt-4 -->
                     </form>
                 </div><!-- closing div send-email-div -->

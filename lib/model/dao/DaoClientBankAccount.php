@@ -26,8 +26,12 @@ class DaoClientBankAccount {
     public function insert($conn, $account_number, $account_holder, $billing_address, 
                         $emailClaim, $phone_client ,$id_claim, $swift = "") {
         if($conn) {
-            $query = sprintf("INSERT IGNORE INTO populetic_form.bank_account_info (account_number, swift, account_holder, billing_address, email_client, phone_client, id_claim)
-            VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s');", $account_number, $swift, $account_holder, $billing_address, $emailClaim, $phone_client, $id_claim);
+            $query = sprintf("INSERT IGNORE INTO 
+                                    populetic_form.bank_account_info (account_number, swift, account_holder, billing_address, 
+                                    , phone_client, id_claim)
+            VALUES 
+                ('%s', '%s', '%s', '%s', '%s', '%s', '%s');",
+                $account_number, $swift, $account_holder, $billing_address, $emailClaim, $phone_client, $id_claim);
 
             $result = mysqli_query($conn, $query);
 
@@ -42,9 +46,9 @@ class DaoClientBankAccount {
     //TODO: after test this change to private
     public function updateToReadyToPayment($conn, $id) {
         //-- cambiar de estado a 'LISTO PARA PAGO' si ya insertado los datos de pago y exit
-        $query = "UPDATE populetic_form.populetic_form_vuelos pfv
+        $query = sprintf("UPDATE populetic_form.populetic_form_vuelos pfv
                 SET pfv.Id_Estado = 37
-                WHERE pfv.ID = ". $id .";";
+                WHERE pfv.ID = '%s';", $id);
 
         $result = mysqli_query($conn, $query);
     }
@@ -108,9 +112,9 @@ class DaoClientBankAccount {
     //TODO: after test this change to private
     public function changeStateToWithoutBankAccount($conn, $id) {
         //-- si ya existe y es igual a 3 cambiar de estado 'SIN DATOS DE PAGO' y exit
-        $query = "UPDATE populetic_form.populetic_form_vuelos pfv
+        $query = sprintf("UPDATE populetic_form.populetic_form_vuelos pfv
                 SET pfv.Id_Estado = 31
-                WHERE pfv.ID = " . $id .";";
+                WHERE pfv.ID = '%s';", $id);
 
         $result = mysqli_query($conn, $query);
 
@@ -121,9 +125,12 @@ class DaoClientBankAccount {
     //TODO: after test this change to private
     public function updateTimesSentTheEmail($conn, $email) {
         //-- si ya exist y es distinto a 3
-        $query = "UPDATE populetic_form.pending_bank_account pba
-                    SET pba.number_of_times_sent = pba.number_of_times_sent + 1
-                    WHERE pba.email_claim = " . "'" . $email . "';";
+        $query = sprintf("UPDATE 
+                    populetic_form.pending_bank_account pba
+                SET 
+                    pba.number_of_times_sent = pba.number_of_times_sent + 1
+                WHERE 
+                    pba.email_claim = '%s';", $email);
 
         $result = mysqli_query($conn, $query);
 
@@ -133,15 +140,12 @@ class DaoClientBankAccount {
 
     public function updatePendingBankAccount($conn, $emailClaim, $idClaim) {
         if ($conn) {
-
-            $timeLimit = strtotime("-1 year");
-
-            $query = "SELECT 
+            $query = sprintf("SELECT 
                 number_of_times_sent AS numberOfTimesSent
             FROM
                 populetic_form.pending_bank_account pba
             WHERE
-                pba.email_claim = " . "'" . $emailClaim . "';"; 
+                pba.email_claim = '%s';", $emailClaim);
 
             $result = mysqli_query($conn, $query);
 
@@ -177,8 +181,10 @@ class DaoClientBankAccount {
     //TODO: after test this change to private
     public function deletePendingBankAccount($conn, $emailClaim) {
         //delete this if we have the client
-        $query = "DELETE FROM populetic_form.pending_bank_account 
-                    WHERE populetic_form.pending_bank_account.email_claim = ". "'" . $emailClaim . "';";
+        $query = sprintf("DELETE FROM 
+                    populetic_form.pending_bank_account 
+                WHERE 
+                    populetic_form.pending_bank_account.email_claim = '%s';", $emailClaim);
 
         $result = mysqli_query($conn, $query);
 

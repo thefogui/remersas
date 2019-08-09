@@ -34,7 +34,7 @@ class Invoice {
 
     /**
      * @param $claimId
-     * @param $conn
+     * @param $appConfig
      * @throws Exception
      */
     public function __construct($claimId, $appConfig) {
@@ -46,6 +46,7 @@ class Invoice {
             $this->getInvokeData();
 
             $appConfig->closeConnection($this->daoInvoice->getConn());
+
             $this->conn = $appConfig->connect( "populetic_form", "replica" );
             $this->daoInvoice->setConn($this->conn);
 
@@ -237,8 +238,6 @@ class Invoice {
 
         $pdf->SetXY(92, 202);
         $pdf->Cell(0,10,utf8_decode($textValues["import"]),0,1,'J',False);
-
-
 
         $pdf->SetXY(105, 211);
         $pdf->SetTextColor(0,0,0);

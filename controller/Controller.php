@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Controller
+ */
 class Controller {
     private static $instance;
     
@@ -13,8 +16,8 @@ class Controller {
     }
 
     /**
-     * This function saves a Json file suitn the array parameter
-     * @param $name the name of the jsson file
+     * This function saves a Json file using the array parameter
+     * @param String $name of the json file
      * @param $array
      * @param string $destination the folder that we gonna save the file
      */
@@ -26,9 +29,9 @@ class Controller {
 
     /**
      * Function to delete a json file
-     * be carefull using it
+     * be careful using it
      *
-     * @param $name file name
+     * @param String $name file name
      * @param string $source file source folder
      * @throws Exception
      * @exception throws an exception if the file does not exist
@@ -37,7 +40,7 @@ class Controller {
         $fileRouter = $source . $name . '.json';
         if (file_exists($fileRouter))
             unlink($fileRouter);
-         else 
+        else
             throw new Exception('Error deleting file: ' . $fileRouter .' does not exist!');
     }
 
@@ -57,13 +60,12 @@ class Controller {
      * @throws Mandrill_Error
      * @throws phpmailerException
      */
-    function sendEmailValidation($name, $email, $hash, $date, $amount=0, 
-                                $ref="X0000XXX", $languageId='es', 
-                                $codigo= "not defined", $listClaimRefs) {
+    function sendEmailValidation($name, $email, $hash, $date, $amount = 0,
+                                $ref = "X0000XXX", $languageId = 'es',
+                                $codigo = "not defined", $listClaimRefs) {
         $correo = $this->initPHPMailer();
         $mandrill = $this->initMandrill();
-        $templateSubject = "_(¡Hemos conseguido su indemnización! índiquenos dónde desea recibirla)";    
-        $result = "Nothing";
+        $templateSubject = "_(¡Hemos conseguido su indemnización! índiquenos dónde desea recibirla)";
 
         if (isset($listClaimRefs)) {
             $emailInfo[] = array(
@@ -86,10 +88,8 @@ class Controller {
 
         try {
             sendMandrillBatchMail($mandrill, $ref, $email, 'correo_verificación_datos_bancarios_' . $languageId, $templateSubject, $emailInfo, 0);
-            $result = "Error no";
         } catch(Mandrill_Error $e) {
             echo 'A mandrill error occurred: ' . get_class($e) . ' - ' . $e->getMessage();
-            $result = "Error yes";
             throw $e;
         }
         
@@ -135,15 +135,13 @@ class Controller {
      * Function to send the email code to the clients 
      * 
      */
-    function sendEmailCode($info, $name, $email, $hash, $code, $refReclamacion) {
+    function sendEmailCode($name, $email, $code, $refReclamacion) {
         $correo = $this->initPHPMailer();
 
-        $result = "Nothing";
-        //check if the email extension is a populetic email.
         
         $to      = $email; // Send email to our user
         $subject = 'Asunto: Clave de aceso - Solicitud pago indemnización ' . $refReclamacion; // Give the email a subject 
-        $body = '
+        $body    = '
     
         <p style="color:black">Apreciado/a, ' . $name . '</p>
         <p style="color:black">Hemos recibido su solicitud de verificación de los datos bancarios.</p>
@@ -176,7 +174,7 @@ class Controller {
 
     /**
      * Function to encrypt a text
-     * @param value the text we want to encript
+     * @param String the text we want to encrypt
      *
      * @return bool|string
      */
@@ -201,7 +199,7 @@ class Controller {
 
     /**
      * Function to decrypt a encrypted text
-     * @param encryptedText the text encrypt
+     * @param String encryptedText the text encrypt
      * @return bool|string
      */
     function decryptText($encryptedText) {
@@ -278,8 +276,8 @@ class Controller {
      */
     public function hashToActualData($hash) {
         $uncriptedHash = hex2bin(base64_decode($hash));
-        $idReclamacion = $this->after("id=", $uncriptedHash);
-        $expiringDate = $this->between("date=", "id=", $uncriptedHash);
+        $idReclamacion = $this->getSubStringAfter("id=", $uncriptedHash);
+        $expiringDate = $this->getSubStringBetween("date=", "id=", $uncriptedHash);
 
         return array("expiringDate" => $expiringDate, "idReclamacion" => $idReclamacion);
     }
@@ -342,12 +340,14 @@ class Controller {
         );
     }
 
-    function between($start, $end, $string) {
+    private function getSubStringBetween($start, $end, $string) {
         $string = ' ' . $string;
         $ini = strpos($string, $start);
+
         if ($ini == 0) return '';
-            $ini += strlen($start);
-            $len = strpos($string, $end, $ini) - $ini;
+
+        $ini += strlen($start);
+        $len = strpos($string, $end, $ini) - $ini;
         return substr($string, $ini, $len);
     }
 
@@ -357,27 +357,22 @@ class Controller {
      * @param str the string we want to remove the string sequence
      * @return bool|string
      */
-    function after($start, $str) {
+    private function getSubStringAfter($start, $str) {
         if (!is_bool(strpos($str, $start)))
-        return substr($str, strpos($str, $start)+strlen($start));
+            return substr($str, strpos($str, $start) + strlen($start));
+        return false;
     }
 
     public function getDataFromUrlCode($url) {
         $url_decoded = $this->decryptText($url);
 
-        $date = $this->between('date=', 'code=', $url_decoded);
+        $date  = $this->getSubStringBetween('date=', 'code=', $url_decoded);
+        $code  = $this->getSubStringBetween('code=', "email=", $url_decoded);
+        $email = $this->getSubStringBetween('email=', 'id=', $url_decoded);
 
-        $code = $this->between('code=', "email=", $url_decoded);
+        $idReclamacion = $this->getSubStringAfter("id=", $url_decoded);
 
-        $email = $this->between('email=', 'id=', $url_decoded);
-
-        $idReclamacion = $this->after("id=", $url_decoded);
-
-        return array('date' => $date, 
-                    'code' => $code, 
-                    'email' => $email, 
-                    'idReclamacion' => $idReclamacion
-        );
+        return array('date' => $date, 'code' => $code, 'email' => $email, 'idReclamacion' => $idReclamacion);
     }
     
     public function rediectToInfoPage($message) {
@@ -398,16 +393,9 @@ class Controller {
             $email = $uncriptedHash["email"];
     
             $_SESSION['email'] = $email;
-            $code = $uncriptedHash["code"];
     
-            if ($this->getInstance()->checkExpiredOneDay($date)){
-                // Fallback behaviour goes here
-                return false;
-            } else 
-                return $this->getInstance()->checkEmailDataBaseChanges($email);
-        } else {
-            // Fallback behaviour goes here
-            return false;
+            return !($this->getInstance()->checkExpiredOneDay($date)) ||
+                    $this->getInstance()->checkEmailDataBaseChanges($email);
         }
         return false;
     }
@@ -439,11 +427,7 @@ class Controller {
 
         $appConfig->closeConnection($conn);
 
-        if (Controller::getInstance()->checkExpiredOneDay($date)){
-            return false;
-        } else 
-            return Controller::getInstance()->checkEmailDataBaseChanges($email);
-        return false;  
+        return !Controller::getInstance()->checkExpiredOneDay($date);
     }
 
     public function getListOfClaims($emailClaim, $idClaim) {
@@ -479,5 +463,32 @@ class Controller {
         $appConfig = new AppConfig();
         $daoClientBankAccount = new DaoClientBankAccount();
         return $daoClientBankAccount->getAllAccounts($appConfig->connect("populetic_form", "replica"));
+    }
+
+    public function displayView($template, $templateData = array()) {
+        $view = new View($template);
+
+        foreach ($templateData as $key => $value) {
+            $view->$key = $value;
+        }
+
+        return $view;
+    }
+
+    /**
+     * Función para recuperar el nombre un usuario usando la refenrencia de la
+     * reclamación.
+     * @param $refReclamacion String
+     * @return String nombre del cliente que tiene la referencia indicada
+     * @throws Exception
+     */
+    public function getUserNameByClaimRef($refReclamacion) {
+        require_once "../lib/model/dao/DaoClient.php";
+        $daoClient = new DaoClient();
+        $appConfig = new AppConfig();
+
+        $conn = $appConfig->connect( "populetic_form", "replica" );
+
+        return $daoClient->getUserNameByClaimRef($conn, $refReclamacion);
     }
 }

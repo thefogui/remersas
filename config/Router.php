@@ -30,7 +30,7 @@ class Router {
         $this->uri = explode('/', $_SERVER['REQUEST_URI']);
     }
 
-    public function setcontroller() {
+    public function setController() {
         $this->controller = $this->uri[2] === '' ? 'Home' : $this->uri[2];
     }
 

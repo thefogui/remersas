@@ -3,7 +3,7 @@
 /**
  * Class to connect to the client table in the database
  * @package 
- * @see     
+ * @see
  */
 class DaoClient {
 
@@ -383,6 +383,31 @@ class DaoClient {
             }
         }
         return $listOfClaims;
+    }
+
+    public function getUserNameByClaimRef($conn,  $reclamacionRef) {
+        if ($conn) {
+            $query = sprintf("SELECT 
+                        c.Nombre AS `name`
+                    FROM 
+                        clientes c
+                    INNER JOIN 
+                        populetic_form_vuelos pfv
+                    ON 
+                        c.ID = pfv.Id_Cliente
+                    WHERE 
+                        pfv.Ref = '%s'", $reclamacionRef);
+
+            $result = mysqli_query($conn, $query);
+
+            if (mysqli_errno($conn))
+                throw new Exception('Error getting users: ' . mysqli_error($conn));
+            else {
+                $row = mysqli_fetch_assoc($result);
+                return $row['name'];
+            }
+        } else
+            throw new Exception('Error connecting to the sql database!');
     }
 
     private function mergeData($array1, $array2) {

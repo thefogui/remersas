@@ -13,16 +13,21 @@ session_start();
  * 
  */
 function sendEmailCode($email, $hash){
+    $name = "";
     $uncryptedHash = Controller::getInstance()->hashToActualData($hash);
+    $refReclamacion = $uncryptedHash["idReclamacion"];
 
     $generatedCode = Controller::getInstance()->generateUrlCodeValidation($email, $uncryptedHash["idReclamacion"]);
     $urlHash = $generatedCode['url'];
-    
     $code = $generatedCode['code'];
 
-    $refReclamacion = $uncryptedHash["idReclamacion"];
+    try {
+        $name = Controller::getInstance()->getUserNameByClaimRef($refReclamacion);
+    } catch (Exception $e) {
+        //TODO: redirect to error handler
+    }
 
-    Controller::getInstance()->sendEmailCode($info, $name, $email, $hash, $code, $refReclamacion);
+    Controller::getInstance()->sendEmailCode($name, $email, $code, $refReclamacion);
     return $urlHash;
 }
 

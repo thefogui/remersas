@@ -2,7 +2,9 @@
 <html lang="en">
     <head>
         <title> Populetic - Email request </title>
+
         <?php include( dirname(__FILE__) . "/layouts/head.php") ?>
+        <link rel="stylesheet" href="../../web/css/emailvalidation.css">
     </head>
 
     <body>
@@ -24,7 +26,8 @@
                     <form method="POST" action="../../controller/emailFormController.php">
                         <input type="hidden" name="hash" value="<?php echo $_GET['hash']; ?>">
                         <div class="form-group">
-                            <input class="form-control" type="email" style="" placeholder="Email" name="email" class="form-control " value="" autofocus="" required="" autocomplete="off">
+                            <input class="form-control" type="email" style="" placeholder="Email" name="email" value=""
+                                   autofocus="" required="" autocomplete="off">
                         </div><!-- closing div form-group -->
 
                         <p class="text-left color-green">
@@ -34,7 +37,8 @@
                         </p>
 
                         <div class="form-group">
-                            <button class="btn btn-primary btn-block d-lg-flex flex-row-reverse justify-content-lg-center" id="btn-form-send" type="submit">
+                            <button class="btn btn-primary btn-block d-lg-flex flex-row-reverse justify-content-lg-center"
+                                    id="btn-form-send" type="submit">
                                 ENVIAR
                             </button>
                         </div><!-- closing div form-group -->

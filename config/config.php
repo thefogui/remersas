@@ -39,9 +39,6 @@ class AppConfig {
                         /* PRODUCTION SERVER */
                         switch( $server )
                         {
-                            case "production":
-                                $servername = "production-database.cjytdcwzxu1j.us-east-2.rds.amazonaws.com";          
-                                break;
                             case "replica":
                                 $servername = "populetic-datawarehouse.cjytdcwzxu1j.us-east-2.rds.amazonaws.com";
                                 break;
@@ -98,9 +95,6 @@ class AppConfig {
                 
                         switch( $server )
                         {
-                            case "production":
-                                $servername = "production-database.cjytdcwzxu1j.us-east-2.rds.amazonaws.com";          
-                                break;
                             case "replica":
                                 $servername = "populetic-datawarehouse.cjytdcwzxu1j.us-east-2.rds.amazonaws.com";
                                 break;
@@ -136,9 +130,9 @@ class AppConfig {
     }
 
 
-
     /**
-     * Class to close the connectiong with mysql
+     * Function to close the connecting with mysql
+     * @param $conn
      */
     public function closeConnection($conn) {
         mysqli_close($conn);
