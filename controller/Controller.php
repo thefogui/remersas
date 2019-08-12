@@ -491,4 +491,35 @@ class Controller {
 
         return $daoClient->getUserNameByClaimRef($conn, $refReclamacion);
     }
+
+    public function translationsFileToSession($languageCode) {
+        $languageJson     = $languageCode . '.json';
+        $cacheDir         = dirname(__FILE__) . "/../cache/";
+        $languageJsonFile = $cacheDir . $languageJson;
+
+        $translations = array();
+
+        if (file_exists($languageJsonFile)) {
+            $translations = json_decode(file_get_contents($languageJsonFile), true);
+        } else {
+            //TODO: what to do here?
+        }
+
+        return $translations;
+    }
+
+    public function getText($tag, $languageCode) {
+        $addTag = false;
+        $text   = "";
+        $tag    = str_replace(")", "", str_replace("_(", "", $tag));
+        $aTag   = explode(".", $tag);
+
+        //create the file for the languageCode
+        if (!isset($_SESSION["translations"])) {
+
+        } else {
+            $translations = $_SESSION["translations"];
+
+        }
+    }
 }
